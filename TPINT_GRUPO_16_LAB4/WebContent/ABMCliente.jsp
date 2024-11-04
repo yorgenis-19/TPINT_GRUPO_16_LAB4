@@ -11,25 +11,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <style>
 	<jsp:include page="style.css"></jsp:include>
-.abmCliente_form{
-	display: flex;
- 	width: fit-content;
-  	justify-content: space-between;
-}
-.abmCliente_form .abmCliente_form-column{
-	display: flex;
-	flex-direction: column;
-	padding: 12px;
-}
-.abmCliente_form .abmCliente_form-column input, .abmCliente_form .abmCliente_form-column select{
-	margin-bottom: 12px;
-}
 </style>
 </head>
 <body>
 <div class="container">
         <h1 style="text-align: center;">Cliente</h1>
-		<form method="get" action="ServletCliente" class="abmCliente_form">
+		<form method="post" action="ServletCliente" class="abmCliente_form">
 			<div class="abmCliente_form-column">
 				<label for="txtNombre">NOMBRE: </label>
 				<input type="text" name="txtNombre" id="txtNombre"/>
@@ -49,9 +36,9 @@
 			</div>
 			<div class="abmCliente_form-column">
 				<label for="txtEmail">EMAIL: </label>
-				<input type="text" name="txtEmail" id="txtEmail"/>
+				<input type="email" name="txtEmail" id="txtEmail"/>
 				<label for="txtFechaNacimiento">FECHA DE NACIMIENTO: </label>
-				<input type="text" name="txtFechaNacimiento" id="txtFechaNacimiento"/>
+				<input type="date" name="txtFechaNacimiento" id="txtFechaNacimiento"/>
 				<label for="txtDireccion">DIRECCIÓN: </label>
 				<input type="text" name="txtDireccion" id="txtDireccion"/>
 				<label for="cmbLocalidad">LOCALIDAD: </label>
