@@ -227,6 +227,20 @@ body {
     gap: 1rem;
 }
 
+.abmCliente_form{
+	display: flex;
+ 	width: fit-content;
+  	justify-content: space-between;
+}
+.abmCliente_form.abmCliente_form-column{
+	display: flex;
+  flex-direction: column;
+  padding: 12px;
+}
+.abmCliente_form.abmCliente_form-column input{
+	margin-bottom: 12px;
+}
+
 /* Utilidades */
 .text-center { text-align: center; }
 .mt-4 { margin-top: 1rem; }
