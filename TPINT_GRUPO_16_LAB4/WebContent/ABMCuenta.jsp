@@ -16,6 +16,24 @@
 <body>
 <div class="container">
         <h1 style="text-align: center;">Cuenta</h1>
+        
+       	<div class="button-wrapper">
+	        <form action="" method="get">
+	            <button type="submit" class="button btn btn-primary">
+	                TRANSFERIR
+	            </button>
+	            <button type="submit" class="button btn btn-danger">
+	                DAR DE BAJA
+	            </button>
+	            <button type="submit" class="button btn btn-primary">
+	                HISTORIAL DE MOVIMIENTOS
+	            </button>
+	            <button type="submit" class="button btn btn-primary">
+	                PRÉSTAMOS
+	            </button>
+	        </form>
+        </div>
+        
         <div class="header_form">
 			<form method="post" action="ServletCuenta" class="abm_form">
 				<div class="abm_form-column">
@@ -39,10 +57,10 @@
 		</div>
        	<div class="button-wrapper">
 	        <form action="" method="get">
-	            <button type="submit" class="button">
+	            <button type="submit" class="button btn btn-success">
 	                Guardar
 	            </button>
-	            <button type="submit" class="button">
+	            <button type="submit" class="button btn btn-secondary">
 	                Volver
 	            </button>
 	        </form>
