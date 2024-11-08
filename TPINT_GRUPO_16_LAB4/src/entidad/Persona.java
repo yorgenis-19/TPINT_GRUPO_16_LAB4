@@ -17,6 +17,7 @@ public class Persona {
     private LocalDate fechaNacimiento;
     private String email;
     private Usuario usuario;
+    /*
     private Direccion direccion;    
 
 	public Direccion getDireccion() {
@@ -26,7 +27,7 @@ public class Persona {
 	public void setDireccion(Direccion direccion) {
 		this.direccion = direccion;
 	}    
-
+     */
 
 	public Usuario getUsuario() {
 		return usuario;
