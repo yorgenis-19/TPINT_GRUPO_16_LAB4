@@ -3,7 +3,7 @@ package entidad;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class Persona {
+public class Cliente {
 	private int id;
     private String dni;
     private String cuil;
