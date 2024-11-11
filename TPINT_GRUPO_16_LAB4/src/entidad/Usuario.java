@@ -2,72 +2,46 @@ package entidad;
 
 
 public class Usuario {
-	private int id;
-    private String persona_dni;
-    private String usuario;
-    private String Pass;
-    private int tipoUsuarioId;
-    private int habilitado;
+	private int Id;
+    private String Nombre;
+    private String Clave;
+    private int TipoUsuarioId;
+    private boolean Activo;
 
 
  
 	public int getId() {
-		return id;
+		return Id;
 	}
-
-
 	public void setId(int id) {
-		this.id = id;
+		this.Id = id;
 	}
 
-
-	public String getPersona_dni() {
-		return persona_dni;
+	public String getNombre() {
+		return Nombre;
+	}
+	public void setNombre(String usuario) {
+		this.Nombre = usuario;
 	}
 
-
-	public void setPersona_dni(String persona_dni) {
-		this.persona_dni = persona_dni;
+	public String getClave() {
+		return Clave;
 	}
-
-
-	public String getUsuario() {
-		return usuario;
+	public void setClave(String contrasena) {
+		this.Clave = contrasena;
 	}
-
-
-	public void setUsuario(String usuario) {
-		this.usuario = usuario;
-	}
-
-
-	public String getPass() {
-		return Pass;
-	}
-
-
-	public void setPass(String contrasena) {
-		this.Pass = contrasena;
-	}
-
 
 	public int getTipoUsuarioId() {
-		return tipoUsuarioId;
+		return TipoUsuarioId;
 	}
-
-
 	public void setTipoUsuarioId(int tipoUsuarioId) {
-		this.tipoUsuarioId = tipoUsuarioId;
+		this.TipoUsuarioId = tipoUsuarioId;
 	}
-
-
-	public int getHabilitado() {
-		return habilitado;
+	public boolean getActivo() {
+		return Activo;
 	}
-
-
-	public void setHabilitado(int habilitado) {
-		this.habilitado = habilitado;
+	public void setActivo(boolean activo) {
+		this.Activo = activo;
 	}
        
     
