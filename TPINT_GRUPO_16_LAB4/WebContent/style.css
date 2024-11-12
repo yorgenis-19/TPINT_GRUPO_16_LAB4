@@ -275,6 +275,18 @@ body {
 	background-color: #eee;
 }
 
+.cards-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 24px 8px;
+}
+.username{
+    width: fit-content;
+	margin: 0 24px;
+	align-content: center;
+}
+
 
 /* Utilidades */
 .text-center { text-align: center; }
