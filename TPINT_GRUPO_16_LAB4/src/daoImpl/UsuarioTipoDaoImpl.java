@@ -5,11 +5,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-import dao.UsuarioDao;
-import entidad.Usuario;
+import dao.UsuarioTipoDao;
 import entidad.UsuarioTipo;
 
-public class UsuarioDaoImpl implements UsuarioDao {
+public class UsuarioTipoDaoImpl implements UsuarioTipoDao {
 
 	private String host = "jdbc:mysql://localhost:3306/";
 	private String user ="root";
@@ -17,7 +16,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
 	private String dbName = "BancoTP";
 	
 	@Override
-	public Usuario Obtener(String nombre, String clave) {
+	public UsuarioTipo Obtener(int id) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch(ClassNotFoundException e)
@@ -25,23 +24,18 @@ public class UsuarioDaoImpl implements UsuarioDao {
 			e.printStackTrace();
 		}
 		
-		Usuario usuario = new Usuario();
+		UsuarioTipo usuario = new UsuarioTipo();
 		Connection cn = null;
 		try
 		{
 			cn = DriverManager.getConnection(host+dbName,user,pass);
 			Statement st = cn.createStatement();
-			String query = "SELECT * FROM Usuario WHERE Nombre = '" + nombre + "' AND Clave = '" + clave + "'";
+			String query = "SELECT * FROM UsuarioTipo WHERE Id = " + id;
 			ResultSet rs = st.executeQuery(query);
 			while(rs.next())
 			{	
 				usuario.setId(rs.getInt("Id"));
-				usuario.setNombre(rs.getString("Nombre"));
-				usuario.setClave(rs.getString("Clave"));
-				UsuarioTipo tipo = new UsuarioTipo();
-				tipo = new UsuarioTipoDaoImpl().Obtener(rs.getInt("TipoId"));
-				usuario.setTipo(tipo);
-				usuario.setActivo(rs.getBoolean("Activo"));
+				usuario.setDescripcion(rs.getString("Descripcion"));
 			}
 		}
 		catch(Exception e)

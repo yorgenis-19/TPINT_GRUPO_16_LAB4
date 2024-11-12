@@ -48,8 +48,17 @@ public class ServletLogin extends HttpServlet {
 			} 
 			else {
 				request.getSession().setAttribute("UsuarioActual", obj);
-				RequestDispatcher rd = request.getRequestDispatcher("/Cliente.jsp");
-				rd.forward(request, response);
+				
+				if(new String("Cliente").equals(obj.getTipo().getDescripcion()))
+				{
+					RequestDispatcher rd = request.getRequestDispatcher("/Cliente.jsp");	
+					rd.forward(request, response);
+				}
+				else
+				{
+					RequestDispatcher rd = request.getRequestDispatcher("/Administrador.jsp");	
+					rd.forward(request, response);
+				}
 			}
 
 			//request.getSession().setAttribute("UsuarioActual", obj);

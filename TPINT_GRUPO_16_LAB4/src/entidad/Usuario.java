@@ -5,7 +5,7 @@ public class Usuario {
 	private int Id;
     private String Nombre;
     private String Clave;
-    private int TipoUsuarioId;
+    private UsuarioTipo Tipo;
     private boolean Activo;
 
 
@@ -31,11 +31,11 @@ public class Usuario {
 		this.Clave = contrasena;
 	}
 
-	public int getTipoUsuarioId() {
-		return TipoUsuarioId;
+	public UsuarioTipo getTipo() {
+		return Tipo;
 	}
-	public void setTipoUsuarioId(int tipoUsuarioId) {
-		this.TipoUsuarioId = tipoUsuarioId;
+	public void setTipo(UsuarioTipo tipo) {
+		this.Tipo = tipo;
 	}
 	public boolean getActivo() {
 		return Activo;
