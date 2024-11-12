@@ -48,7 +48,7 @@ if(session.getAttribute("UsuarioActual") != null)
     </div>
   </div>
 </nav>
- <div class="container">
+ <div class="container page-container">
  
  <div class="container cards-container">
 	<a class="card" href="BuscadorCliente.jsp">

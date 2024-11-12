@@ -42,7 +42,7 @@ if(session.getAttribute("UsuarioActual") != null)
     </div>
   </div>
 </nav>
-<div class="container">
+<div class="container page-container">
         <h1 style="text-align: center;">Buscar Clientes</h1>
         <div class="header">
 	        <div class="filter-container">

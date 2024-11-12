@@ -286,6 +286,17 @@ body {
 	margin: 0 24px;
 	align-content: center;
 }
+.navbar{
+	position: fixed;
+  width: 100%;
+  top: 0;
+  height: 70px;
+  z-index: 10;
+}
+.page-container{
+	top: 70px;
+  	position: relative;
+}
 
 
 /* Utilidades */
