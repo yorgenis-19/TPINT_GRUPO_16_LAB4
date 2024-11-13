@@ -76,7 +76,7 @@ if(request.getAttribute("ClientesResultado") != null) {
 				    <button type="submit" class="btn btn-primary" name=btnBuscar>Buscar</button>
 				  </div>
 				  <div class="col-1">
-				    <button class="btn btn-success">Nuevo</button>
+				    <a class="btn btn-success" href="ABMCliente.jsp">Nuevo</a>
 				  </div>
 	         </form>
 	         
@@ -103,9 +103,9 @@ if(request.getAttribute("ClientesResultado") != null) {
         			<td><%=obj.getDni()%></td>
         			<td><%=obj.getEmail()%></td>
         			<td>
-	        			<button type="submit" class="btn btn-outline-primarybtn btn-outline-primary">
+	        			<a type="submit" class="btn btn-outline-primarybtn btn-outline-primary" href="ABMCliente.jsp">
 	                        Ver
-	                    </button>
+	                    </a>
                     </td>
                     <td>
 	        			<button type="submit" class="btn btn-outline-danger">
