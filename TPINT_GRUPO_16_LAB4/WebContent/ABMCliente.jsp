@@ -47,7 +47,54 @@ if(session.getAttribute("UsuarioActual") != null)
 <div class="container page-container">
         <h1 style="text-align: center;">Cliente</h1>
         <div class="header_form">
-			<form method="post" action="ServletCliente" class="abm_form">
+			<form method="post" action="ServletCliente" class="container">
+			
+			<div class="row">
+			  <div class="col-sm">
+    			<label for="txtNombre" class="col-sm-2 col-form-label">Nombre</label>
+			    <input type="text" class="form-control" placeholder="Nombre" aria-label="Nombre" id="txtNombre" name="txtNombre">
+			  </div>
+			  <div class="col-sm">
+    			<label for="txtApellido" class="col-sm-2 col-form-label">Apellido</label>
+			    <input type="text" class="form-control" placeholder="Apellido" aria-label="Apellido"  id="txtApellido" name="txtApellido">
+			  </div>
+			</div>
+			<div class="row">
+			  <div class="col-sm">
+    			<label for="cmbSexo" class="col-sm-2 col-form-label">Sexo</label>
+			    <select class="form-select" id="cmbSexo" name="cmbSexo">
+				    <option value="1" selected>Masculino</option>
+				    <option value="2">Femenino</option>
+			  	</select>				
+			  </div>
+			  <div class="col-sm">
+    			<label for="txtDNI" class="col-sm-2 col-form-label">D.N.I.</label>
+			    <input type="text" class="form-control" placeholder="D.N.I." aria-label="D.N.I." name="txtDNI" id="txtDNI">
+			  </div>
+			</div>
+			
+			<div class="row">
+			  <div class="col-sm">
+    			<label for="txtCUIL" class="col-sm-2 col-form-label">C.U.I.L.</label>
+			    <input type="text" class="form-control" placeholder="C.U.I.L." aria-label="C.U.I.L." name="txtCUIL" id="txtCUIL">
+			  </div>
+			  <div class="col-sm">
+    			<label for="txtTelefono" class="col-sm-2 col-form-label">Teléfono</label>
+			    <input type="text" class="form-control" placeholder="Telefono" aria-label="Telefono"  name="txtTelefono" id="txtTelefono">
+			  </div>
+			</div>
+			
+			<div class="row">
+			  <div class="col-sm">
+    			<label for="txtEmail" class="col-sm-2 col-form-label">Email</label>
+			    <input type="text" class="form-control" placeholder="Email" aria-label="Email" name="txtEmail" id="txtEmail">
+			  </div>
+			  <div class="col-sm">
+    			<label for="txtFechaNacimiento" class="col-sm col-form-label">Fecha de Nacimiento</label>
+			    <input type="text" class="form-control" placeholder="Fecha de Nacimiento" aria-label="Fecha de Nacimiento"  name="txtFechaNacimiento" id="txtFechaNacimiento">
+			  </div>
+			</div>
+			<!-- 
 				<div class="abm_form-column">
 					<label for="txtNombre">NOMBRE: </label>
 					<input type="text" name="txtNombre" id="txtNombre"/>
@@ -83,7 +130,7 @@ if(session.getAttribute("UsuarioActual") != null)
 						<option value="2">Provincia_2</option>
 					</select>
 				</div>
-				
+				-->
 			</form>
         </div>
        	<div class="button-wrapper">
