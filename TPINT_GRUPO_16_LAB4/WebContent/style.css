@@ -246,6 +246,7 @@ body {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-evenly;
+	margin: 12px 0px;
 }
 .filter-container .filter-container-column{
 	display: flex;
@@ -297,7 +298,9 @@ body {
 	top: 70px;
   	position: relative;
 }
-
+.card-body{
+	align-self: center;
+}
 
 /* Utilidades */
 .text-center { text-align: center; }

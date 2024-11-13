@@ -22,4 +22,18 @@ public class UsuarioNegocioImpl implements UsuarioNegocio {
 		return obj;
 	}
 
+	@Override
+	public Usuario Obtener(int id) {
+		Usuario obj = new Usuario();
+		UsuarioDao dao = new UsuarioDaoImpl();
+		try
+		{
+			obj = dao.Obtener(id);
+		}
+		catch(Exception e)
+		{
+			e.getStackTrace();
+		}
+		return obj;
+	}
 }

@@ -1,101 +1,85 @@
 package entidad;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class Cliente {
-	private int id;
-    private String dni;
-    private String cuil;
-    private String nombre;
-    private String apellido;
-    private String sexo;
-    private String Celular;
+	private int Id;
+	private Usuario Usuario;
+	private String Nombre;
+	private String Apellido;
+	private String Sexo;
+    private String Dni;
+    private String Cuil;
     private String Telefono;
-    private int direccion_id;
-	private String nacionalidad;
-    private LocalDate fechaNacimiento;
-    private String email;
-    private Usuario usuario;
-    /*
-    private Direccion direccion;    
-
-	public Direccion getDireccion() {
-		return direccion;
-	}
-
-	public void setDireccion(Direccion direccion) {
-		this.direccion = direccion;
-	}    
-     */
-
-	public Usuario getUsuario() {
-		return usuario;
+    private String Email;
+    private Date FechaNacimiento;
+    private int DireccionId;
+    private int LocalidadId;
+    private int ProvinciaId;
+	
+    public Usuario getUsuario() {
+		return Usuario;
 	}
     
 	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+		this.Usuario = usuario;
 	}
 	
-	public int getDireccion_id() {
-		return direccion_id;
+	public int getDireccionId() {
+		return DireccionId;
 	}
 	
-	public void setDireccion_id(int direccion_id) {
-		this.direccion_id = direccion_id;
+	public void setDireccionId(int direccion_id) {
+		this.DireccionId = direccion_id;
 	}
 
     
 	public String getEmail() {
-		return email;
+		return Email;
 	}
 	public void setEmail(String email) {
-		this.email = email;
+		this.Email = email;
 	}
-	public void setFechaNacimiento(LocalDate fechaNacimiento) {
-		this.fechaNacimiento = fechaNacimiento;
+	public void setFechaNacimiento(Date fechaNacimiento) {
+		this.FechaNacimiento = fechaNacimiento;
 	}
 	public int getId() {
-		return id;
+		return Id;
 	}
 	public void setId(int id) {
-		this.id = id;
+		this.Id = id;
 	}
 	public String getDni() {
-		return dni;
+		return Dni;
 	}
 	public void setDni(String dni) {
-		this.dni = dni;
+		this.Dni = dni;
 	}
 	public String getCuil() {
-		return cuil;
+		return Cuil;
 	}
 	public void setCuil(String cuil) {
-		this.cuil = cuil;
+		this.Cuil = cuil;
 	}
 	public String getNombre() {
-		return nombre;
+		return Nombre;
 	}
 	public void setNombre(String nombre) {
-		this.nombre = nombre;
+		this.Nombre = nombre;
 	}
 	public String getApellido() {
-		return apellido;
+		return Apellido;
 	}
 	public void setApellido(String apellido) {
-		this.apellido = apellido;
+		this.Apellido = apellido;
 	}
 	public String getSexo() {
-		return sexo;
+		return Sexo;
 	}
 	public void setSexo(String sexo) {
-		this.sexo = sexo;
-	}
-	public String getCelular() {
-		return Celular;
-	}
-	public void setCelular(String celular) {
-		Celular = celular;
+		this.Sexo = sexo;
 	}
 	public String getTelefono() {
 		return Telefono;
@@ -103,22 +87,28 @@ public class Cliente {
 	public void setTelefono(String telefono) {
 		Telefono = telefono;
 	}
-	public String getNacionalidad() {
-		return nacionalidad;
+	public int getLocalidadId() {
+		return LocalidadId;
 	}
-	public void setNacionalidad(String nacionalidad) {
-		this.nacionalidad = nacionalidad;
+	public void setLocalidadId(int id) {
+		this.LocalidadId = id;
 	}
-	 public String getFechaNacimiento() {
+	public int getProvinciaId() {
+		return ProvinciaId;
+	}
+	public void setProvinciaId(int id) {
+		ProvinciaId = id;
+	}
+	 /*public String getFechaNacimiento() {
 	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyy-MM-dd");
-	        return this.fechaNacimiento.format(formatter);
+	        return this.FechaNacimiento.format(formatter);
 	    }
 	 
 	
 
 	  public void setFechaNacimiento(String fechaNacimiento) {
 	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyy-MM-dd");
-	        this.fechaNacimiento = LocalDate.parse(fechaNacimiento, formatter);
+	        this.FechaNacimiento = LocalDate.parse(fechaNacimiento, formatter);
 	    }
-
+*/
 }

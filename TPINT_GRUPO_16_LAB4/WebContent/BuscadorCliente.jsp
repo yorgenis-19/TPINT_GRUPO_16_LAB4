@@ -1,3 +1,5 @@
+<%@page import="entidad.Cliente"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="entidad.Usuario"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
@@ -19,6 +21,10 @@ Usuario usuario = new Usuario();
 if(session.getAttribute("UsuarioActual") != null)
 {
 	usuario = (Usuario)session.getAttribute("UsuarioActual");
+}
+ArrayList<Cliente> clientes = new ArrayList<Cliente>();
+if(request.getAttribute("ClientesResultado") != null) {
+	clientes = (ArrayList<Cliente>)request.getAttribute("ClientesResultado");
 }
 %>
 <nav class="navbar bg-primary navbar-expand-lg " data-bs-theme="dark">
@@ -43,58 +49,72 @@ if(session.getAttribute("UsuarioActual") != null)
   </div>
 </nav>
 <div class="container page-container">
-        <h1 style="text-align: center;">Buscar Clientes</h1>
+        <h1 style="text-align: center;">CLIENTES</h1>
         <div class="header">
 	        <div class="filter-container">
-	        	<div class="filter-container-column">
-	        		<label for="txtNombre">NOMBRE: </label>
-					<input type="text" name="txtNombre" id="txtNombre"/>
-					<label for="txtApellido">APELLIDO: </label>
-					<input type="text" name="txtApellido" id="txtApellido"/>
-	        	</div>
-	        	<div class="filter-container-column">
-	        		<label for="txtDNI">D.N.I.: </label>
-					<input type="text" name="txtDNI" id="txtDNI"/>
-					<label for="txtEmail">EMAIL: </label>
-					<input type="text" name="txtEmail" id="txtEmail"/>
-	        	</div>
+	         <form class="row g-3" method="get" action="ServletBuscarClientes">
+	         	  <div class="col-md-4">
+				    <label for="txtNombre" class="form-label">Nombre</label>
+				    <input type="text" class="form-control" id="txtNombre" name="txtNombre">
+				  </div>
+			      <div class="col-md-4">
+				    <label for="txtApellido" class="form-label">Apellido</label>
+				    <input type="text" class="form-control" id="txtApellido" name="txtApellido">
+				  </div>
+			      <div class="col-md-4">
+				    <label for="txtDNI" class="form-label">DNI</label>
+				    <input type="text" class="form-control" id="txtDNI" name="txtDNI">
+				  </div>
+				  <div class="col-md-4">
+				    <label for="txtEmail" class="form-label">Email</label>
+				    <input type="text" class="form-control" id="txtEmail" name="txtEmail">
+				  </div>
+				  
+				  <div class="col-10">
+				  </div>
+				  <div class="col-1">
+				    <button type="submit" class="btn btn-primary" name=btnBuscar>Buscar</button>
+				  </div>
+				  <div class="col-1">
+				    <button class="btn btn-success">Nuevo</button>
+				  </div>
+	         </form>
+	         
 	        </div>
-	        
-	       	<div class="button-wrapper">
-	          <button type="submit" class="button">
-	              Buscar
-	          </button>
-	        </div>
+	         
         </div>
         <div class="grid-container">
-        	<table border="1" style="width: 100%;" class="table">
+        	<table class="table table-striped table-hover">
         		<tr>
         			<th>APELLIDO</th>
         			<th>NOMBRE</th>
         			<th>DNI</th>
         			<th>EMAIL</th>
         			<th></th>
+        			<th></th>
         		</tr>
         		<%
-        		for(int i = 0; i < 5; i++) {
+    				if(clientes != null) {
+        			for(Cliente obj : clientes) {
     			%>
         		<tr>
-        			<td>Perez</td>
-        			<td>Juan</td>
-        			<td>12345678</td>
-        			<td>asd@asd.com</td>
+        			<td><%=obj.getApellido()%></td>
+        			<td><%=obj.getNombre()%></td>
+        			<td><%=obj.getDni()%></td>
+        			<td><%=obj.getEmail()%></td>
         			<td>
-	        			<button type="submit" class="button">
+	        			<button type="submit" class="btn btn-outline-primarybtn btn-outline-primary">
 	                        Ver
 	                    </button>
                     </td>
                     <td>
-	        			<button type="submit" class="button">
+	        			<button type="submit" class="btn btn-outline-danger">
 	                        Eliminar
 	                    </button>
                     </td>
         		</tr>
-        		<%} %>
+        		<%} 
+        		}%>
         	</table>
         </div>
 </div>
