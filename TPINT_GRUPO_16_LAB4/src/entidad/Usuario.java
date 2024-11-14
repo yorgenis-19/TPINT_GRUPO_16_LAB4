@@ -5,6 +5,7 @@ public class Usuario {
 	
 	public Usuario() {
 		this.Tipo = new UsuarioTipo();
+		this.Activo = true;
 	}
 	
 	private int Id;

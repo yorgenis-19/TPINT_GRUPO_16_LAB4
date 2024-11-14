@@ -91,7 +91,6 @@ if(request.getAttribute("ClientesResultado") != null) {
         			<th>DNI</th>
         			<th>EMAIL</th>
         			<th></th>
-        			<th></th>
         		</tr>
         		<%
     				if(clientes != null) {
@@ -109,11 +108,6 @@ if(request.getAttribute("ClientesResultado") != null) {
 		                        Ver
 		                    </button>        			
 	        			</form>
-                    </td>
-                    <td>
-	        			<button  class="btn btn-outline-danger">
-	                        Eliminar
-	                    </button>
                     </td>
         		</tr>
         		<%} 

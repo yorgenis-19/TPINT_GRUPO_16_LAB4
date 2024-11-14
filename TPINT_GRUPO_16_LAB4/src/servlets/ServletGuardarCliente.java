@@ -15,8 +15,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import entidad.Cliente;
+import entidad.Usuario;
+import entidad.UsuarioTipo;
 import negocio.ClienteNegocio;
+import negocio.UsuarioNegocio;
 import negocioImpl.ClienteNegocioImpl;
+import negocioImpl.UsuarioNegocioImpl;
+import negocioImpl.UsuarioTipoNegocioImpl;
 /**
  * Servlet implementation class ServletGuardarCliente
  */
@@ -74,6 +79,22 @@ public class ServletGuardarCliente extends HttpServlet {
 			obj.setCuil(cuil);
 			obj.setTelefono(telefono);
 			obj.setFechaNacimiento(fechaNacimiento);
+			
+				String usuario = request.getParameter("txtUsuario");
+				String clave = request.getParameter("txtClave");
+				//int tipoId = Integer.parseInt(request.getParameter("cmbTipo"));
+				Usuario usu = new Usuario();
+				usu.setNombre(usuario);
+				usu.setClave(clave);
+				usu.setActivo(true);
+				UsuarioTipo tipo = new UsuarioTipoNegocioImpl().Obtener("Cliente");
+				usu.setTipo(tipo);
+				UsuarioNegocio negUsuario = new UsuarioNegocioImpl();
+				negUsuario.Guardar(usu);
+				
+				obj.setUsuario(negUsuario.Obtener(usu.getNombre(), usu.getClave()));
+			
+			
 	        int filas = neg.Guardar(obj);
 
 	        request.setAttribute("Filas", filas);

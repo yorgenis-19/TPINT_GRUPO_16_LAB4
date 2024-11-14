@@ -1,3 +1,7 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="negocioImpl.UsuarioTipoNegocioImpl"%>
+<%@page import="negocio.UsuarioTipoNegocio"%>
+<%@page import="entidad.UsuarioTipo"%>
 <%@page import="entidad.Cliente"%>
 <%@page import="entidad.Usuario"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -8,6 +12,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Cliente</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -21,16 +27,23 @@
 </style>
 </head>
 <body>
+<script>
+window.onload = function() {
+	
+}
+</script>
 <%
-Usuario usuario = new Usuario(); 
-if(session.getAttribute("UsuarioActual") != null)
-{
-	usuario = (Usuario)session.getAttribute("UsuarioActual");
-}
-Cliente cliente = new Cliente();
-if(request.getAttribute("ClienteActual") != null){
-	cliente = (Cliente)request.getAttribute("ClienteActual");
-}
+	Usuario usuario = new Usuario(); 
+	if(session.getAttribute("UsuarioActual") != null)
+	{
+		usuario = (Usuario)session.getAttribute("UsuarioActual");
+	}
+	Cliente cliente = new Cliente();
+	if(request.getAttribute("ClienteActual") != null){
+		cliente = (Cliente)request.getAttribute("ClienteActual");
+	}
+	UsuarioTipoNegocio neg = new UsuarioTipoNegocioImpl();
+	ArrayList<UsuarioTipo> tipos = neg.ObtenerTodos();
 %>
 <nav class="navbar bg-primary navbar-expand-lg " data-bs-theme="dark">
   <div class="container-fluid">
@@ -71,8 +84,6 @@ if(request.getAttribute("ClienteActual") != null){
     			<label for="txtApellido" class="col-sm-2 col-form-label">Apellido</label>
 			    <input type="text" class="form-control"value="<%if(cliente.getId() != 0){%><%=cliente.getApellido() %><%} %>"  placeholder="Apellido" aria-label="Apellido"  id="txtApellido" name="txtApellido" required>
 			  </div>
-			</div>
-			<div class="row">
 			  <div class="col-sm">
     			<label for="cmbSexo" class="col-sm-2 col-form-label">Sexo</label>
 			    <select class="form-select" value="<%if(cliente.getId() != 0){%><%=cliente.getSexo() %><%} %>" id="cmbSexo" name="cmbSexo" required>
@@ -80,13 +91,12 @@ if(request.getAttribute("ClienteActual") != null){
 				    <option value="Femenino" <%if(cliente.getId() != 0 && cliente.getSexo().equals("Femenino")){%> selected <%}%>>Femenino</option>
 			  	</select>				
 			  </div>
+			</div>
+			<div class="row">
 			  <div class="col-sm">
     			<label for="txtDNI" class="col-sm-2 col-form-label">D.N.I.</label>
 			    <input type="text" class="form-control"value="<%if(cliente.getId() != 0){%><%=cliente.getDni() %><%} %>"  placeholder="D.N.I." aria-label="D.N.I." name="txtDNI" id="txtDNI" required>
 			  </div>
-			</div>
-			
-			<div class="row">
 			  <div class="col-sm">
     			<label for="txtCUIL" class="col-sm-2 col-form-label">C.U.I.L.</label>
 			    <input type="text" class="form-control" value="<%if(cliente.getId() != 0){%><%=cliente.getCuil() %><%} %>" placeholder="C.U.I.L." aria-label="C.U.I.L." name="txtCUIL" id="txtCUIL" required>
@@ -107,18 +117,101 @@ if(request.getAttribute("ClienteActual") != null){
 			    <input type="date" class="form-control" value="<%if(cliente.getId() != 0){%><%=cliente.getFechaNacimiento() %><%} %>" placeholder="Fecha de Nacimiento" aria-label="Fecha de Nacimiento"  name="txtFechaNacimiento" id="txtFechaNacimiento" required>
 			  </div>
 			</div>
+			
+			<div class="row">
+			</div>
+			
+		  <%if(cliente.getId() == 0){%>
+			<div class="row">
+		    	<div class="col-sm">
+	    			<label for="txtUsuario" class="col-sm-2 col-form-label">Usuario</label>
+	        		<input type="text" class="form-control" placeholder="Usuario" aria-label="Nombre" id="txtUsuario" name="txtUsuario" required>
+       			</div>
+		    	<div class="col-sm">
+	    			<label for="txtClave" class="col-sm-2 col-form-label">Clave</label>
+        			<input type="password" class="form-control" placeholder="Clave" aria-label="Clave" id="txtClave" name="txtClave" required>
+        		</div>
+        	</div>
+        	<%} %>
+
 			<div class="row button-row">
 			  <div class="col-sm">
+			  <button type="submit" class="btn btn-primary" name="btnGuardar">
+	                GUARDAR
+	            </button>
+	            <!-- 
+			  <%if(cliente.getId() == 0){%>
+				<button type="button" class="btn btn-primary" id="btnAbrirModal" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+				  GUARDAR
+				</button>
+			  <%} else {%>
 				<button type="submit" class="btn btn-primary" name="btnGuardar">
 	                GUARDAR
 	            </button>
+	            <%} %>
+	             -->
 	            <a class="btn btn-secondary" href="BuscadorCliente.jsp">
 	                VOLVER
 	            </a>
            	  </div>
 			</div>
+			
+		  <%if(cliente.getId() == 0){%>
+			<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h1 class="modal-title fs-5" id="staticBackdropLabel">Nuevo Usuario</h1>
+			        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			      </div>
+			      <div class="modal-body">
+			        <div class="container">
+			        	<div class="row">
+					    	<div class="col-sm">
+				    			<label for="txtUsuario" class="col-sm-2 col-form-label">Usuario</label>
+				        		<input type="text" class="form-control" placeholder="Usuario" aria-label="Nombre" id="txtUsuario" name="txtUsuario">
+			       			</div>
+			        	</div>
+			        	<div class="row">
+					    	<div class="col-sm">
+				    			<label for="txtClave" class="col-sm-2 col-form-label">Clave</label>
+			        			<input type="password" class="form-control" placeholder="Clave" aria-label="Clave" id="txtClave" name="txtClave">
+			        		</div>
+			        	</div>
+			        	<!-- 
+			        	<div class="row">
+					    	<div class="col-sm">
+			    			<label for="cmbUsuarioTipo" class="col-sm-2 col-form-label">Tipo</label>
+						    <select class="form-select" id="cmbTipo" name="cmbTipo">
+						    <%
+							    for(UsuarioTipo tipo : tipos)
+							    {%>
+							        <option value="<%=tipo.getId()%>">
+							        <%=tipo.getDescripcion()%>
+							        </option>
+							    <%}
+						    %>
+						  	</select>
+			        		</div>
+			        	</div>
+			        	 -->
+			        </div>
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+			        <button type="submit" name="btnNuevoUsuario" class="btn btn-primary">Guardar</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+	            <%} %>
 			</form>
         </div>
 </div>
+
+
+
+
+
 </body>
 </html>

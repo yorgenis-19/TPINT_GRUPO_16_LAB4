@@ -3,7 +3,9 @@ package daoImpl;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 
 import dao.UsuarioDao;
 import entidad.Usuario;
@@ -85,5 +87,44 @@ public class UsuarioDaoImpl implements UsuarioDao {
 			e.printStackTrace();
 		}
 		return usuario;
+	}
+
+
+	@Override
+	public int Guardar(Usuario obj) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch(ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		
+		String query = "INSERT INTO `Usuario`(`Nombre`,`Clave`,`TipoId`,`Activo`)VALUES('"+obj.getNombre()+"','"+obj.getClave()+"',"+obj.getTipo().getId()+","+obj.getActivo()+")";
+		if(obj.getId() > 0)
+		{
+			query = "UPDATE Usuario SET Nombre = '"+obj.getNombre()+"', Clave = '"+obj.getClave()+"', TipoId = "+obj.getTipo().getId()+", Activo = "+obj.getActivo()+" WHERE Id = " + obj.getId();
+		}
+		
+		Connection cn = null;
+		int filas = 0;
+			
+		try {
+			cn = DriverManager.getConnection(host+dbName, user, pass);
+			Statement st = cn.createStatement();
+			filas = st.executeUpdate(query);
+		} 
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			if(cn != null) {
+				try {
+					cn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return filas;
 	}
 }
