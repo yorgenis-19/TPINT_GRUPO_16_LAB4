@@ -47,6 +47,7 @@ public class ServletGuardarCliente extends HttpServlet {
 		if(request.getParameter("btnGuardar") != null)
 		{
 			ClienteNegocio neg = new ClienteNegocioImpl();
+			int id = Integer.parseInt(request.getParameter("txtId"));
 			String nombre = request.getParameter("txtNombre"); 
 			String apellido = request.getParameter("txtApellido");
 			String email = request.getParameter("txtEmail"); 
@@ -62,6 +63,9 @@ public class ServletGuardarCliente extends HttpServlet {
 				e.printStackTrace();
 			}
 			Cliente obj = new Cliente();
+			if(id > 0) {
+				obj = neg.Obtener(id);
+			}
 			obj.setNombre(nombre);
 			obj.setApellido(apellido);
 			obj.setEmail(email);

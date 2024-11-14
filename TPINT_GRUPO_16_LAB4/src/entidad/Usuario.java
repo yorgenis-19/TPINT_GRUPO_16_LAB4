@@ -2,6 +2,11 @@ package entidad;
 
 
 public class Usuario {
+	
+	public Usuario() {
+		this.Tipo = new UsuarioTipo();
+	}
+	
 	private int Id;
     private String Nombre;
     private String Clave;

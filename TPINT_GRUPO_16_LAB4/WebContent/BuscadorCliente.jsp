@@ -103,12 +103,15 @@ if(request.getAttribute("ClientesResultado") != null) {
         			<td><%=obj.getDni()%></td>
         			<td><%=obj.getEmail()%></td>
         			<td>
-	        			<a type="submit" class="btn btn-outline-primarybtn btn-outline-primary" href="ABMCliente.jsp">
-	                        Ver
-	                    </a>
+	        			<form method="get" action="ServletVerCliente">
+	        				<input name="Id" value="<%=obj.getId()%>" style="display:none;">
+		        			<button type="submit" name="btnVer" class="btn btn-outline-primarybtn btn-outline-primary">
+		                        Ver
+		                    </button>        			
+	        			</form>
                     </td>
                     <td>
-	        			<button type="submit" class="btn btn-outline-danger">
+	        			<button  class="btn btn-outline-danger">
 	                        Eliminar
 	                    </button>
                     </td>

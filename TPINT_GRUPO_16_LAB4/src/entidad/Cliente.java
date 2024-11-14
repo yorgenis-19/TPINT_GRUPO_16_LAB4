@@ -5,6 +5,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class Cliente {
+	public Cliente() {
+		this.Usuario = new Usuario();
+	}
 	private int Id;
 	private Usuario Usuario;
 	private String Nombre;
