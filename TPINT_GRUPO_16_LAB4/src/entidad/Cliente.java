@@ -1,8 +1,8 @@
 package entidad;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class Cliente {
 	private int Id;
@@ -41,9 +41,6 @@ public class Cliente {
 	}
 	public void setEmail(String email) {
 		this.Email = email;
-	}
-	public void setFechaNacimiento(Date fechaNacimiento) {
-		this.FechaNacimiento = fechaNacimiento;
 	}
 	public int getId() {
 		return Id;
@@ -98,6 +95,12 @@ public class Cliente {
 	}
 	public void setProvinciaId(int id) {
 		ProvinciaId = id;
+	}
+	public void setFechaNacimiento(Date fechaNacimiento) {
+		this.FechaNacimiento = fechaNacimiento;
+	}
+	public Date getFechaNacimiento() {
+		return FechaNacimiento;
 	}
 	 /*public String getFechaNacimiento() {
 	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyy-MM-dd");

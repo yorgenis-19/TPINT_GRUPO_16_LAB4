@@ -3,7 +3,9 @@ package daoImpl;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -106,6 +108,39 @@ public class ClienteDaoImpl implements ClienteDao {
 			e.printStackTrace();
 		}
 		return objs;
+	}
+
+	@Override
+	public int Guardar(Cliente obj) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch(ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		
+		String query = "INSERT INTO `Cliente`(`UsuarioId`,`Nombre`,`Apellido`,`Sexo`,`DNI`,`CUIL`,`Telefono`,`Email`,`FechaNacimiento`,`DireccionId`,`LocalidadId`,`ProvinciaId`)VALUES("+obj.getId()+",'"+obj.getNombre()+"','"+obj.getApellido()+"','"+obj.getSexo()+"','"+obj.getDni()+"','"+obj.getCuil()+"','"+obj.getTelefono()+"','"+obj.getEmail()+"','"+new SimpleDateFormat("yyyMMdd").format(obj.getFechaNacimiento())+"',"+obj.getDireccionId()+","+obj.getLocalidadId()+","+obj.getProvinciaId()+")";
+		Connection cn = null;
+		int filas = 0;
+			
+		try {
+			cn = DriverManager.getConnection(host+dbName, user, pass);
+			Statement st = cn.createStatement();
+			filas = st.executeUpdate(query);
+		} 
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			if(cn != null) {
+				try {
+					cn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return filas;
 	}
 
 }

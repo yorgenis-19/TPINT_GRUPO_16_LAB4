@@ -1,3 +1,4 @@
+<%@page import="entidad.Cliente"%>
 <%@page import="entidad.Usuario"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
@@ -13,7 +14,11 @@
 
 <!-- Archivo CSS externo -->
 <link rel="stylesheet" type="text/css" href="style.css">
-
+<style>
+.button-row{
+	  margin: 12px 0;
+}
+</style>
 </head>
 <body>
 <%
@@ -22,6 +27,7 @@ if(session.getAttribute("UsuarioActual") != null)
 {
 	usuario = (Usuario)session.getAttribute("UsuarioActual");
 }
+Cliente cliente = new Cliente();
 %>
 <nav class="navbar bg-primary navbar-expand-lg " data-bs-theme="dark">
   <div class="container-fluid">
@@ -45,104 +51,69 @@ if(session.getAttribute("UsuarioActual") != null)
   </div>
 </nav>
 <div class="container page-container">
-        <h1 style="text-align: center;">Cliente</h1>
+        <h1 style="text-align: center;">Clientes</h1>
         <div class="header_form">
-			<form method="post" action="ServletCliente" class="container">
+			<form method="post" action="ServletGuardarCliente" class="container needs-validation">
 			
 			<div class="row">
 			  <div class="col-sm">
     			<label for="txtNombre" class="col-sm-2 col-form-label">Nombre</label>
-			    <input type="text" class="form-control" placeholder="Nombre" aria-label="Nombre" id="txtNombre" name="txtNombre">
+   			    <div class="input-group has-validation">
+				    <input type="text" class="form-control" placeholder="Nombre" aria-label="Nombre" id="txtNombre" name="txtNombre" required>
+			    </div>
 			  </div>
 			  <div class="col-sm">
     			<label for="txtApellido" class="col-sm-2 col-form-label">Apellido</label>
-			    <input type="text" class="form-control" placeholder="Apellido" aria-label="Apellido"  id="txtApellido" name="txtApellido">
+			    <input type="text" class="form-control" placeholder="Apellido" aria-label="Apellido"  id="txtApellido" name="txtApellido" required>
 			  </div>
 			</div>
 			<div class="row">
 			  <div class="col-sm">
     			<label for="cmbSexo" class="col-sm-2 col-form-label">Sexo</label>
-			    <select class="form-select" id="cmbSexo" name="cmbSexo">
+			    <select class="form-select" id="cmbSexo" name="cmbSexo" required>
 				    <option value="1" selected>Masculino</option>
 				    <option value="2">Femenino</option>
 			  	</select>				
 			  </div>
 			  <div class="col-sm">
     			<label for="txtDNI" class="col-sm-2 col-form-label">D.N.I.</label>
-			    <input type="text" class="form-control" placeholder="D.N.I." aria-label="D.N.I." name="txtDNI" id="txtDNI">
+			    <input type="text" class="form-control" placeholder="D.N.I." aria-label="D.N.I." name="txtDNI" id="txtDNI" required>
 			  </div>
 			</div>
 			
 			<div class="row">
 			  <div class="col-sm">
     			<label for="txtCUIL" class="col-sm-2 col-form-label">C.U.I.L.</label>
-			    <input type="text" class="form-control" placeholder="C.U.I.L." aria-label="C.U.I.L." name="txtCUIL" id="txtCUIL">
+			    <input type="text" class="form-control" placeholder="C.U.I.L." aria-label="C.U.I.L." name="txtCUIL" id="txtCUIL" required>
 			  </div>
 			  <div class="col-sm">
     			<label for="txtTelefono" class="col-sm-2 col-form-label">Teléfono</label>
-			    <input type="text" class="form-control" placeholder="Telefono" aria-label="Telefono"  name="txtTelefono" id="txtTelefono">
+			    <input type="text" class="form-control" placeholder="Telefono" aria-label="Telefono"  name="txtTelefono" id="txtTelefono" required>
 			  </div>
 			</div>
 			
 			<div class="row">
 			  <div class="col-sm">
     			<label for="txtEmail" class="col-sm-2 col-form-label">Email</label>
-			    <input type="text" class="form-control" placeholder="Email" aria-label="Email" name="txtEmail" id="txtEmail">
+			    <input type="email" class="form-control" placeholder="Email" aria-label="Email" name="txtEmail" id="txtEmail" required>
 			  </div>
 			  <div class="col-sm">
     			<label for="txtFechaNacimiento" class="col-sm col-form-label">Fecha de Nacimiento</label>
-			    <input type="text" class="form-control" placeholder="Fecha de Nacimiento" aria-label="Fecha de Nacimiento"  name="txtFechaNacimiento" id="txtFechaNacimiento">
+			    <input type="date" class="form-control" placeholder="Fecha de Nacimiento" aria-label="Fecha de Nacimiento"  name="txtFechaNacimiento" id="txtFechaNacimiento" required>
 			  </div>
 			</div>
-			<!-- 
-				<div class="abm_form-column">
-					<label for="txtNombre">NOMBRE: </label>
-					<input type="text" name="txtNombre" id="txtNombre"/>
-					<label for="txtApellido">APELLIDO: </label>
-					<input type="text" name="txtApellido" id="txtApellido"/>
-					<label for="cmbSexo">SEXO: </label>
-					<select name="cmbSexo" id="cmbSexo">
-						<option value="1">MASCULINO</option>
-						<option value="2">FEMENINO</option>
-					</select>
-					<label for="txtDNI">D.N.I.: </label>
-					<input type="text" name="txtDNI" id="txtDNI"/>
-					<label for="txtCUIL">C.U.I.L.: </label>
-					<input type="text" name="txtCUIL" id="txtCUIL"/>
-					<label for="txtTelefono">TELÉFONO: </label>
-					<input type="text" name="txtTelefono" id="txtTelefono"/>
-				</div>
-				<div class="abm_form-column">
-					<label for="txtEmail">EMAIL: </label>
-					<input type="email" name="txtEmail" id="txtEmail"/>
-					<label for="txtFechaNacimiento">FECHA DE NACIMIENTO: </label>
-					<input type="date" name="txtFechaNacimiento" id="txtFechaNacimiento"/>
-					<label for="txtDireccion">DIRECCIÓN: </label>
-					<input type="text" name="txtDireccion" id="txtDireccion"/>
-					<label for="cmbLocalidad">LOCALIDAD: </label>
-					<select name="cmbLocalidad" id="cmbLocalidad">
-						<option value="1">Localidad_1</option>
-						<option value="2">Localidad_2</option>
-					</select>
-					<label for="cmbProvincia">PROVINCIA: </label>
-					<select name="cmbProvincia" id="cmbProvincia">
-						<option value="1">Provincia_1</option>
-						<option value="2">Provincia_2</option>
-					</select>
-				</div>
-				-->
+			<div class="row button-row">
+			  <div class="col-sm">
+				<button type="submit" class="btn btn-primary" name="btnGuardar">
+	                GUARDAR
+	            </button>
+	            <a class="btn btn-secondary" href="BuscadorCliente.jsp">
+	                VOLVER
+	            </a>
+           	  </div>
+			</div>
 			</form>
         </div>
-       	<div class="button-wrapper">
-               <form action="" method="get">
-                   <button type="submit" class="button">
-                       GUARDAR
-                   </button>
-                   <a class="btn btn-secondary" href="BuscadorCliente.jsp">
-                       VOLVER
-                   </a>
-               </form>
-           </div>
 </div>
 </body>
 </html>

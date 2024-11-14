@@ -38,4 +38,17 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 		}
 		return objs;
 	}
+
+	@Override
+	public int Guardar(Cliente obj) {
+		int filas = 0;
+		ClienteDao dao = new ClienteDaoImpl();
+		try {
+			filas = dao.Guardar(obj);
+		} catch(Exception e)
+		{
+			e.getStackTrace();
+		}
+		return filas;
+	}
 }
