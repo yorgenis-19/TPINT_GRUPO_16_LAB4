@@ -26,7 +26,7 @@ Usuario usuario = null;
 	    <input type="text" class="form-control" id="txtUsuario" aria-describedby="emailHelp" name="txtUsuario">
 	  </div>
 	  <div class="mb-3">
-	    <label for="txtClave" class="form-label">Password</label>
+	    <label for="txtClave" class="form-label">Contraseña</label>
 	    <input type="password" class="form-control" id="txtClave" name="txtClave">
 	  </div>
 	  <%

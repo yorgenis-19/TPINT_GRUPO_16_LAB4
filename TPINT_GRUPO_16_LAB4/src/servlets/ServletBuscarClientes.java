@@ -40,9 +40,13 @@ public class ServletBuscarClientes extends HttpServlet {
 			String apellido = request.getParameter("txtApellido");
 			String email = request.getParameter("txtEmail"); 
 			String dni = request.getParameter("txtDNI");
-	        ArrayList<Cliente> objs = neg.Obtener(nombre, apellido, email, dni);
+	        ArrayList<Cliente> objs = neg.Obtener(nombre, apellido, email, dni, true);
 
 	        request.setAttribute("ClientesResultado", objs);
+	        request.setAttribute("Filtro_Nombre", nombre);
+	        request.setAttribute("Filtro_Apellido", apellido);
+	        request.setAttribute("Filtro_Email", email);
+	        request.setAttribute("Filtro_Dni", dni);
 	        RequestDispatcher rd = request.getRequestDispatcher("/BuscadorCliente.jsp");
 	        rd.forward(request, response);
 		}

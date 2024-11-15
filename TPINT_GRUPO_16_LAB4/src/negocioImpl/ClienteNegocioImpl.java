@@ -25,12 +25,12 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 	}
 
 	@Override
-	public ArrayList<Cliente> Obtener(String nombre, String apellido, String email, String dni) {
+	public ArrayList<Cliente> Obtener(String nombre, String apellido, String email, String dni, boolean activo) {
 		ArrayList<Cliente> objs = new ArrayList<Cliente>();
 		ClienteDao dao = new ClienteDaoImpl();
 		try
 		{
-			objs = dao.Obtener(nombre, apellido, email, dni);
+			objs = dao.Obtener(nombre, apellido, email, dni, activo);
 		}
 		catch(Exception e)
 		{
@@ -50,5 +50,65 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 			e.getStackTrace();
 		}
 		return filas;
+	}
+
+	@Override
+	public boolean ExisteMail(int id, String email) {
+		boolean res = false;
+		ClienteDao dao = new ClienteDaoImpl();
+		try
+		{
+			res = dao.ExisteMail(id,email);
+		}
+		catch(Exception e)
+		{
+			e.getStackTrace();
+		}
+		return res;
+	}
+
+	@Override
+	public boolean ExisteDNI(int id, String dni) {
+		boolean res = false;
+		ClienteDao dao = new ClienteDaoImpl();
+		try
+		{
+			res = dao.ExisteDNI(id,dni);
+		}
+		catch(Exception e)
+		{
+			e.getStackTrace();
+		}
+		return res;
+	}
+
+	@Override
+	public boolean ExisteCUIL(int id, String cuil) {
+		boolean res = false;
+		ClienteDao dao = new ClienteDaoImpl();
+		try
+		{
+			res = dao.ExisteCUIL(id,cuil);
+		}
+		catch(Exception e)
+		{
+			e.getStackTrace();
+		}
+		return res;
+	}
+
+	@Override
+	public boolean ExisteUsuario(int id, String usuario) {
+		boolean res = false;
+		ClienteDao dao = new ClienteDaoImpl();
+		try
+		{
+			res = dao.ExisteUsuario(id,usuario);
+		}
+		catch(Exception e)
+		{
+			e.getStackTrace();
+		}
+		return res;
 	}
 }

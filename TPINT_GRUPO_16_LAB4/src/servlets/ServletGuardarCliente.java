@@ -53,12 +53,23 @@ public class ServletGuardarCliente extends HttpServlet {
 		{
 			ClienteNegocio neg = new ClienteNegocioImpl();
 			int id = Integer.parseInt(request.getParameter("txtId"));
+			String email = request.getParameter("txtEmail"); 
+			String dni = request.getParameter("txtDNI"); 
+			String cuil = request.getParameter("txtCUIL");
+			
+			boolean existeMail = neg.ExisteMail(id, email);
+			if(existeMail) {
+				request.setAttribute("Error_ExisteMail", existeMail);
+		        RequestDispatcher rd = request.getRequestDispatcher("/ABMCliente.jsp");
+		        rd.forward(request, response);
+		        return;
+			}
+			//boolean existeDNI = neg.ExisteDNI(id, dni);
+			//boolean existeCUIL = neg.ExisteCUIL(id, cuil);
+			
 			String nombre = request.getParameter("txtNombre"); 
 			String apellido = request.getParameter("txtApellido");
-			String email = request.getParameter("txtEmail"); 
 			String sexo = request.getParameter("cmbSexo"); 
-			String dni = request.getParameter("txtDNI"); 
-			String cuil = request.getParameter("txtCUIL"); 
 			String telefono = request.getParameter("txtTelefono");
 			Date fechaNacimiento = new Date();
 			try {
@@ -80,7 +91,9 @@ public class ServletGuardarCliente extends HttpServlet {
 			obj.setTelefono(telefono);
 			obj.setFechaNacimiento(fechaNacimiento);
 			
+			if(id == 0) {
 				String usuario = request.getParameter("txtUsuario");
+				//boolean existeUsuario = neg.ExisteUsuario(id, usuario);
 				String clave = request.getParameter("txtClave");
 				//int tipoId = Integer.parseInt(request.getParameter("cmbTipo"));
 				Usuario usu = new Usuario();
@@ -90,9 +103,9 @@ public class ServletGuardarCliente extends HttpServlet {
 				UsuarioTipo tipo = new UsuarioTipoNegocioImpl().Obtener("Cliente");
 				usu.setTipo(tipo);
 				UsuarioNegocio negUsuario = new UsuarioNegocioImpl();
-				negUsuario.Guardar(usu);
-				
+				negUsuario.Guardar(usu);				
 				obj.setUsuario(negUsuario.Obtener(usu.getNombre(), usu.getClave()));
+			}
 			
 			
 	        int filas = neg.Guardar(obj);

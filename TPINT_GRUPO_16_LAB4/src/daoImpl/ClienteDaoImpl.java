@@ -66,7 +66,7 @@ public class ClienteDaoImpl implements ClienteDao {
 	}
 
 	@Override
-	public ArrayList<Cliente> Obtener(String nombre, String apellido, String email, String dni) {
+	public ArrayList<Cliente> Obtener(String nombre, String apellido, String email, String dni, boolean activo) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch(ClassNotFoundException e)
@@ -80,7 +80,7 @@ public class ClienteDaoImpl implements ClienteDao {
 		{
 			cn = DriverManager.getConnection(host+dbName,user,pass);
 			Statement st = cn.createStatement();
-			String query = "SELECT * FROM Cliente WHERE (Nombre LIKE '%" + nombre + "%' ) AND (Apellido LIKE '%" + apellido + "%' ) AND (Email LIKE '%" + email + "%' ) AND (DNI LIKE '%" + dni + "%' )";
+			String query = "SELECT * FROM Cliente c INNER JOIN Usuario u ON u.Id = UsuarioId WHERE u.Activo = "+activo+" AND (c.Nombre LIKE '%" + nombre + "%' ) AND (c.Apellido LIKE '%" + apellido + "%' ) AND (c.Email LIKE '%" + email + "%' ) AND (c.DNI LIKE '%" + dni + "%' )";
 			ResultSet rs = st.executeQuery(query);
 			while(rs.next())
 			{
@@ -146,6 +146,53 @@ public class ClienteDaoImpl implements ClienteDao {
 			}
 		}
 		return filas;
+	}
+
+	@Override
+	public boolean ExisteMail(int id, String email) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch(ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		boolean res = false;
+		Cliente obj = new Cliente();
+		Connection cn = null;
+		try
+		{
+			cn = DriverManager.getConnection(host+dbName,user,pass);
+			Statement st = cn.createStatement();
+			String query = "SELECT Id FROM Cliente WHERE Id != "+ id + "AND Email = '" + email + "' limit 1";
+			ResultSet rs = st.executeQuery(query);
+			while(rs.next())
+			{	
+				res = rs.getInt("Id") > 0;
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return res;
+	}
+
+	@Override
+	public boolean ExisteDNI(int id, String dni) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean ExisteCUIL(int id, String cuil) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean ExisteUsuario(int id, String usuario) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

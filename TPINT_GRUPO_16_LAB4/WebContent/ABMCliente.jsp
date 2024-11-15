@@ -67,7 +67,7 @@ window.onload = function() {
   </div>
 </nav>
 <div class="container page-container">
-        <h1 style="text-align: center;">Clientes</h1>
+        <h1 style="text-align: center;">Cliente</h1>
         <div class="header_form">
 			<form method="post" action="ServletGuardarCliente" class="container needs-validation">
 			
@@ -75,61 +75,81 @@ window.onload = function() {
 				    
 			<div class="row">
 			  <div class="col-sm">
-    			<label for="txtNombre" class="col-sm-2 col-form-label">Nombre</label>
+    			<label for="txtNombre" class="col-sm-2 col-form-label">Nombre:</label>
    			    <div class="input-group has-validation">
 				    <input type="text" class="form-control" value="<%if(cliente.getId() != 0){%><%=cliente.getNombre() %><%} %>" placeholder="Nombre" aria-label="Nombre" id="txtNombre" name="txtNombre" required>
 			    </div>
 			  </div>
 			  <div class="col-sm">
-    			<label for="txtApellido" class="col-sm-2 col-form-label">Apellido</label>
+    			<label for="txtApellido" class="col-sm-2 col-form-label">Apellido:</label>
 			    <input type="text" class="form-control"value="<%if(cliente.getId() != 0){%><%=cliente.getApellido() %><%} %>"  placeholder="Apellido" aria-label="Apellido"  id="txtApellido" name="txtApellido" required>
 			  </div>
+			  <div class="col-sm">		
+    			<label for="txtUsuario" class="col-sm-2 col-form-label">Usuario:</label>
+		  		<%if(cliente.getId() == 0){%>
+	        		<input type="text" class="form-control" placeholder="Usuario" aria-label="Nombre" id="txtUsuario" name="txtUsuario" required>
+		  		<%} else {%>
+		  			<input type="text" class="form-control" value="<%=cliente.getUsuario().getNombre() %>" disabled placeholder="Nombre" aria-label="Nombre" id="txtNombre" name="txtNombre">
+		  		<%} %>
+			  </div>
+			</div>
+			<div class="row">
 			  <div class="col-sm">
-    			<label for="cmbSexo" class="col-sm-2 col-form-label">Sexo</label>
+    			<label for="cmbSexo" class="col-sm-2 col-form-label">Sexo:</label>
 			    <select class="form-select" value="<%if(cliente.getId() != 0){%><%=cliente.getSexo() %><%} %>" id="cmbSexo" name="cmbSexo" required>
 				    <option value="Masculino" <%if(cliente.getId() == 0 || cliente.getSexo().equals("Masculino")){%> selected <%}%>>Masculino</option>
 				    <option value="Femenino" <%if(cliente.getId() != 0 && cliente.getSexo().equals("Femenino")){%> selected <%}%>>Femenino</option>
-			  	</select>				
+			  	</select>
 			  </div>
-			</div>
-			<div class="row">
 			  <div class="col-sm">
-    			<label for="txtDNI" class="col-sm-2 col-form-label">D.N.I.</label>
+    			<label for="txtDNI" class="col-sm-2 col-form-label">D.N.I.:</label>
 			    <input type="text" class="form-control"value="<%if(cliente.getId() != 0){%><%=cliente.getDni() %><%} %>"  placeholder="D.N.I." aria-label="D.N.I." name="txtDNI" id="txtDNI" required>
 			  </div>
+			  
+			  <div class="col-sm">		
+		  		<%if(cliente.getId() == 0){%>
+	    			<label for="txtClave" class="col-sm-2 col-form-label">Clave:</label>
+        			<input type="password" class="form-control" placeholder="Clave" aria-label="Clave" id="txtClave" name="txtClave" required>
+        			
+		  		<%}%>		  	
+			  </div>
+			</div>
+			
+			<div class="row">
 			  <div class="col-sm">
-    			<label for="txtCUIL" class="col-sm-2 col-form-label">C.U.I.L.</label>
+			    <label for="txtCUIL" class="col-sm-2 col-form-label">C.U.I.L.:</label>
 			    <input type="text" class="form-control" value="<%if(cliente.getId() != 0){%><%=cliente.getCuil() %><%} %>" placeholder="C.U.I.L." aria-label="C.U.I.L." name="txtCUIL" id="txtCUIL" required>
 			  </div>
 			  <div class="col-sm">
-    			<label for="txtTelefono" class="col-sm-2 col-form-label">Teléfono</label>
+			    <label for="txtTelefono" class="col-sm-2 col-form-label">Teléfono:</label>
 			    <input type="text" class="form-control" value="<%if(cliente.getId() != 0){%><%=cliente.getTelefono() %><%} %>" placeholder="Telefono" aria-label="Telefono"  name="txtTelefono" id="txtTelefono" required>
 			  </div>
+			  <div class="col-sm">
+		  		<%if(cliente.getId() == 0){%>
+	    			<label for="txtClaveConfirmar" class="col-sm col-form-label">Confirmar Clave:</label>
+        			<input type="password" class="form-control" placeholder="Clave" aria-label="Clave" id="txtClaveConfirmar" name="txtClaveConfirmar" required>
+		  		<%}%>
+			  </div>
 			</div>
 			
 			<div class="row">
 			  <div class="col-sm">
-    			<label for="txtEmail" class="col-sm-2 col-form-label">Email</label>
+			    <label for="txtEmail" class="col-sm-2 col-form-label">Email:</label>
 			    <input type="email" class="form-control" value="<%if(cliente.getId() != 0){%><%=cliente.getEmail() %><%} %>" placeholder="Email" aria-label="Email" name="txtEmail" id="txtEmail" required>
 			  </div>
-			  <div class="col-sm">
-    			<label for="txtFechaNacimiento" class="col-sm col-form-label">Fecha de Nacimiento</label>
+				<div class="col-sm">
+				<label for="txtFechaNacimiento" class="col-sm col-form-label">Fecha de Nacimiento:</label>
 			    <input type="date" class="form-control" value="<%if(cliente.getId() != 0){%><%=cliente.getFechaNacimiento() %><%} %>" placeholder="Fecha de Nacimiento" aria-label="Fecha de Nacimiento"  name="txtFechaNacimiento" id="txtFechaNacimiento" required>
+				</div>
+			  <div class="col-sm">
+			  
 			  </div>
-			</div>
-			
-			<div class="row">
 			</div>
 			
 		  <%if(cliente.getId() == 0){%>
 			<div class="row">
 		    	<div class="col-sm">
-	    			<label for="txtUsuario" class="col-sm-2 col-form-label">Usuario</label>
-	        		<input type="text" class="form-control" placeholder="Usuario" aria-label="Nombre" id="txtUsuario" name="txtUsuario" required>
-       			</div>
-		    	<div class="col-sm">
-	    			<label for="txtClave" class="col-sm-2 col-form-label">Clave</label>
-        			<input type="password" class="form-control" placeholder="Clave" aria-label="Clave" id="txtClave" name="txtClave" required>
+	    			
         		</div>
         	</div>
         	<%} %>
@@ -208,10 +228,5 @@ window.onload = function() {
 			</form>
         </div>
 </div>
-
-
-
-
-
 </body>
 </html>
