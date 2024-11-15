@@ -102,7 +102,7 @@ ArrayList<CuentaTipo> tipos = new CuentaTipoNegocioImpl().ObtenerTodos();
 				    <button type="submit" class="btn btn-primary" name=btnBuscar>Buscar</button>
 				  </div>
 				  <div class="col-1">
-				    <a class="btn btn-success" href="ABMCuenta.jsp">Nuevo</a>
+				    <a class="btn btn-success" href="NuevaCuenta.jsp">Nuevo</a>
 				  </div>
 	         </form>
 	         
