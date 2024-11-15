@@ -18,9 +18,9 @@ import negocioImpl.ClienteNegocioImpl;
 import negocioImpl.CuentaNegocioImpl;
 
 /**
- * Servlet implementation class ServletNuevaCuenta
+ * Servlet implementation class ServletBuscarCuenta
  */
-@WebServlet("/ServletNuevaCuenta")
+@WebServlet("/ServletBuscarCuenta")
 public class ServletBuscarCuenta extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
