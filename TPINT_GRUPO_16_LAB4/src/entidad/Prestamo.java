@@ -1,6 +1,8 @@
 package entidad;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Date;
 
 public class Prestamo {
 	private int id;
@@ -11,6 +13,13 @@ public class Prestamo {
 	private int idEstadoPrestamo;
 	private int cantidadCuotas;
 	private float importeMensualAPagar;
+	public Prestamo(int nroCuenta, int codPrestamoPendinte, Date fecha_creacion, BigDecimal importe,
+			int cantidad_cuotas, int estado) {
+		// TODO Auto-generated constructor stub
+	}
+	public Prestamo() {
+		// TODO Auto-generated constructor stub
+	}
 	public int getId() {
 		return id;
 	}
