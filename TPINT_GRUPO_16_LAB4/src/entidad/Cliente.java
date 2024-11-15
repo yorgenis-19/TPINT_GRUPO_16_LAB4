@@ -105,6 +105,9 @@ public class Cliente {
 	public Date getFechaNacimiento() {
 		return FechaNacimiento;
 	}
+	public String getNombreCompleto() {
+		return this.Apellido + ", "+ this.Nombre;
+	}
 	 /*public String getFechaNacimiento() {
 	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyy-MM-dd");
 	        return this.FechaNacimiento.format(formatter);

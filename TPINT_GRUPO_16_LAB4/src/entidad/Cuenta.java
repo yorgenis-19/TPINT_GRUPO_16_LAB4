@@ -1,72 +1,64 @@
 package entidad;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 public class Cuenta {
 
-	private int numeroCuenta;
-	private int clienteDni;
-	private LocalDate fechaCreacion;
-	private TipoCuenta idTipoCuenta;
-	private String cbu;
-	private float saldo;
-	private int habilitado;
-	
-	private Cliente cliente_Dni;
+	private int Id;
+	private Cliente Cliente;
+	private float Monto;
+	private boolean Activa;
+	private int CBU;
+	private CuentaTipo Tipo;
+	private Date FechaDeCreacion;
 	
 	
-	
-	
-	public int getNumeroCuenta() {
-		return numeroCuenta;
+	public Cuenta() {
+		super();
+		this.Tipo = new CuentaTipo();
 	}
-	public void setNumeroCuenta(int numeroCuenta) {
-		this.numeroCuenta = numeroCuenta;
+	public int getId() {
+		return Id;
 	}
-	public int getNumeroCuenta(int numeroCuenta) {
-		return numeroCuenta;
+	public void setId(int id) {
+		Id = id;
 	}
-	public int getClienteDni() {
-		return clienteDni;
+	public Cliente getCliente() {
+		return Cliente;
 	}
-	public void setClienteDni(int clienteDni) {
-		this.clienteDni = clienteDni;
+	public void setCliente(Cliente cliente) {
+		Cliente = cliente;
 	}
-	public LocalDate getFechaCreacion() {
-		return fechaCreacion;
+	public float getMonto() {
+		return Monto;
 	}
-	public void setFechaCreacion(LocalDate fechaCreacion) {
-		this.fechaCreacion = fechaCreacion;
+	public void setMonto(float monto) {
+		Monto = monto;
 	}
-	public TipoCuenta getIdTipoCuenta() {
-		return idTipoCuenta;
+	public boolean isActiva() {
+		return Activa;
 	}
-	public void setIdTipoCuenta(TipoCuenta idTipoCuenta) {
-		this.idTipoCuenta = idTipoCuenta;
+	public void setActiva(boolean activa) {
+		Activa = activa;
 	}
-	public String getCbu() {
-		return cbu;
+	public int getCBU() {
+		return CBU;
 	}
-	public void setCbu(String cbu) {
-		this.cbu = cbu;
+	public void setCBU(int cBU) {
+		CBU = cBU;
 	}
-	public float getSaldo() {
-		return saldo;
+	public CuentaTipo getTipo() {
+		return Tipo;
 	}
-	public void setSaldo(float saldo) {
-		this.saldo = saldo;
+	public void setTipo(CuentaTipo tipo) {
+		this.Tipo = tipo;
 	}
-	public int getHabilitado() {
-		return habilitado;
+	public Date getFechaDeCreacion() {
+		return FechaDeCreacion;
 	}
-	public void setHabilitado(int habilitado) {
-		this.habilitado = habilitado;
-	}
-	public Cliente getCliente_Dni() {
-		return cliente_Dni;
-	}
-	public void setCliente_Dni(Cliente cliente_Dni) {
-		this.cliente_Dni = cliente_Dni;
+	public void setFechaDeCreacion(Date fechaDeCreacion) {
+		FechaDeCreacion = fechaDeCreacion;
 	}
 	
 	
