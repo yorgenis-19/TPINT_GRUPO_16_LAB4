@@ -25,7 +25,7 @@ if(session.getAttribute("UsuarioActual") != null)
 {
 	usuario = (Usuario)session.getAttribute("UsuarioActual");
 }
-ArrayList<Cliente> clientes = new ClienteNegocioImpl().Obtener("", "", "", "");
+ArrayList<Cliente> clientes = new ClienteNegocioImpl().Obtener("", "", "", "", true);
 ArrayList<CuentaTipo> tipos = new CuentaTipoNegocioImpl().ObtenerTodos();
 %>
 <nav class="navbar bg-primary navbar-expand-lg " data-bs-theme="dark">

@@ -30,7 +30,7 @@ ArrayList<Cuenta> cuentas = new ArrayList<Cuenta>();
 if(request.getAttribute("CuentassResultado") != null) {
 	cuentas = (ArrayList<Cuenta>)request.getAttribute("CuentassResultado");
 }
-ArrayList<Cliente> clientes = new ClienteNegocioImpl().Obtener("", "", "", "");
+ArrayList<Cliente> clientes = new ClienteNegocioImpl().Obtener("", "", "", "", true);
 ArrayList<CuentaTipo> tipos = new CuentaTipoNegocioImpl().ObtenerTodos();
 %>
 <nav class="navbar bg-primary navbar-expand-lg " data-bs-theme="dark">
