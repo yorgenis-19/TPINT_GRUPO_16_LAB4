@@ -260,4 +260,47 @@ public class ClienteDaoImpl implements ClienteDao {
 		return res;
 	}
 
+	@Override
+	public Cliente ObtenerPorUsuario(int usuarioId) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch(ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		
+		Cliente obj = new Cliente();
+		Connection cn = null;
+		try
+		{
+			cn = DriverManager.getConnection(host+dbName,user,pass);
+			Statement st = cn.createStatement();
+			String query = "SELECT * FROM Cliente WHERE UsuarioId ="+ usuarioId;
+			ResultSet rs = st.executeQuery(query);
+			while(rs.next())
+			{	
+				obj.setId(rs.getInt("Id"));
+				Usuario usuario = new UsuarioDaoImpl().Obtener(rs.getInt("UsuarioId"));
+				obj.setUsuario(usuario);
+				obj.setNombre(rs.getString("Nombre"));
+				obj.setApellido(rs.getString("Apellido"));
+				obj.setSexo(rs.getString("Sexo"));
+				obj.setDni(rs.getString("Dni"));
+				obj.setCuil(rs.getString("Cuil"));
+				obj.setTelefono(rs.getString("Telefono"));
+				obj.setEmail(rs.getString("Email"));
+				obj.setFechaNacimiento(rs.getDate("FechaNacimiento"));
+				obj.setDireccionId(rs.getInt("DireccionId"));
+				obj.setLocalidadId(rs.getInt("LocalidadId"));
+				obj.setProvinciaId(rs.getInt("ProvinciaId"));
+				
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return obj;
+	}
+
 }
