@@ -1,3 +1,4 @@
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="negocioImpl.UsuarioTipoNegocioImpl"%>
 <%@page import="negocio.UsuarioTipoNegocio"%>
@@ -44,6 +45,14 @@ window.onload = function() {
 	}
 	UsuarioTipoNegocio neg = new UsuarioTipoNegocioImpl();
 	ArrayList<UsuarioTipo> tipos = neg.ObtenerTodos();
+
+	boolean errorEmail = request.getAttribute("MAIL_EXISTENTE") != null ? (boolean)request.getAttribute("MAIL_EXISTENTE") : false;
+	boolean errorDni = request.getAttribute("DNI_EXISTENTE") != null ? (boolean)request.getAttribute("DNI_EXISTENTE") : false;
+	boolean errorCuil = request.getAttribute("CUIL_EXISTENTE") != null ? (boolean)request.getAttribute("CUIL_EXISTENTE") : false;
+	boolean errorUsuario = request.getAttribute("USUARIO_EXISTENTE") != null ? (boolean)request.getAttribute("USUARIO_EXISTENTE") : false;
+	boolean errorClave = request.getAttribute("CLAVE_DISTINTA") != null ? (boolean)request.getAttribute("CLAVE_DISTINTA") : false;
+	
+	
 %>
 <nav class="navbar bg-primary navbar-expand-lg " data-bs-theme="dark">
   <div class="container-fluid">
@@ -77,17 +86,22 @@ window.onload = function() {
 			  <div class="col-sm">
     			<label for="txtNombre" class="col-sm-2 col-form-label">Nombre:</label>
    			    <div class="input-group has-validation">
-				    <input type="text" class="form-control" value="<%if(cliente.getId() != 0){%><%=cliente.getNombre() %><%} %>" placeholder="Nombre" aria-label="Nombre" id="txtNombre" name="txtNombre" required>
+				    <input type="text" class="form-control" value="<%=cliente.getNombre() %>" placeholder="Nombre" aria-label="Nombre" id="txtNombre" name="txtNombre" required>
 			    </div>
 			  </div>
 			  <div class="col-sm">
     			<label for="txtApellido" class="col-sm-2 col-form-label">Apellido:</label>
-			    <input type="text" class="form-control"value="<%if(cliente.getId() != 0){%><%=cliente.getApellido() %><%} %>"  placeholder="Apellido" aria-label="Apellido"  id="txtApellido" name="txtApellido" required>
+			    <input type="text" class="form-control"value="<%=cliente.getApellido() %>"  placeholder="Apellido" aria-label="Apellido"  id="txtApellido" name="txtApellido" required>
 			  </div>
 			  <div class="col-sm">		
     			<label for="txtUsuario" class="col-sm-2 col-form-label">Usuario:</label>
 		  		<%if(cliente.getId() == 0){%>
 	        		<input type="text" class="form-control" placeholder="Usuario" aria-label="Nombre" id="txtUsuario" name="txtUsuario" required>
+	        		<%if(errorUsuario) {%>
+		    	    <div class="invalid-feedback" style="display:block;">
+				      El usuario ingresado ya existe.
+				    </div>
+				    <%}%>
 		  		<%} else {%>
 		  			<input type="text" class="form-control" value="<%=cliente.getUsuario().getNombre() %>" disabled placeholder="Nombre" aria-label="Nombre" id="txtNombre" name="txtNombre">
 		  		<%} %>
@@ -96,14 +110,19 @@ window.onload = function() {
 			<div class="row">
 			  <div class="col-sm">
     			<label for="cmbSexo" class="col-sm-2 col-form-label">Sexo:</label>
-			    <select class="form-select" value="<%if(cliente.getId() != 0){%><%=cliente.getSexo() %><%} %>" id="cmbSexo" name="cmbSexo" required>
+			    <select class="form-select" value="<%=cliente.getSexo() %>" id="cmbSexo" name="cmbSexo" required>
 				    <option value="Masculino" <%if(cliente.getId() == 0 || cliente.getSexo().equals("Masculino")){%> selected <%}%>>Masculino</option>
 				    <option value="Femenino" <%if(cliente.getId() != 0 && cliente.getSexo().equals("Femenino")){%> selected <%}%>>Femenino</option>
 			  	</select>
 			  </div>
 			  <div class="col-sm">
     			<label for="txtDNI" class="col-sm-2 col-form-label">D.N.I.:</label>
-			    <input type="text" class="form-control"value="<%if(cliente.getId() != 0){%><%=cliente.getDni() %><%} %>"  placeholder="D.N.I." aria-label="D.N.I." name="txtDNI" id="txtDNI" required>
+			    <input type="text" class="form-control"value="<%=cliente.getDni() %>"  placeholder="D.N.I." aria-label="D.N.I." name="txtDNI" id="txtDNI" required>
+			    <%if(errorDni) {%>
+	    	    <div class="invalid-feedback" style="display:block;">
+			      El D.N.I. ingresado ya existe.
+			    </div>
+			    <%}%>
 			  </div>
 			  
 			  <div class="col-sm">		
@@ -118,16 +137,21 @@ window.onload = function() {
 			<div class="row">
 			  <div class="col-sm">
 			    <label for="txtCUIL" class="col-sm-2 col-form-label">C.U.I.L.:</label>
-			    <input type="text" class="form-control" value="<%if(cliente.getId() != 0){%><%=cliente.getCuil() %><%} %>" placeholder="C.U.I.L." aria-label="C.U.I.L." name="txtCUIL" id="txtCUIL" required>
+			    <input type="text" class="form-control" value="<%=cliente.getCuil() %>" placeholder="C.U.I.L." aria-label="C.U.I.L." name="txtCUIL" id="txtCUIL" required>
 			  </div>
 			  <div class="col-sm">
 			    <label for="txtTelefono" class="col-sm-2 col-form-label">Teléfono:</label>
-			    <input type="text" class="form-control" value="<%if(cliente.getId() != 0){%><%=cliente.getTelefono() %><%} %>" placeholder="Telefono" aria-label="Telefono"  name="txtTelefono" id="txtTelefono" required>
+			    <input type="text" class="form-control" value="<%=cliente.getTelefono() %>" placeholder="Telefono" aria-label="Telefono"  name="txtTelefono" id="txtTelefono" required>
 			  </div>
 			  <div class="col-sm">
 		  		<%if(cliente.getId() == 0){%>
 	    			<label for="txtClaveConfirmar" class="col-sm col-form-label">Confirmar Clave:</label>
         			<input type="password" class="form-control" placeholder="Clave" aria-label="Clave" id="txtClaveConfirmar" name="txtClaveConfirmar" required>
+        			<%if(errorClave) {%>
+		    	    <div class="invalid-feedback" style="display:block;">
+				      Las claves ingresadas no coinciden.
+				    </div>
+				    <%}%>
 		  		<%}%>
 			  </div>
 			</div>
@@ -135,11 +159,16 @@ window.onload = function() {
 			<div class="row">
 			  <div class="col-sm">
 			    <label for="txtEmail" class="col-sm-2 col-form-label">Email:</label>
-			    <input type="email" class="form-control" value="<%if(cliente.getId() != 0){%><%=cliente.getEmail() %><%} %>" placeholder="Email" aria-label="Email" name="txtEmail" id="txtEmail" required>
+			    <input type="email" class="form-control" value="<%=cliente.getEmail() %>" placeholder="Email" aria-label="Email" name="txtEmail" id="txtEmail" required>
+			    <%if(errorEmail) {%>
+	    	    <div class="invalid-feedback" style="display:block;">
+			      El email ingresado ya existe.
+			    </div>
+			    <%}%>
 			  </div>
 				<div class="col-sm">
 				<label for="txtFechaNacimiento" class="col-sm col-form-label">Fecha de Nacimiento:</label>
-			    <input type="date" class="form-control" value="<%if(cliente.getId() != 0){%><%=cliente.getFechaNacimiento() %><%} %>" placeholder="Fecha de Nacimiento" aria-label="Fecha de Nacimiento"  name="txtFechaNacimiento" id="txtFechaNacimiento" required>
+			    <input type="date" class="form-control" value="<%=new SimpleDateFormat("yyyy-MM-dd").format(cliente.getFechaNacimiento()) %>" placeholder="Fecha de Nacimiento" aria-label="Fecha de Nacimiento"  name="txtFechaNacimiento" id="txtFechaNacimiento" required>
 				</div>
 			  <div class="col-sm">
 			  

@@ -11,5 +11,5 @@ public interface ClienteDao {
 	public boolean ExisteMail(int id, String email);
 	public boolean ExisteDNI(int id, String dni);
 	public boolean ExisteCUIL(int id, String cuil);
-	public boolean ExisteUsuario(int id, String usuario);
+	public boolean ExisteUsuario(String usuario);
 }
