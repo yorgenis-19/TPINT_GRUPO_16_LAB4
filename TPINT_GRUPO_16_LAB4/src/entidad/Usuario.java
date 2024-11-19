@@ -46,6 +46,9 @@ public class Usuario {
 	public boolean getActivo() {
 		return Activo;
 	}
+	public String getActivoStr() {
+		return Activo ? "Si" : "No";
+	}
 	public void setActivo(boolean activo) {
 		this.Activo = activo;
 	}

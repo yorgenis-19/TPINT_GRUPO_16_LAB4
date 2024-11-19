@@ -1,5 +1,7 @@
 package negocioImpl;
 
+import java.util.ArrayList;
+
 import dao.ClienteDao;
 import dao.UsuarioDao;
 import daoImpl.ClienteDaoImpl;
@@ -50,5 +52,20 @@ public class UsuarioNegocioImpl implements UsuarioNegocio {
 			e.getStackTrace();
 		}
 		return filas;
+	}
+
+	@Override
+	public ArrayList<Usuario> Obtener(String nombre, int tipoId, String activo) {
+		ArrayList<Usuario> obj = new ArrayList<Usuario>();
+		UsuarioDao dao = new UsuarioDaoImpl();
+		try
+		{
+			obj = dao.Obtener(nombre,tipoId,activo);
+		}
+		catch(Exception e)
+		{
+			e.getStackTrace();
+		}
+		return obj;
 	}
 }
