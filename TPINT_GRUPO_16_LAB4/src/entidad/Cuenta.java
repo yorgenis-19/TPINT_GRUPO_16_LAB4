@@ -9,7 +9,7 @@ public class Cuenta {
 	private Cliente Cliente;
 	private float Monto;
 	private boolean Activa;
-	private int CBU;
+	private long CBU;
 	private CuentaTipo Tipo;
 	private Date FechaDeCreacion;
 	
@@ -42,10 +42,10 @@ public class Cuenta {
 	public void setActiva(boolean activa) {
 		Activa = activa;
 	}
-	public int getCBU() {
+	public long getCBU() {
 		return CBU;
 	}
-	public void setCBU(int cBU) {
+	public void setCBU(long cBU) {
 		CBU = cBU;
 	}
 	public CuentaTipo getTipo() {

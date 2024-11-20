@@ -23,7 +23,9 @@ import negocioImpl.CuentaNegocioImpl;
 @WebServlet("/ServletBuscarCuenta")
 public class ServletBuscarCuenta extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+     
+	CuentaNegocio cuentaNeg = new CuentaNegocioImpl();
+	ClienteNegocio clienteNeg = new ClienteNegocioImpl();
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -36,19 +38,61 @@ public class ServletBuscarCuenta extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getParameter("btnBuscar") != null)
+		if(request.getParameter("btnBuscarC") != null)
 		{
-			CuentaNegocio neg = new CuentaNegocioImpl();
-			int clienteId = Integer.parseInt(request.getParameter("cmbCliente")); 
-			int cbu = Integer.parseInt(request.getParameter("txtCBU"));
-			int tipo = Integer.parseInt(request.getParameter("cmbTipo")); 
-			float monto = Float.parseFloat(request.getParameter("txtMonto"));
-	        ArrayList<Cuenta> objs = neg.Obtener(clienteId, cbu, tipo, monto);
+			 Cliente cliente = new Cliente();
+		        ArrayList<Cuenta> listaCuentas = new ArrayList<>();
 
-	        request.setAttribute("ClientesResultado", objs);
-	        RequestDispatcher rd = request.getRequestDispatcher("/BuscadorCliente.jsp");
-	        rd.forward(request, response);
-		}
+		        String idClienteParam = request.getParameter("IDCliente");
+		        int ID = 0;
+
+		        try {
+		            // Validar y convertir el parámetro
+		            if (idClienteParam != null && !idClienteParam.isEmpty()) {
+		                ID = Integer.parseInt(idClienteParam);
+		            } else {
+		                throw new IllegalArgumentException("El ID del cliente no puede estar vacío.");
+		            }
+
+		            // Obtener cuentas por cliente ID
+		            listaCuentas = cuentaNeg.ObtenerCuentasxClienteID(ID);
+
+		            if (listaCuentas != null) {
+		                cliente = clienteNeg.ObtenerPorUsuario(ID);
+
+		                request.setAttribute("listaCuentas", listaCuentas);
+		                request.setAttribute("cliente", cliente);
+
+		                RequestDispatcher dispatcher = request.getRequestDispatcher("/BuscadorCuenta.jsp");
+		                dispatcher.forward(request, response);
+		            } else {
+		                // Manejar el caso de cliente sin cuentas
+		                request.setAttribute("error", "No se encontraron cuentas para el cliente con ID: " + ID);
+		                RequestDispatcher dispatcher = request.getRequestDispatcher("/BuscadorCuenta.jsp");
+		                dispatcher.forward(request, response);
+		            }
+
+		        } catch (NumberFormatException e) {
+		            // Manejo de errores de conversión
+		            request.setAttribute("error", "El ID ingresado no es válido. Debe ser un número.");
+		            RequestDispatcher dispatcher = request.getRequestDispatcher("/BuscadorCuenta.jsp");
+		            dispatcher.forward(request, response);
+
+		        } catch (IllegalArgumentException e) {
+		            // Manejo de errores de validación
+		            request.setAttribute("error", e.getMessage());
+		            RequestDispatcher dispatcher = request.getRequestDispatcher("/BuscadorCuenta.jsp");
+		            dispatcher.forward(request, response);
+
+		        } catch (Exception e) {
+		            // Manejo de otros errores
+		            e.printStackTrace();
+		            request.setAttribute("error", "Se produjo un error al procesar la solicitud.");
+		            RequestDispatcher dispatcher = request.getRequestDispatcher("/BuscadorCuenta.jsp");
+		            dispatcher.forward(request, response);
+		        }
+		    }
+		
 	}
 
 	/**

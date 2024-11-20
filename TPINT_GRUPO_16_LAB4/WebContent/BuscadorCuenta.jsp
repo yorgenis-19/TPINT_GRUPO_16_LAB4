@@ -58,52 +58,12 @@ ArrayList<CuentaTipo> tipos = new CuentaTipoNegocioImpl().ObtenerTodos();
         <h1 style="text-align: center;">CUENTAS</h1>
         <div class="header">
 	        <div class="filter-container">
-	         <form class="row g-3" method="get" action="ServletBuscarCuenta">
-	         	  <div class="col-md-4">
-				    <label for="cmbCliente" class="form-label">Cliente</label>
-				    <select class="form-select" id="cmbCliente" name="cmbCliente">
-			        	<option value="0" selected>Todos</option>
-					    <%
-						    for(Cliente cliente : clientes)
-						    {%>
-						        <option value="<%=cliente.getId()%>">
-						        <%=cliente.getNombreCompleto()%>
-						        </option>
-						    <%}
-					    %>
-				  	</select>
-				  </div>
-			      <div class="col-md-4">
-				    <label for="txtCBU" class="form-label">CBU</label>
-				    <input type="text" class="form-control" id="txtCBU" name="txtCBU">
-				  </div>
-			      <div class="col-md-4">
-				    <label for="cmbTipo" class="form-label">Tipo</label>
-				    <select class="form-select" id="cmbTipo" name="cmbTipo">
-			        	<option value="0" selected>Todos</option>
-					    <%
-						    for(CuentaTipo tipo : tipos)
-						    {%>
-						        <option value="<%=tipo.getId()%>">
-						        <%=tipo.getDescripcion()%>
-						        </option>
-						    <%}
-					    %>
-				  	</select>
-				  </div>
-				  <div class="col-md-4">
-				    <label for="txtMonto" class="form-label">Monto</label>
-				    <input type="number" class="form-control" id="txtMonto" name="txtMonto">
-				  </div>
-				  
-				  <div class="col-10">
-				  </div>
-				  <div class="col-1">
-				    <button type="submit" class="btn btn-primary" name=btnBuscar>Buscar</button>
-				  </div>
-				  <div class="col-1">
-				    <a class="btn btn-success" href="NuevaCuenta.jsp">Nuevo</a>
-				  </div>
+	         <form class="row g-3" method="get" action="ServletBuscarCuenta">	 
+           			<input type="number" id="IDCliente" name="IDCliente"
+           			 placeholder="Ingrese el ID del cliente" value="<%= request.getParameter("IDCliente") != null ? request.getParameter("IDCliente") : "" %>" >
+           		
+           			
+					<input type="submit" value="Buscar Cuentas" class="btn btn-primary" name="btnBuscarC">        		
 	         </form>
 	         
 	        </div>
@@ -120,25 +80,29 @@ ArrayList<CuentaTipo> tipos = new CuentaTipoNegocioImpl().ObtenerTodos();
         			<th></th>
         		</tr>
         		<%
-    				if(clientes != null) {
-        			for(Cuenta obj : cuentas) {
-    			%>
-        		<tr>
-        			<td><%=obj.getCliente().getNombreCompleto()%></td>
-        			<td><%=obj.getMonto()%></td>
-        			<td><%=obj.getCBU()%></td>
-        			<td><%=obj.getTipo().getDescripcion()%></td>
-        			<td>
-	        			<form method="get" action="ServletVerCuenta">
-	        				<input name="Id" value="<%=obj.getId()%>" style="display:none;">
-		        			<button type="submit" name="btnVer" class="btn btn-outline-primarybtn btn-outline-primary">
-		                        Ver
-		                    </button>        			
-	        			</form>
-                    </td>
-        		</tr>
-        		<%} 
-        		}%>
+                // Verificamos que la lista de cuentas no sea nula y que tenga elementos
+                if (request.getAttribute("listaCuentas") != null) {
+                    cuentas = (ArrayList<Cuenta>) request.getAttribute("listaCuentas");
+                    for (Cuenta cuenta : cuentas) {
+            %>
+            <tr>
+                <td><%= cuenta.getCliente().getNombre() + " " + cuenta.getCliente().getApellido() %></td>
+                <td><%= cuenta.getMonto() %></td>
+                <td><%= cuenta.getCBU() %></td>
+                <td><%= cuenta.getTipo().getDescripcion() %></td>
+                <td>
+                    <form method="get" action="ServletVerCuenta">
+                        <input name="Id" value="<%= cuenta.getId() %>" style="display:none;">
+                        <button type="submit" name="btnVer" class="btn btn-outline-primary">
+                            Ver
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            <% 
+                    }
+                } 
+            %>
         	</table>
         </div>
 </div>

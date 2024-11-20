@@ -21,7 +21,7 @@ public class Conexion {
 		{
 			Class.forName("com.mysql.jdbc.Driver");
 			this.connection = DriverManager.getConnection(host+dbName, user, pass);
-			System.out.println("Conexión Abierta");
+			System.out.println("Conexión Abierta en grupo16");
 		}
 		catch(Exception e)
 		{
