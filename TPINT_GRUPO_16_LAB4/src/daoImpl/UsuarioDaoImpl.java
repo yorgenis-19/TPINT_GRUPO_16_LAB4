@@ -16,7 +16,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
 	private String host = "jdbc:mysql://localhost:3306/";
 	private String user ="root";
     private String pass = "root";
-	private String dbName = "BancoTP";
+	private String dbName = "bancotp";
 	
 	@Override
 	public Usuario Obtener(String nombre, String clave) {

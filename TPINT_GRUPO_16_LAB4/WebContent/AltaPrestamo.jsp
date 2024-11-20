@@ -82,7 +82,7 @@
 	Boolean resBoolean=false;
 	if(request.getAttribute("Prestamos")!=null)
 	{
-		listaPrestamos = (ArrayList<Prestamo>) request.getAttribute("Prestamos");
+		listaPrestamos = (ArrayList<Prestamo>) request.getAttribute("Prestamo");
 	}
 	if(request.getAttribute("resString")!=null)
 	{
@@ -97,10 +97,11 @@
  	if(session.getAttribute("Usuario")!=null){	
  		usuario = (Usuario)session.getAttribute("Usuario");
  	}
+ 	
  	//Para paginado:
  		int pag = 0;
  		int cantPag = 0;
- 	    //Al momento de dar siguiente o presionar otro bot�n, manda como parametro "pag" con el n�mero de p�gina.
+ 	    //Al momento de dar siguiente o presionar otro boton, manda como parametro "pag" con el n�mero de pagina.
  	    if (request.getAttribute("pag") != null) {
  	        pag = (int) request.getAttribute("pag");
  	        cantPag = (int) request.getAttribute("cantPag");
@@ -115,7 +116,7 @@
       <div class="collapse navbar-collapse" id="navbarExample01">
 			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
    			 <li class="nav-item active" style="background-color: highlight;">
-        		<a class="nav-link" aria-current="page" href="inicioAdmin.jsp">
+        		<a class="nav-link" aria-current="page" href="/TPINT_GRUPO_16_LAB4/Cliente.jsp">
             		<i class="fas fa-arrow-left"></i> 
             		<!-- Icono de flecha -->
            				 Menu Principal
@@ -135,7 +136,7 @@
 
 <div class="container col-8 mt-5 pt-5">
 <br><br>
-<h2 style="color: #007bff; font-family: 'Arial', sans-serif; text-align: center;">Autorizaci�n de Pr�stamos</h2>
+<h2 style="color: #007bff; font-family: 'Arial', sans-serif; text-align: center;">Autorizacion de Prestamos</h2>
 
 <%
 		if(!resBoolean && resString!= null){%>
@@ -266,7 +267,6 @@
                 <% }  %>						
 	</div>
 </div>	
-		 
 		 
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js">

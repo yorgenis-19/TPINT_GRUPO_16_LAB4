@@ -129,7 +129,7 @@
             </div>
             
             <div class="button-wrapper">
-                <form action="Prestamos.jsp" method="get">
+                <form action="AltaPrestamo.jsp" method="get">
                     <button type="submit" class="button">
                         <i class="fas fa-hand-holding-usd me-2"></i>
                         Solicitar Préstamo
