@@ -60,12 +60,12 @@ ArrayList<CuentaTipo> tipos = new CuentaTipoNegocioImpl().ObtenerTodos();
 	        <div class="filter-container">
 	         <form class="row g-3" method="get" action="ServletBuscarCuenta">	 
            			<input type="number" id="IDCliente" name="IDCliente"
-           			 placeholder="Ingrese el ID del cliente" value="<%= request.getParameter("IDCliente") != null ? request.getParameter("IDCliente") : "" %>" >
-           		
-           			
+           			 placeholder="Ingrese el ID del cliente" value="<%= request.getParameter("IDCliente") != null ? request.getParameter("IDCliente") : "" %>" >           	        			
 					<input type="submit" value="Buscar Cuentas" class="btn btn-primary" name="btnBuscarC">        		
 	         </form>
-	         
+	         <form method="get" action="ServletListarCuentas">
+   				 <input type="submit" value="Listar Todas" name="btnListarCuentas" class="btn btn-primary">
+			</form>
 	        </div>
 	         
         </div>
