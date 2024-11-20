@@ -28,7 +28,7 @@ if(session.getAttribute("UsuarioActual") != null)
 }
 ArrayList<Cuenta> cuentas = new ArrayList<Cuenta>();
 if(request.getAttribute("CuentassResultado") != null) {
-	cuentas = (ArrayList<Cuenta>)request.getAttribute("CuentassResultado");
+	cuentas = (ArrayList<Cuenta>)request.getAttribute("CuentasResultado");
 }
 ArrayList<Cliente> clientes = new ClienteNegocioImpl().Obtener("", "", "", "", true);
 ArrayList<CuentaTipo> tipos = new CuentaTipoNegocioImpl().ObtenerTodos();
@@ -58,7 +58,7 @@ ArrayList<CuentaTipo> tipos = new CuentaTipoNegocioImpl().ObtenerTodos();
         <h1 style="text-align: center;">CUENTAS</h1>
         <div class="header">
 	        <div class="filter-container">
-	         <form class="row g-3" method="get" action="ServletBuscarCuentas">
+	         <form class="row g-3" method="get" action="ServletBuscarCuenta">
 	         	  <div class="col-md-4">
 				    <label for="cmbCliente" class="form-label">Cliente</label>
 				    <select class="form-select" id="cmbCliente" name="cmbCliente">

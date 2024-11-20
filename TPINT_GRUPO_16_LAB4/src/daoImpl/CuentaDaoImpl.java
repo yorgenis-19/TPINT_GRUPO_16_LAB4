@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 
+import com.mysql.jdbc.PreparedStatement;
+
 import dao.ClienteDao;
 import dao.CuentaDao;
 import entidad.Cliente;
@@ -147,4 +149,74 @@ public class CuentaDaoImpl implements CuentaDao {
 		return filas;
 	}
 */
+
+	@Override
+	public ArrayList<Cuenta> ObtenerCuentasxClienteID(int ID) {
+		 ArrayList<Cuenta> cuentas = new ArrayList<>();
+		    String query = "SELECT c.Id AS cuenta_id, c.ClienteId, c.Monto, c.Activa, c.CBU, c.TipoId, c.FechaDeCreacion, " +
+		                   "ct.Id AS tipo_id, ct.Descripcion, " +
+		                   "cl.Id AS cliente_id, cl.Nombre, cl.Apellido, cl.Dni, cl.Cuil, cl.Telefono, cl.Email, cl.FechaDeNacimiento " +
+		                   "FROM Cuenta c " +
+		                   "INNER JOIN CuentaTipo ct ON c.TipoId = ct.Id " +
+		                   "INNER JOIN Cliente cl ON c.ClienteId = cl.Id " +
+		                   "WHERE c.ClienteId = ? AND c.Activa = 1";
+
+		    try {
+		        Conexion cn = new Conexion();
+		        cn.Open();
+		        System.out.println("CONEXIÓN ABIERTA - OBTENER CUENTAS POR CLIENTE ID");
+		        
+		        PreparedStatement preparedStatement = (PreparedStatement) cn.prepareStatement(query);
+		        preparedStatement.setInt(1, ID);
+		        ResultSet rs = preparedStatement.executeQuery();
+
+		        while (rs.next()) {
+		            // Crear objetos necesarios
+		            Cuenta cuenta = new Cuenta();
+		            Cliente cliente = new Cliente();
+		            CuentaTipo tipoCuenta = new CuentaTipo();
+
+		            // Mapear datos de la cuenta
+		            cuenta.setId(rs.getInt("cuenta_id"));
+		            cuenta.setMonto(rs.getFloat("Monto"));
+		            cuenta.setActiva(rs.getBoolean("Activa"));
+		            cuenta.setCBU(rs.getInt("CBU"));
+
+		            // Mapear datos del cliente
+		            cliente.setId(rs.getInt("cliente_id"));
+		            cliente.setNombre(rs.getString("Nombre"));
+		            cliente.setApellido(rs.getString("Apellido"));
+		            cliente.setDni(rs.getString("Dni"));
+		            cliente.setCuil(rs.getString("Cuil"));
+		            cliente.setTelefono(rs.getString("Telefono"));
+		            cliente.setEmail(rs.getString("Email"));
+		            cliente.setFechaNacimiento(rs.getDate("FechaDeNacimiento"));
+
+		            // Asignar el cliente al objeto Cuenta
+		            cuenta.setCliente(cliente);
+
+		            // Mapear datos del tipo de cuenta
+		            tipoCuenta.setId(rs.getInt("tipo_id"));
+		            tipoCuenta.setDescripcion(rs.getString("Descripcion"));
+
+		            // Asignar el tipo de cuenta al objeto Cuenta
+		            cuenta.setTipo(tipoCuenta);
+
+		            // Agregar la cuenta a la lista
+		            cuentas.add(cuenta);
+		        }
+
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    } finally {
+		        try {
+		            Conexion cn = new Conexion();
+		            cn.close();
+		        } catch (Exception ex) {
+		            ex.printStackTrace();
+		        }
+		    }
+
+		    return cuentas;
+	}
 }

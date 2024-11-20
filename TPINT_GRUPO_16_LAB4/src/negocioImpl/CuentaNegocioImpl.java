@@ -8,7 +8,12 @@ import entidad.Cuenta;
 import negocio.CuentaNegocio;
 
 public class CuentaNegocioImpl implements CuentaNegocio {
-
+	private CuentaDao cuentadao;
+	
+	public CuentaNegocioImpl() {
+        cuentadao = new CuentaDaoImpl();
+    }
+	
 	@Override
 	public Cuenta Obtener(int id) {
 		Cuenta obj = new Cuenta();
@@ -37,6 +42,11 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 			e.getStackTrace();
 		}
 		return objs;
+	}
+
+	@Override
+	public ArrayList<Cuenta> ObtenerCuentasxClienteID(int ID) {
+		return cuentadao.ObtenerCuentasxClienteID(ID) ;
 	}
 
 }
