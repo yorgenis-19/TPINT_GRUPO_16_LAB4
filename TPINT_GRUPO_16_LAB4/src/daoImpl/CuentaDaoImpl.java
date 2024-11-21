@@ -1,6 +1,7 @@
 package daoImpl;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -169,7 +170,7 @@ public class CuentaDaoImpl implements CuentaDao {
 		    try {
 		        cn = new Conexion();
 		        cn.Open();
-		        System.out.println("CONEXIÓN ABIERTA - OBTENER CUENTAS POR CLIENTE ID");
+		        System.out.println("CONEXIï¿½N ABIERTA - OBTENER CUENTAS POR CLIENTE ID");
 
 		        preparedStatement = (PreparedStatement) cn.prepareStatement(query);
 		        preparedStatement.setInt(1, ID);
@@ -236,7 +237,7 @@ public class CuentaDaoImpl implements CuentaDao {
 	    try {
 	        cn = new Conexion();
 	        cn.Open();
-	        System.out.println("CONEXIÓN ABIERTA - LISTAR TODAS LAS CUENTAS");
+	        System.out.println("CONEXIï¿½N ABIERTA - LISTAR TODAS LAS CUENTAS");
 
 	        preparedStatement = (PreparedStatement) cn.prepareStatement(query);
 	        rs = preparedStatement.executeQuery();
@@ -332,5 +333,41 @@ public class CuentaDaoImpl implements CuentaDao {
 	    }
 
 	    return cuentas;
+	}
+	
+	public int CrearCuenta(int ID, int TipoCuenta) {
+		 int estado = 0;
+
+		    Conexion cn = new Conexion();
+		    String query = "INSERT INTO Cuenta (ClienteId, Activa, CBU, TipoId, FechaDeCreacion) " +
+		                   "VALUES (?, ?, ?, ?, ?, ?)";
+
+		    try {
+		        cn.Open();
+		        PreparedStatement preparedStatement = (PreparedStatement) cn.prepareStatement(query);
+
+		        // Asignar los valores al PreparedStatement
+		        preparedStatement.setInt(1, ID); // ClienteId
+		       // preparedStatement.setFloat(2, montoInicial); // Monto
+		        preparedStatement.setBoolean(3, true); // Activa (por defecto true)
+		        preparedStatement.setLong(4, generarCBU()); // CBU (se genera automï¿½ticamente)
+		        preparedStatement.setInt(5, TipoCuenta); // TipoId
+		        preparedStatement.setDate(6, Date.valueOf(LocalDate.now())); // FechaDeCreacion
+
+		        // Ejecutar la consulta
+		        estado = preparedStatement.executeUpdate();
+
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    } finally {
+		        cn.close();
+		    }
+
+		    return estado;
+	}
+
+	private long generarCBU() {
+	    // Generar un nï¿½mero aleatorio de 16 dï¿½gitos
+	    return (long) (Math.random() * 1_000_000_000_000_000L);
 	}
 }
