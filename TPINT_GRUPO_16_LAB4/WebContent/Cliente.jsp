@@ -141,8 +141,8 @@ if(session.getAttribute("UsuarioActual") != null)
             </div>
             
             <div class="button-wrapper">
-                <form action="Transferencias.jsp" method="get">
-                    <button type="submit" class="button">
+                <form action="ServletClienteTransferencia" method="get">
+                    <button type="submit" class="button" name="btnClienteTransferencia">
                         <i class="fas fa-exchange-alt me-2"></i>
                         Transferencias
                     </button>
