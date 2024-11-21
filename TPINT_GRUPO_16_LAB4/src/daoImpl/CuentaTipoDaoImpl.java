@@ -160,10 +160,7 @@ public class CuentaTipoDaoImpl implements CuentaTipoDao {
 	        if (tiposDeCuenta.isEmpty()) {
 	            System.out.println("No se han encontrado tipos de cuenta.");
 	        } else {
-	            System.out.println("Tipos de cuenta obtenidos:");
-	            for (CuentaTipo tipo : tiposDeCuenta) {
-	                System.out.println("ID: " + tipo.getId() + " - Descripción: " + tipo.getDescripcion());
-	            }
+	            System.out.println("Tipos de cuenta obtenidos");
 	        }
 
 	    } catch (SQLException e) {

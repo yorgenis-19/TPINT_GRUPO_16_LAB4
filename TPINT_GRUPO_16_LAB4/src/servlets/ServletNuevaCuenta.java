@@ -85,6 +85,8 @@ public class ServletNuevaCuenta extends HttpServlet {
         } else {
             request.setAttribute("error", "Cliente no encontrado.");
         }
+        ArrayList<CuentaTipo> tiposDeCuenta = cuentaTipoNeg.ObtenerTodosLosTiposDeCuenta();
+        request.setAttribute("tiposDeCuenta", tiposDeCuenta);
 
         // Redirigir nuevamente al JSP
         RequestDispatcher dispatcher = request.getRequestDispatcher("NuevaCuenta.jsp");
