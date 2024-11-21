@@ -45,7 +45,7 @@ CREATE TABLE Cuenta
 (
     Id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     ClienteId INT,
-    Monto FLOAT(10,2),
+    Monto FLOAT(10,2),	
     Activa BOOL DEFAULT 1,
     CBU BIGINT,
     TipoId INT,
@@ -54,7 +54,12 @@ CREATE TABLE Cuenta
     FOREIGN KEY (TipoId) REFERENCES CuentaTipo(Id)
 );
 
-CREATE TABLE Movimientos
+CREATE TABLE MovimientoTipo
+(
+    Id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    Descripcion VARCHAR(50) NOT NULL
+);
+CREATE TABLE Movimiento
 (
     Id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     CuentaOrigenId INT,
@@ -62,7 +67,8 @@ CREATE TABLE Movimientos
     Importe FLOAT(10,2),
     Fecha DATE,
     Detalle VARCHAR(50),
-    TIPO INT,
+    TipoId INT,
+    FOREIGN KEY (TipoId) REFERENCES MovimientoTipo(Id),
     FOREIGN KEY (CuentaOrigenId) REFERENCES Cuenta(Id),
     FOREIGN KEY (CuentaDestinoId) REFERENCES Cuenta(Id)
 );

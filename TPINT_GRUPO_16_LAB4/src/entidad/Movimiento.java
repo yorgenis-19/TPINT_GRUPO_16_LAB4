@@ -3,61 +3,53 @@ package entidad;
 import java.time.LocalDate;
 
 public class Movimiento {
-	private int id;
-	private int cuentaOrigenId;
-	private int cuentaDestinoId;
-	private int importe;
-	private LocalDate fecha;
-	private String detalle;
-	private int idTipo;
+	private int Id;
+	private int CuentaOrigenId;
+	private int CuentaDestinoId;
+	private int Importe;
+	private LocalDate Fecha;
+	private String Detalle;
+	private int TipoId;
 	public int getId() {
-		return id;
+		return Id;
 	}
 	public void setId(int id) {
-		this.id = id;
+		this.Id = id;
 	}
 	public int getCuentaOrigenId() {
-		return cuentaOrigenId;
+		return CuentaOrigenId;
 	}
 	public void setCuentaOrigenId(int cuentaOrigenId) {
-		this.cuentaOrigenId = cuentaOrigenId;
+		this.CuentaOrigenId = cuentaOrigenId;
 	}
 	public int getCuentaDestinoId() {
-		return cuentaDestinoId;
+		return CuentaDestinoId;
 	}
 	public void setCuentaDestinoId(int cuentaDestinoId) {
-		this.cuentaDestinoId = cuentaDestinoId;
+		this.CuentaDestinoId = cuentaDestinoId;
 	}
 	public int getImporte() {
-		return importe;
+		return Importe;
 	}
 	public void setImporte(int importe) {
-		this.importe = importe;
+		this.Importe = importe;
 	}
 	public LocalDate getFecha() {
-		return fecha;
+		return Fecha;
 	}
 	public void setFecha(LocalDate fecha) {
-		this.fecha = fecha;
+		this.Fecha = fecha;
 	}
 	public String getDetalle() {
-		return detalle;
+		return Detalle;
 	}
 	public void setDetalle(String detalle) {
-		this.detalle = detalle;
+		this.Detalle = detalle;
 	}
 	public int getIdTipo() {
-		return idTipo;
+		return TipoId;
 	}
 	public void setIdTipo(int idTipo) {
-		this.idTipo = idTipo;
+		this.TipoId = idTipo;
 	}
-	@Override
-	public String toString() {
-		return "Movimiento [id=" + id + ", cuentaOrigenId=" + cuentaOrigenId + ", cuentaDestinoId=" + cuentaDestinoId
-				+ ", importe=" + importe + ", fecha=" + fecha + ", detalle=" + detalle + ", idTipo=" + idTipo + "]";
-	}
-	
-	
-	
 }
