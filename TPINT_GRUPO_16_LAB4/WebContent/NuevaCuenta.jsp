@@ -49,56 +49,39 @@ ArrayList<CuentaTipo> tipos = new CuentaTipoNegocioImpl().ObtenerTodos();
     </div>
   </div>
 </nav>
-<div class="container page-container">
-	<h1 style="text-align: center;">Cuenta</h1>
-	<div class="header_form">
-		<form method="post" action="ServletGuardarCliente" class="container needs-validation">
-			<div class="row">
-			  <div class="col-sm">
-    			<label for="cmbCliente" class="col-sm-2 col-form-label">Cliente</label>
-   			    <div class="input-group has-validation">
-				    <select class="form-select" id="cmbCliente" name="cmbCliente" required>
-				    <%
-					    for(Cliente cliente : clientes)
-					    {%>
-					        <option value="<%=cliente.getId()%>">
-					        <%=cliente.getNombreCompleto()%>
-					        </option>
-					    <%}
-				    %>
-				  	</select>
-			    </div>
-			  </div>
-			</div>
-			<div class="row">
-			  <div class="col-sm">
-    			<label for="cmbTipo" class="col-sm-2 col-form-label">Tipo</label>
-   			    <div class="input-group has-validation">
-				    <select class="form-select" id="cmbTipo" name="cmbTipo" required>
-				    <%
-					    for(CuentaTipo tipo : tipos)
-					    {%>
-					        <option value="<%=tipo.getId()%>">
-					        <%=tipo.getDescripcion()%>
-					        </option>
-					    <%}
-				    %>
-				  	</select>
-			    </div>
-			  </div>
-			</div>
-			<div class="row button-row">
-			  <div class="col-sm">
-				  <button type="submit" class="btn btn-primary" name="btnGuardar">
-		                GUARDAR
-		          </button>
-	            <a class="btn btn-secondary" href="BuscadorCuenta.jsp">
-	                VOLVER
-	            </a>
-			  </div>
-			 </div>
-		</form>
-	</div>
+
+<div class="container">
+    <h2>Crear Cuenta</h2>
+    <% 
+        Cliente cliente = (Cliente) request.getAttribute("cliente");
+        if (cliente != null) {
+    %>
+        <p><strong>Cliente ID:</strong> <%= cliente.getId() %></p>
+        <p><strong>Nombre:</strong> <%= cliente.getNombre() %></p>
+        <p><strong>Apellido:</strong> <%= cliente.getApellido() %></p>
+        <p><strong>DNI:</strong> <%= cliente.getDni() %></p>
+    <% } else { %>
+        <p>No se encontró información del cliente.</p>
+    <% } %>
+
+    <form method="post" action="ServletCrearCuenta">
+        <input type="hidden" name="IDCliente" value="<%= cliente != null ? cliente.getId() : "" %>">
+        
+        <div class="mb-3">
+            <label for="Monto" class="form-label">Monto Inicial</label>
+            <input type="number" step="0.01" class="form-control" id="Monto" name="Monto" required>
+        </div>
+        
+        <div class="mb-3">
+            <label for="TipoCuenta" class="form-label">Tipo de Cuenta</label>
+            <select class="form-control" id="TipoCuenta" name="TipoCuenta" required>
+                <option value="1">Cuenta Corriente</option>
+                <option value="2">Caja de Ahorro</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary" name="btnConfirmarCuenta">Crear Cuenta</button>
+    </form>
 </div>
 
 </body>

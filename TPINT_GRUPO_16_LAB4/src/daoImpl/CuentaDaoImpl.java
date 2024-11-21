@@ -1,6 +1,7 @@
 package daoImpl;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -283,5 +284,41 @@ public class CuentaDaoImpl implements CuentaDao {
 	    }
 
 	    return cuentas;
+	}
+
+	@Override
+	public int CrearCuenta(int ID, int TipoCuenta) {
+		 int estado = 0;
+
+		    Conexion cn = new Conexion();
+		    String query = "INSERT INTO Cuenta (ClienteId, Activa, CBU, TipoId, FechaDeCreacion) " +
+		                   "VALUES (?, ?, ?, ?, ?, ?)";
+
+		    try {
+		        cn.Open();
+		        PreparedStatement preparedStatement = (PreparedStatement) cn.prepareStatement(query);
+
+		        // Asignar los valores al PreparedStatement
+		        preparedStatement.setInt(1, ID); // ClienteId
+		       // preparedStatement.setFloat(2, montoInicial); // Monto
+		        preparedStatement.setBoolean(3, true); // Activa (por defecto true)
+		        preparedStatement.setLong(4, generarCBU()); // CBU (se genera automáticamente)
+		        preparedStatement.setInt(5, TipoCuenta); // TipoId
+		        preparedStatement.setDate(6, Date.valueOf(LocalDate.now())); // FechaDeCreacion
+
+		        // Ejecutar la consulta
+		        estado = preparedStatement.executeUpdate();
+
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    } finally {
+		        cn.close();
+		    }
+
+		    return estado;
+	}
+	private long generarCBU() {
+	    // Generar un número aleatorio de 16 dígitos
+	    return (long) (Math.random() * 1_000_000_000_000_000L);
 	}
 }
