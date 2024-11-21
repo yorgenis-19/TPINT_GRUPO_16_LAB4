@@ -69,7 +69,7 @@ ArrayList<Movimiento> movimientos = (ArrayList<Movimiento>)request.getAttribute(
 	</div>
 	
 	<div class="container">
-        <div class="grid-container">
+        <div class="grid-container" style="height: 500px;overflow: auto;">
         	<table class="table table-striped table-hover">
         		<tr>
         			<th>Origen</th>
