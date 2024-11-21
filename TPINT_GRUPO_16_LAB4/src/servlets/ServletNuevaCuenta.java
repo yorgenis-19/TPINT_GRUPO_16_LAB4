@@ -1,6 +1,8 @@
 package servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,11 +13,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import entidad.Cliente;
 import entidad.Cuenta;
+import entidad.CuentaTipo;
 import entidad.Usuario;
 import negocio.ClienteNegocio;
 import negocio.CuentaNegocio;
+import negocio.CuentaTipoNegocio;
 import negocioImpl.ClienteNegocioImpl;
 import negocioImpl.CuentaNegocioImpl;
+import negocioImpl.CuentaTipoNegocioImpl;
 
 /**
  * Servlet implementation class ServletNuevaCuenta
@@ -24,6 +29,7 @@ import negocioImpl.CuentaNegocioImpl;
 public class ServletNuevaCuenta extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	CuentaNegocio cuentaNeg = new CuentaNegocioImpl();
+	CuentaTipoNegocio cuentaTipoNeg = new CuentaTipoNegocioImpl();
 	ClienteNegocio clienteNeg = new ClienteNegocioImpl();
     /**
      * @see HttpServlet#HttpServlet()
@@ -37,8 +43,16 @@ public class ServletNuevaCuenta extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+
+		// Obtener los tipos de cuenta
+	    ArrayList<CuentaTipo> tiposDeCuenta = cuentaTipoNeg.ObtenerTodosLosTiposDeCuenta();
+
+	    // Pasar los tipos de cuenta al JSP
+	    request.setAttribute("tiposDeCuenta", tiposDeCuenta);
+
+	    // Redirigir al JSP NuevaCuenta.jsp
+	    RequestDispatcher dispatcher = request.getRequestDispatcher("NuevaCuenta.jsp");
+	    dispatcher.forward(request, response);
 	}
 
 	/**

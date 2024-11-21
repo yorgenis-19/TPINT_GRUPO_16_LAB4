@@ -66,7 +66,9 @@ ArrayList<CuentaTipo> tipos = new CuentaTipoNegocioImpl().ObtenerTodos();
 	         <form method="get" action="ServletListarCuentas"  style="margin-top: 10px;">
    				 <input type="submit" value="Listar Todas" name="btnListarCuentas" class="btn btn-primary" >
 			</form>
-				<input type="submit" value="Nueva Cuenta" name="btnCrearC" onclick="window.location.href='NuevaCuenta.jsp';" class="btn btn-primary">
+				<form method="get" action="ServletNuevaCuenta" style="margin-top: 10px;">
+    			<input type="submit" value="Nueva Cuenta" name="btnCrearC" class="btn btn-primary">
+				</form>
 	        </div>
 	         
         </div>

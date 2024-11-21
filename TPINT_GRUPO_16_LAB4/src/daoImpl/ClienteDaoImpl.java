@@ -400,9 +400,7 @@ public class ClienteDaoImpl implements ClienteDao {
 	            cliente.setTelefono(rs.getString("Telefono"));
 	            cliente.setEmail(rs.getString("Email"));
 	            cliente.setFechaNacimiento(rs.getDate("FechaDeNacimiento"));
-	            cliente.setDireccionId(rs.getInt("Direccion"));
-	            cliente.setLocalidadId(rs.getInt("Localidad"));
-	            cliente.setProvinciaId(rs.getInt("Provincia"));
+	          
 
 	            System.out.println("Datos del cliente obtenidos: " + cliente);
 	        } else {

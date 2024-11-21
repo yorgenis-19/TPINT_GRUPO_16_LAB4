@@ -9,4 +9,5 @@ public interface CuentaTipoDao {
 	public CuentaTipo Obtener(int id) throws SQLException;
 	public CuentaTipo Obtener(String descripcion) throws SQLException;
 	public ArrayList<CuentaTipo> ObtenerTodos() throws SQLException;
+	public ArrayList<CuentaTipo> ObtenerTodosLosTiposDeCuenta();
 }

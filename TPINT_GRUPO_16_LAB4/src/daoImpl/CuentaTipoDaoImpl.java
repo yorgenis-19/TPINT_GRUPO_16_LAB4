@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import com.mysql.jdbc.PreparedStatement;
+
 import dao.CuentaTipoDao;
 import entidad.CuentaTipo;
 
@@ -122,6 +124,58 @@ public class CuentaTipoDaoImpl implements CuentaTipoDao {
 			 }
 			}
 		return obj;
+	}
+
+	@Override
+	public ArrayList<CuentaTipo> ObtenerTodosLosTiposDeCuenta() {
+		ArrayList<CuentaTipo> tiposDeCuenta = new ArrayList<>();
+	    Conexion conexion = new Conexion();
+	    Connection cn = null;
+
+	    try {
+	        // Abre la conexión
+	        cn = conexion.Open();
+
+	        if (cn != null) {
+	            System.out.println("Conexión establecida correctamente para todas la cuentas.");
+	        } else {
+	            System.out.println("Error al establecer la conexión.");
+	            return tiposDeCuenta;
+	        }
+
+	        // Consulta SQL
+	        String query = "SELECT * FROM CuentaTipo";
+	        PreparedStatement ps = (PreparedStatement) cn.prepareStatement(query);
+	        ResultSet rs = ps.executeQuery();
+
+	        // Mapear resultados
+	        while (rs.next()) {
+	            CuentaTipo tipo = new CuentaTipo();
+	            tipo.setId(rs.getInt("Id"));
+	            tipo.setDescripcion(rs.getString("Descripcion"));
+	            tiposDeCuenta.add(tipo);
+	        }
+
+	        // Imprimir lo que se ha obtenido
+	        if (tiposDeCuenta.isEmpty()) {
+	            System.out.println("No se han encontrado tipos de cuenta.");
+	        } else {
+	            System.out.println("Tipos de cuenta obtenidos:");
+	            for (CuentaTipo tipo : tiposDeCuenta) {
+	                System.out.println("ID: " + tipo.getId() + " - Descripción: " + tipo.getDescripcion());
+	            }
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        // Cerrar la conexión
+	        if (cn != null) {
+	            conexion.close();
+	        }
+	    }
+
+	    return tiposDeCuenta;
 	}
 
 }

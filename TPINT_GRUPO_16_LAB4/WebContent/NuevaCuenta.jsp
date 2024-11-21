@@ -2,6 +2,7 @@
 <%@page import="entidad.CuentaTipo"%>
 <%@page import="negocioImpl.ClienteNegocioImpl"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
 <%@page import="entidad.Cliente"%>
 <%@page import="entidad.Usuario"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -75,19 +76,31 @@ if(session.getAttribute("UsuarioActual") != null)
     <form method="post" action="ServletNuevaCuenta">
     <input type="hidden" name="IDCliente" value="<%= cliente != null ? cliente.getId() : "" %>">
     <input type="hidden" name="action" value="crearCuenta">
-    
+
     <div class="mb-3">
         <label for="Monto" class="form-label">Monto Inicial</label>
         <input type="number" step="0.01" class="form-control" id="Monto" name="Monto" required>
     </div>
-    
+
     <div class="mb-3">
-        <label for="TipoCuenta" class="form-label">Tipo de Cuenta</label>
-        <select class="form-control" id="TipoCuenta" name="TipoCuenta" required>
-            <option value="1">Cuenta Corriente</option>
-            <option value="2">Caja de Ahorro</option>
-        </select>
-    </div>
+    <label for="TipoCuenta" class="form-label">Tipo de Cuenta</label>
+    <select class="form-control" id="TipoCuenta" name="TipoCuenta" required>
+        <%
+            ArrayList<CuentaTipo> tiposDeCuenta = (ArrayList<CuentaTipo>) request.getAttribute("tiposDeCuenta");
+            if (tiposDeCuenta != null && !tiposDeCuenta.isEmpty()) {
+                for (CuentaTipo tipo : tiposDeCuenta) {
+        %>
+                    <option value="<%= tipo.getId() %>"><%= tipo.getDescripcion() %></option>
+        <%
+                }
+            } else {
+        %>
+                <option disabled>No hay tipos de cuenta disponibles.</option>
+        <%
+            }
+        %>
+    </select>
+</div>
 
     <button type="submit" class="btn btn-primary">Crear Cuenta</button>
 </form>
