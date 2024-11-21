@@ -132,8 +132,8 @@ if(session.getAttribute("UsuarioActual") != null)
             </a>
             
             <div class="button-wrapper">
-                <form action="Cuentas.jsp" method="get">
-                    <button type="submit" class="button">
+                <form action="ServletClienteCuentas" method="get">
+                    <button type="submit" class="button" name="btnClienteCuentas">
                         <i class="fas fa-wallet me-2"></i>
                         Mis Cuentas
                     </button>

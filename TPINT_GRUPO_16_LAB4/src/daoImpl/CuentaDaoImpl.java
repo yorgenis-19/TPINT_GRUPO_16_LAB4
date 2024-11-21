@@ -18,6 +18,8 @@ import entidad.Cliente;
 import entidad.Cuenta;
 import entidad.CuentaTipo;
 import entidad.Usuario;
+import negocioImpl.ClienteNegocioImpl;
+import negocioImpl.CuentaTipoNegocioImpl;
 
 public class CuentaDaoImpl implements CuentaDao {
 
@@ -266,6 +268,53 @@ public class CuentaDaoImpl implements CuentaDao {
 	            cuenta.setTipo(tipoCuenta);
 
 	            // Agregar la cuenta a la lista
+	            cuentas.add(cuenta);
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        // Cerrar recursos en el orden inverso en que fueron abiertos
+	        try {
+	            if (rs != null) rs.close();
+	            if (preparedStatement != null) preparedStatement.close();
+	            if (cn != null) cn.close();
+	        } catch (Exception ex) {
+	            ex.printStackTrace();
+	        }
+	    }
+
+	    return cuentas;
+	}
+
+	@Override
+	public ArrayList<Cuenta> ObtenerPorUsuario(int usuarioId) {
+		ArrayList<Cuenta> cuentas = new ArrayList<>();
+	    String query = "select cu.* from cuenta cu INNER JOIN Cliente cl ON cl.Id = cu.ClienteId WHERE cl.UsuarioId = " + usuarioId;
+	    Conexion cn = null;
+	    PreparedStatement preparedStatement = null;
+	    ResultSet rs = null;
+
+	    try {
+	        cn = new Conexion();
+	        cn.Open();
+
+	        preparedStatement = (PreparedStatement) cn.prepareStatement(query);
+	        rs = preparedStatement.executeQuery();
+
+	        while (rs.next()) {
+	            Cuenta cuenta = new Cuenta();
+	            Cliente cliente = new Cliente();
+	            CuentaTipo tipoCuenta = new CuentaTipo();
+	            cliente = new ClienteNegocioImpl().Obtener(rs.getInt("ClienteId"));
+	            cuenta.setCliente(cliente);
+	            cuenta.setId(rs.getInt("Id"));
+	            cuenta.setMonto(rs.getFloat("Monto"));
+	            cuenta.setCBU(rs.getLong("CBU"));
+	            cuenta.setActiva(rs.getBoolean("Activa"));
+	            cuenta.setFechaDeCreacion(rs.getDate("FechaDeCreacion"));
+	            tipoCuenta = new CuentaTipoNegocioImpl().Obtener(rs.getInt("TipoId"));
+	            cuenta.setTipo(tipoCuenta);
 	            cuentas.add(cuenta);
 	        }
 

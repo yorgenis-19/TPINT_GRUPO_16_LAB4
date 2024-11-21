@@ -56,4 +56,19 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 		return lista;
 	}
 
+	@Override
+	public ArrayList<Cuenta> ObtenerPorUsuario(int usuarioId) {
+		ArrayList<Cuenta> objs = new ArrayList<Cuenta>();
+		CuentaDao dao = new CuentaDaoImpl();
+		try
+		{
+			objs = dao.ObtenerPorUsuario(usuarioId);
+		}
+		catch(Exception e)
+		{
+			e.getStackTrace();
+		}
+		return objs;
+	}
+
 }
