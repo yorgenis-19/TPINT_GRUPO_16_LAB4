@@ -45,62 +45,40 @@ public class ServletNuevaCuenta extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (request.getParameter("btnCrearC") != null) {
-	        String idClienteParam = request.getParameter("IDCliente");
-	        int clienteId = 0;
+		 String action = request.getParameter("action");
 
-	        if (idClienteParam != null && !idClienteParam.isEmpty()) {
-	            clienteId = Integer.parseInt(idClienteParam);
-	        } else {
-	            request.setAttribute("error", "El ID del cliente no puede estar vacío.");
-	            RequestDispatcher rd = request.getRequestDispatcher("/CrearCuenta.jsp");
-	            rd.forward(request, response);
-	            return;
+	        if ("buscarCliente".equals(action)) {
+	            buscarCliente(request, response);
+	        } else if ("crearCuenta".equals(action)) {
+	            crearCuenta(request, response);
 	        }
-
-	        // Obtener cliente
-	        Cliente cliente = clienteNeg.Obtener(clienteId);
-
-	        // Validar si el cliente existe
-	        if (cliente == null || cliente.getId() == 0) {
-	            request.setAttribute("error", "El cliente no existe.");
-	            RequestDispatcher rd = request.getRequestDispatcher("/CrearCuenta.jsp");
-	            rd.forward(request, response);
-	            return;
-	        }
-
-	        // Pasar los datos del cliente al JSP para continuar con la creación de la cuenta
-	        request.setAttribute("cliente", cliente);
-	        RequestDispatcher rd = request.getRequestDispatcher("/CrearCuenta.jsp");
-	        rd.forward(request, response);
-	    }
-
-	    // Manejar el evento del botón "Confirmar Cuenta"
-	    /*if (request.getParameter("btnConfirmarCuenta") != null) {
-	        try {
-	            int clienteId = Integer.parseInt(request.getParameter("IDCliente"));
-	            double monto = Double.parseDouble(request.getParameter("Monto"));
-	            int tipoCuenta = Integer.parseInt(request.getParameter("TipoCuenta"));
-
-	            // Llamar al método para crear la cuenta
-	           int resultado = cuentaNeg.CrearCuenta(clienteId, tipoCuenta);
-
-	            // Verificar si la cuenta se creó correctamente
-	            if (resultado > 0) {
-	                request.setAttribute("mensaje", "Cuenta creada exitosamente.");
-	            } else {
-	                request.setAttribute("error", "No se pudo crear la cuenta.");
-	            }
-
-	        } catch (NumberFormatException e) {
-	            request.setAttribute("error", "Datos inválidos proporcionados. Verifique el monto y el tipo de cuenta.");
-	        } catch (Exception e) {
-	            request.setAttribute("error", "Ocurrió un error inesperado: " + e.getMessage());
-	        }
-
-	        // Redirigir al resultado
-	        RequestDispatcher rd = request.getRequestDispatcher("/Resultado.jsp");
-	        rd.forward(request, response);
-	    }*/
 	}
+	
+	private void buscarCliente(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Obtener el ID del cliente desde el formulario
+        String idClienteParam = request.getParameter("IDCliente");
+        int idCliente = 0;
+
+        if (idClienteParam != null && !idClienteParam.isEmpty()) {
+            idCliente = Integer.parseInt(idClienteParam);
+        }
+
+        // Llamar al método del DAO para obtener los datos del cliente
+        Cliente cliente = clienteNeg.ObtenerClientePorId(idCliente);
+
+        if (cliente != null) {
+            request.setAttribute("cliente", cliente);
+        } else {
+            request.setAttribute("error", "Cliente no encontrado.");
+        }
+
+        // Redirigir nuevamente al JSP
+        RequestDispatcher dispatcher = request.getRequestDispatcher("NuevaCuenta.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void crearCuenta(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+     
+    }
+	
 }

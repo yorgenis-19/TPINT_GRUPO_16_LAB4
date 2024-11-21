@@ -25,8 +25,7 @@ if(session.getAttribute("UsuarioActual") != null)
 {
 	usuario = (Usuario)session.getAttribute("UsuarioActual");
 }
-ArrayList<Cliente> clientes = new ClienteNegocioImpl().Obtener("", "", "", "", true);
-ArrayList<CuentaTipo> tipos = new CuentaTipoNegocioImpl().ObtenerTodos();
+
 %>
 <nav class="navbar bg-primary navbar-expand-lg " data-bs-theme="dark">
   <div class="container-fluid">
@@ -52,36 +51,46 @@ ArrayList<CuentaTipo> tipos = new CuentaTipoNegocioImpl().ObtenerTodos();
 
 <div class="container">
     <h2>Crear Cuenta</h2>
+    
+    <form action="ServletNuevaCuenta" method="post">
+    <div id="BusquedaCliente">
+        <input type="number" id="IDCliente" name="IDCliente" placeholder="Ingrese el ID del cliente" required>
+        <input type="hidden" name="action" value="buscarCliente">
+        <input type="submit" value="Buscar Cliente" class="btn btn-primary">
+    </div>
+</form>
+    
     <% 
-        Cliente cliente = (Cliente) request.getAttribute("cliente");
-        if (cliente != null) {
+    Cliente cliente = (Cliente) request.getAttribute("cliente");
+    if (cliente != null) {
     %>
-        <p><strong>Cliente ID:</strong> <%= cliente.getId() %></p>
-        <p><strong>Nombre:</strong> <%= cliente.getNombre() %></p>
-        <p><strong>Apellido:</strong> <%= cliente.getApellido() %></p>
-        <p><strong>DNI:</strong> <%= cliente.getDni() %></p>
-    <% } else { %>
-        <p>No se encontró información del cliente.</p>
-    <% } %>
+         <p><strong>Cliente ID:</strong> <%= cliente.getId() %></p>
+    <p><strong>Nombre:</strong> <%= cliente.getNombre() %></p>
+    <p><strong>Apellido:</strong> <%= cliente.getApellido() %></p>
+    <p><strong>DNI:</strong> <%= cliente.getDni() %></p>
+<% } else if (request.getParameter("IDCliente") != null) { %>
+    <p style="color: red;">No se encontró información del cliente.</p>
+<% } %>
 
-    <form method="post" action="ServletCrearCuenta">
-        <input type="hidden" name="IDCliente" value="<%= cliente != null ? cliente.getId() : "" %>">
-        
-        <div class="mb-3">
-            <label for="Monto" class="form-label">Monto Inicial</label>
-            <input type="number" step="0.01" class="form-control" id="Monto" name="Monto" required>
-        </div>
-        
-        <div class="mb-3">
-            <label for="TipoCuenta" class="form-label">Tipo de Cuenta</label>
-            <select class="form-control" id="TipoCuenta" name="TipoCuenta" required>
-                <option value="1">Cuenta Corriente</option>
-                <option value="2">Caja de Ahorro</option>
-            </select>
-        </div>
+    <form method="post" action="ServletNuevaCuenta">
+    <input type="hidden" name="IDCliente" value="<%= cliente != null ? cliente.getId() : "" %>">
+    <input type="hidden" name="action" value="crearCuenta">
+    
+    <div class="mb-3">
+        <label for="Monto" class="form-label">Monto Inicial</label>
+        <input type="number" step="0.01" class="form-control" id="Monto" name="Monto" required>
+    </div>
+    
+    <div class="mb-3">
+        <label for="TipoCuenta" class="form-label">Tipo de Cuenta</label>
+        <select class="form-control" id="TipoCuenta" name="TipoCuenta" required>
+            <option value="1">Cuenta Corriente</option>
+            <option value="2">Caja de Ahorro</option>
+        </select>
+    </div>
 
-        <button type="submit" class="btn btn-primary" name="btnConfirmarCuenta">Crear Cuenta</button>
-    </form>
+    <button type="submit" class="btn btn-primary">Crear Cuenta</button>
+</form>
 </div>
 
 </body>

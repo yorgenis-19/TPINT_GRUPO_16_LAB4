@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 
+import com.mysql.jdbc.PreparedStatement;
+
 import dao.ClienteDao;
 import entidad.Cliente;
 import entidad.Usuario;
@@ -55,6 +57,7 @@ public class ClienteDaoImpl implements ClienteDao {
 				obj.setDireccionId(rs.getInt("DireccionId"));
 				obj.setLocalidadId(rs.getInt("LocalidadId"));
 				obj.setProvinciaId(rs.getInt("ProvinciaId"));
+				
 				
 			}
 		}
@@ -364,6 +367,63 @@ public class ClienteDaoImpl implements ClienteDao {
 			}
 		}
 		return obj;
+	}
+
+	@Override
+	public Cliente ObtenerClientePorId(int id) {
+		Cliente cliente = null;
+	    Conexion conexion = new Conexion();
+	    Connection cn = null;
+
+	    try {
+	        // Abre la conexión usando la clase Conexion
+	        cn = conexion.Open();
+
+	        // Consulta SQL
+	        String query = "SELECT * FROM Cliente WHERE Id = ?";
+	        PreparedStatement ps = (PreparedStatement) conexion.prepareStatement(query);
+	        ps.setInt(1, id);
+	        System.out.println("Consulta preparada: " + ps.toString());
+
+	        ResultSet rs = ps.executeQuery();
+	        System.out.println("Consulta ejecutada.");
+
+	        // Mapear resultados
+	        if (rs.next()) {
+	            cliente = new Cliente();
+	            cliente.setId(rs.getInt("Id"));
+	            cliente.setNombre(rs.getString("Nombre"));
+	            cliente.setApellido(rs.getString("Apellido"));
+	            cliente.setSexo(rs.getString("Sexo"));
+	            cliente.setDni(rs.getString("DNI"));
+	            cliente.setCuil(rs.getString("CUIL"));
+	            cliente.setTelefono(rs.getString("Telefono"));
+	            cliente.setEmail(rs.getString("Email"));
+	            cliente.setFechaNacimiento(rs.getDate("FechaDeNacimiento"));
+	            cliente.setDireccionId(rs.getInt("Direccion"));
+	            cliente.setLocalidadId(rs.getInt("Localidad"));
+	            cliente.setProvinciaId(rs.getInt("Provincia"));
+
+	            System.out.println("Datos del cliente obtenidos: " + cliente);
+	        } else {
+	            System.out.println("No se encontró un cliente con el ID: " + id);
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error en la consulta SQL:");
+	        e.printStackTrace();
+	    } finally {
+	        // Cerrar conexión
+	        if (cn != null) {
+	            try {
+	                conexion.close();
+	                System.out.println("Conexión cerrada.");
+	            } catch (Exception e) {
+	                System.out.println("Error al cerrar la conexión:");
+	                e.printStackTrace();
+	            }
+	        }
+	    }
+	    return cliente;
 	}
 
 }
