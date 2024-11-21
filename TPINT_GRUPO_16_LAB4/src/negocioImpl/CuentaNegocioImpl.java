@@ -1,7 +1,7 @@
 package negocioImpl;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Date;
 
 import dao.ClienteDao;
 import dao.CuentaDao;
@@ -99,5 +99,17 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 			e.getStackTrace();
 		}
 	}
+
+	@Override
+	public boolean insertarCuenta(Cuenta cuenta) {
+		CuentaDao dao = new CuentaDaoImpl();
+		 cuenta.setCBU(generarCBU()); // Generar el CBU único
+		 cuenta.setFechaDeCreacion(new java.sql.Date(new Date().getTime())); // Fecha actual
+	        return dao.insertarCuenta(cuenta);
+	}
+	private long generarCBU() {
+        // Generar un número de 18 dígitos
+        return (long) (Math.random() * 1_000_000_000_000_000_000L);
+    }
 
 }

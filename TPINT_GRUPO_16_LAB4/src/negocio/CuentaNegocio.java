@@ -12,4 +12,5 @@ public interface CuentaNegocio {
 	public ArrayList<Cuenta> ObtenerPorUsuario(int usuarioId);
 	public Cuenta ObtenerPorCBU(long cbu);
 	public void Guardar(Cuenta obj);
+	boolean insertarCuenta(Cuenta cuenta);
 }

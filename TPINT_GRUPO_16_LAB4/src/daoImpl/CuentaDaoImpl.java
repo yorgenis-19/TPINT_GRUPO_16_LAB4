@@ -23,6 +23,7 @@ import negocioImpl.ClienteNegocioImpl;
 import negocioImpl.CuentaTipoNegocioImpl;
 
 public class CuentaDaoImpl implements CuentaDao {
+	private Conexion conexion = new Conexion();
 
 	private String host = "jdbc:mysql://localhost:3306/";
 	private String user ="root";
@@ -440,4 +441,28 @@ public class CuentaDaoImpl implements CuentaDao {
 		}
 		
 	}
-}
+
+	@Override
+	public boolean insertarCuenta(Cuenta cuenta) {
+		
+		String query = "INSERT INTO Cuenta (ClienteId, Monto, CBU, TipoId, FechaDeCreacion) VALUES (?, ?, ?, ?, ?)";
+
+        try {
+            PreparedStatement ps = (PreparedStatement) conexion.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, cuenta.getCliente().getId());
+            ps.setFloat(2, cuenta.getMonto());
+            ps.setLong(3, cuenta.getCBU()); // Generado previamente
+            ps.setInt(4, cuenta.getTipo().getId());
+            ps.setDate(5, new java.sql.Date(cuenta.getFechaDeCreacion().getTime()));
+
+            int filasAfectadas = ps.executeUpdate();
+            return filasAfectadas > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            conexion.close();
+        }
+    }
+	}
+

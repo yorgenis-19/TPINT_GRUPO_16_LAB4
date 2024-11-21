@@ -99,6 +99,19 @@ if(session.getAttribute("UsuarioActual") != null)
         <%
             }
         %>
+        <% 
+String mensajeExito = (String) request.getAttribute("mensajeExito");
+String mensajeError = (String) request.getAttribute("mensajeError");
+if (mensajeExito != null) { 
+%>
+    <div class="alert alert-success">
+        <%= mensajeExito %>
+    </div>
+<% } else if (mensajeError != null) { %>
+    <div class="alert alert-danger">
+        <%= mensajeError %>
+    </div>
+<% } %>
     </select>
 </div>
 

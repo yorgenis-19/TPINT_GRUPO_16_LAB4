@@ -94,7 +94,43 @@ public class ServletNuevaCuenta extends HttpServlet {
     }
 
     private void crearCuenta(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-     
+    	try {
+            // Obtener datos del formulario
+            int clienteId = Integer.parseInt(request.getParameter("IDCliente"));
+            float monto = Float.parseFloat(request.getParameter("Monto"));
+            int tipoId = Integer.parseInt(request.getParameter("TipoCuenta"));
+
+            // Crear el objeto Cliente y Tipo
+            Cliente cliente = new Cliente();
+            cliente.setId(clienteId);
+
+            CuentaTipo tipo = new CuentaTipo();
+            tipo.setId(tipoId);
+
+            // Crear el objeto Cuenta
+            Cuenta cuenta = new Cuenta();
+            cuenta.setCliente(cliente);
+            cuenta.setMonto(monto);
+            cuenta.setTipo(tipo);
+
+            // Llamar a la capa de negocio
+            boolean cuentaCreada = cuentaNeg.insertarCuenta(cuenta);
+
+            if (cuentaCreada) {
+                request.setAttribute("mensajeExito", "Cuenta creada con éxito.");
+                request.setAttribute("cliente", cuenta.getCliente());
+            } else {
+                request.setAttribute("mensajeError", "Error al crear la cuenta.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("mensajeError", "Error en los datos ingresados.");
+        }
+
+        // Redirigir nuevamente al JSP
+        RequestDispatcher dispatcher = request.getRequestDispatcher("NuevaCuenta.jsp");
+        doGet(request, response);
     }
 	
 }

@@ -15,4 +15,5 @@ public interface CuentaDao {
 	public int CrearCuenta (int ID, int TipoCuenta);
 	public Cuenta ObtenerPorCBU(long cbu) throws SQLException;
 	public void Guardar(Cuenta obj);
+	boolean insertarCuenta(Cuenta cuenta);
 }
