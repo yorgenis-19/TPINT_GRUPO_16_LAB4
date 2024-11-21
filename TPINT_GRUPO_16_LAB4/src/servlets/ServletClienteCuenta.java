@@ -11,9 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import entidad.Cuenta;
+import entidad.Movimiento;
 import entidad.Usuario;
 import negocio.CuentaNegocio;
 import negocioImpl.CuentaNegocioImpl;
+import negocioImpl.MovimientoNegocioImpl;
 
 /**
  * Servlet implementation class ServletClienteCuenta
@@ -38,6 +40,8 @@ public class ServletClienteCuenta extends HttpServlet {
 		{
 			Cuenta obj = new CuentaNegocioImpl().Obtener(Integer.parseInt(request.getParameter("cuentaId")));
 			request.setAttribute("CuentaSeleccionada", obj);
+			ArrayList<Movimiento> movimientos = new MovimientoNegocioImpl().ObtenerPorCuenta(obj.getId());
+			request.setAttribute("Movimientos", movimientos);
 			RequestDispatcher rd = request.getRequestDispatcher("/ClienteCuenta.jsp");
 			rd.forward(request, response);
 		}

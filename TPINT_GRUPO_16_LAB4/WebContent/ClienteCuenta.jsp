@@ -1,3 +1,6 @@
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="entidad.Movimiento"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="entidad.Cuenta"%>
 <%@page import="entidad.Usuario"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -22,6 +25,8 @@ if(session.getAttribute("UsuarioActual") != null)
 	usuario = (Usuario)session.getAttribute("UsuarioActual");
 }
 Cuenta cuenta = (Cuenta)request.getAttribute("CuentaSeleccionada");
+
+ArrayList<Movimiento> movimientos = (ArrayList<Movimiento>)request.getAttribute("Movimientos");
 
 %>
 <nav class="navbar bg-success navbar-expand-lg " data-bs-theme="dark">
@@ -62,8 +67,36 @@ Cuenta cuenta = (Cuenta)request.getAttribute("CuentaSeleccionada");
 			</div>
 		</div>
 	</div>
-	<div>
 	
+	<div class="container">
+        <div class="grid-container">
+        	<table class="table table-striped table-hover">
+        		<tr>
+        			<th>Origen</th>
+        			<th>Destino</th>
+        			<th>Importe</th>
+        			<th>Fecha</th>
+        			<th>Detalle</th>
+        			<th>Tipo</th>
+        		</tr>
+        		<%
+        			for(Movimiento obj : movimientos) {
+    			%>
+        		<tr>
+        			<td><%=obj.getCuentaOrigen().getCBU()%></td>
+        			<td><%=obj.getCuentaDestino().getCBU()%></td>
+        			<td><%=obj.getImporte()%></td>
+        			<td><%=new SimpleDateFormat("dd/MM/yyyy").format(obj.getFecha())%></td>
+        			<td><%=obj.getDetalle()%></td>
+        			<td><%=obj.getTipo().getDescripcion()%></td>
+        		</tr>
+        		<%}%>
+        	</table>
+        </div>
+	</div>
+	
+	
+	<div>
         <form action="ServletClienteCuentas" method="get">
            <button type="submit" class="btn btn-secondary" name="btnClienteCuentas">
                Volver

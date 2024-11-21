@@ -1,43 +1,44 @@
 package entidad;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 public class Movimiento {
 	private int Id;
-	private int CuentaOrigenId;
-	private int CuentaDestinoId;
-	private int Importe;
-	private LocalDate Fecha;
+	private Cuenta CuentaOrigen;
+	private Cuenta CuentaDestino;
+	private float Importe;
+	private Date Fecha;
 	private String Detalle;
-	private int TipoId;
+	private MovimientoTipo Tipo;
 	public int getId() {
 		return Id;
 	}
 	public void setId(int id) {
 		this.Id = id;
 	}
-	public int getCuentaOrigenId() {
-		return CuentaOrigenId;
+	public Cuenta getCuentaOrigen() {
+		return CuentaOrigen;
 	}
-	public void setCuentaOrigenId(int cuentaOrigenId) {
-		this.CuentaOrigenId = cuentaOrigenId;
+	public void setCuentaOrigen(Cuenta cuentaOrigen) {
+		this.CuentaOrigen = cuentaOrigen;
 	}
-	public int getCuentaDestinoId() {
-		return CuentaDestinoId;
+	public Cuenta getCuentaDestino() {
+		return CuentaDestino;
 	}
-	public void setCuentaDestinoId(int cuentaDestinoId) {
-		this.CuentaDestinoId = cuentaDestinoId;
+	public void setCuentaDestino(Cuenta cuentaDestino) {
+		this.CuentaDestino = cuentaDestino;
 	}
-	public int getImporte() {
+	public float getImporte() {
 		return Importe;
 	}
-	public void setImporte(int importe) {
+	public void setImporte(float importe) {
 		this.Importe = importe;
 	}
-	public LocalDate getFecha() {
+	public Date getFecha() {
 		return Fecha;
 	}
-	public void setFecha(LocalDate fecha) {
+	public void setFecha(Date fecha) {
 		this.Fecha = fecha;
 	}
 	public String getDetalle() {
@@ -46,10 +47,10 @@ public class Movimiento {
 	public void setDetalle(String detalle) {
 		this.Detalle = detalle;
 	}
-	public int getIdTipo() {
-		return TipoId;
+	public MovimientoTipo getTipo() {
+		return Tipo;
 	}
-	public void setIdTipo(int idTipo) {
-		this.TipoId = idTipo;
+	public void setTipo(MovimientoTipo tipo) {
+		this.Tipo = tipo;
 	}
 }
