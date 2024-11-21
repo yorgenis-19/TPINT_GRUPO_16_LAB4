@@ -20,7 +20,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
 	private String dbName = "BancoTP";
 	
 	@Override
-	public Usuario Obtener(String nombre, String clave) {
+	public Usuario Obtener(String nombre, String clave) throws SQLException {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch(ClassNotFoundException e)
@@ -54,6 +54,11 @@ public class UsuarioDaoImpl implements UsuarioDao {
 		{
 			e.printStackTrace();
 			
+		}
+		finally{
+		 if(cn!=null) {
+			 cn.close();			 
+		 }
 		}
 		return usuario;
 	}
@@ -90,6 +95,15 @@ public class UsuarioDaoImpl implements UsuarioDao {
 		catch(Exception e)
 		{
 			e.printStackTrace();
+		}
+		finally {
+			if(cn != null) {
+				try {
+					cn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return usuario;
 	}

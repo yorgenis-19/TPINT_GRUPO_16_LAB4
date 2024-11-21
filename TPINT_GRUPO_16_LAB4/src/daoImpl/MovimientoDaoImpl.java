@@ -63,7 +63,54 @@ public class MovimientoDaoImpl implements MovimientoDao {
 		{
 			e.printStackTrace();
 		}
+		finally {
+			if(cn != null) {
+				try {
+					cn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		return movimientos;
+	}
+
+	@Override
+	public int Guardar(Movimiento mov) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch(ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		
+		String query = "insert into Movimiento (`CuentaOrigenId`,`CuentaDestinoId`, `Importe`, `Fecha`, `Detalle`, `TipoId`) values ("+mov.getCuentaOrigen().getId()+","+mov.getCuentaDestino().getId()+","+mov.getImporte()+",'"+new SimpleDateFormat("yyyyMMdd").format(mov.getFecha())+"','"+mov.getDetalle()+"',"+mov.getTipo().getId()+")";
+		//if(obj.getId() > 0)
+		//{
+		//	query = "UPDATE Usuario SET Nombre = '"+obj.getNombre()+"', Clave = '"+obj.getClave()+"', TipoId = "+obj.getTipo().getId()+", Activo = "+obj.getActivo()+" WHERE Id = " + obj.getId();
+		//}
+		
+		Connection cn = null;
+		int filas = 0;
+			
+		try {
+			cn = DriverManager.getConnection(host+dbName, user, pass);
+			Statement st = cn.createStatement();
+			filas = st.executeUpdate(query);
+		} 
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			if(cn != null) {
+				try {
+					cn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return filas;
 	}
 
 

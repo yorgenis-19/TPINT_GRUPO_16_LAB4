@@ -38,14 +38,18 @@ public class CuentaDaoImpl implements CuentaDao {
 			e.printStackTrace();
 		}
 		
-		Cuenta obj = new Cuenta();
-		Connection cn = null;
+		Conexion cn = null;
+	    PreparedStatement preparedStatement = null;
+	    ResultSet rs = null;
+	    String query = "SELECT * FROM Cuenta WHERE Id ="+ id;
+	    Cuenta obj = new Cuenta();
 		try
 		{
-			cn = DriverManager.getConnection(host+dbName,user,pass);
-			Statement st = cn.createStatement();
-			String query = "SELECT * FROM Cuenta WHERE Id ="+ id;
-			ResultSet rs = st.executeQuery(query);
+			cn = new Conexion();
+	        cn.Open();
+
+	        preparedStatement = (PreparedStatement) cn.prepareStatement(query);
+	        rs = preparedStatement.executeQuery();
 			while(rs.next())
 			{	
 				obj.setId(rs.getInt("Id"));
@@ -62,7 +66,16 @@ public class CuentaDaoImpl implements CuentaDao {
 		catch(Exception e)
 		{
 			e.printStackTrace();
-		}
+		} finally {
+	        // Cerrar recursos en el orden inverso en que fueron abiertos
+	        try {
+	            if (rs != null) rs.close();
+	            if (preparedStatement != null) preparedStatement.close();
+	            if (cn != null) cn.close();
+	        } catch (Exception ex) {
+	            ex.printStackTrace();
+	        }
+	    }
 		return obj;
 	}
 
@@ -111,35 +124,6 @@ public class CuentaDaoImpl implements CuentaDao {
 		{
 			e.printStackTrace();
 		}
-		return objs;
-	}
-/*
-	@Override
-	public int Guardar(Cuenta obj) {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-		} catch(ClassNotFoundException e)
-		{
-			e.printStackTrace();
-		}
-		
-		String query = "INSERT INTO `Cuenta`(`UsuarioId`,`Nombre`,`Apellido`,`Sexo`,`DNI`,`CUIL`,`Telefono`,`Email`,`FechaNacimiento`,`DireccionId`,`LocalidadId`,`ProvinciaId`)VALUES("+obj.getUsuario().getId()+",'"+obj.getNombre()+"','"+obj.getApellido()+"','"+obj.getSexo()+"','"+obj.getDni()+"','"+obj.getCuil()+"','"+obj.getTelefono()+"','"+obj.getEmail()+"','"+new SimpleDateFormat("yyyyMMdd").format(obj.getFechaNacimiento())+"',"+obj.getDireccionId()+","+obj.getLocalidadId()+","+obj.getProvinciaId()+")";
-		if(obj.getId() > 0)
-		{
-			query = "UPDATE Cuenta SET UsuarioId = "+obj.getUsuario().getId()+", Nombre = '"+obj.getNombre()+"', Apellido = '"+obj.getApellido()+"', Sexo = '"+obj.getSexo()+"', DNI = '"+obj.getDni()+"', CUIL = '"+obj.getCuil()+"', Telefono = '"+obj.getTelefono()+"', Email = '"+obj.getEmail()+"', FechaNacimiento = '"+new SimpleDateFormat("yyyyMMdd").format(obj.getFechaNacimiento())+"', DireccionId = "+obj.getDireccionId()+", LocalidadId = "+obj.getLocalidadId()+", ProvinciaId = "+obj.getProvinciaId()+" WHERE ID = " + obj.getId();
-		}
-		
-		Connection cn = null;
-		int filas = 0;
-			
-		try {
-			cn = DriverManager.getConnection(host+dbName, user, pass);
-			Statement st = cn.createStatement();
-			filas = st.executeUpdate(query);
-		} 
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
 		finally {
 			if(cn != null) {
 				try {
@@ -149,9 +133,8 @@ public class CuentaDaoImpl implements CuentaDao {
 				}
 			}
 		}
-		return filas;
+		return objs;
 	}
-*/
 
 	@Override
 	public ArrayList<Cuenta> ObtenerCuentasxClienteID(int ID) {
@@ -369,5 +352,92 @@ public class CuentaDaoImpl implements CuentaDao {
 	private long generarCBU() {
 	    // Generar un n�mero aleatorio de 16 d�gitos
 	    return (long) (Math.random() * 1_000_000_000_000_000L);
+	}
+
+	@Override
+	public Cuenta ObtenerPorCBU(long cbu) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch(ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		
+		Cuenta obj = new Cuenta();
+		Conexion cn = null;
+	    PreparedStatement preparedStatement = null;
+	    ResultSet rs = null;
+		try
+		{
+	        cn = new Conexion();
+	        cn.Open();
+			String query = "SELECT * FROM Cuenta WHERE CBU = "+ cbu;
+			preparedStatement = (PreparedStatement) cn.prepareStatement(query);
+			rs = preparedStatement.executeQuery(query);
+			while(rs.next())
+			{	
+				obj.setId(rs.getInt("Id"));
+				CuentaTipo tipo = new CuentaTipoDaoImpl().Obtener(rs.getInt("TipoId"));
+				obj.setTipo(tipo);
+				Cliente cliente = new ClienteDaoImpl().Obtener(rs.getInt("ClienteId"));
+				obj.setCliente(cliente);
+				obj.setMonto(rs.getFloat("Monto"));
+				obj.setActiva(rs.getBoolean("Activa"));
+				obj.setCBU(rs.getInt("CBU"));
+				obj.setFechaDeCreacion(rs.getDate("FechaDeCreacion"));
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		} finally {
+	        // Cerrar recursos en el orden inverso en que fueron abiertos
+	        try {
+	            if (rs != null) rs.close();
+	            if (preparedStatement != null) preparedStatement.close();
+	            if (cn != null) cn.close();
+	        } catch (Exception ex) {
+	            ex.printStackTrace();
+	        }
+	    }
+		return obj;
+	}
+
+	@Override
+	public void Guardar(Cuenta obj) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch(ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		
+		String query = "INSERT INTO `Cuenta`(`ClienteId`,`Monto`,`Activa`,`CBU`,`TipoId`,`FechaDeCreacion`) VALUES ("+obj.getCliente().getId()+","+obj.getMonto()+","+obj.isActiva()+","+obj.getCBU()+","+obj.getTipo().getId()+",'"+new SimpleDateFormat("yyyyMMdd").format(obj.getFechaDeCreacion())+"')";
+		if(obj.getId() > 0)
+		{
+			query = "UPDATE Cuenta SET ClienteId = "+obj.getCliente().getId()+", Monto = "+obj.getMonto()+", Activa = "+obj.isActiva()+", CBU = "+obj.getCBU()+", TipoId = "+obj.getTipo().getId()+", FechaDeCreacion = '"+new SimpleDateFormat("yyyyMMdd").format(obj.getFechaDeCreacion()) +"' WHERE Id = " + obj.getId();
+		}
+		
+		Connection cn = null;
+		int filas = 0;
+			
+		try {
+			cn = DriverManager.getConnection(host+dbName, user, pass);
+			Statement st = cn.createStatement();
+			filas = st.executeUpdate(query);
+		} 
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			if(cn != null) {
+				try {
+					cn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
 	}
 }

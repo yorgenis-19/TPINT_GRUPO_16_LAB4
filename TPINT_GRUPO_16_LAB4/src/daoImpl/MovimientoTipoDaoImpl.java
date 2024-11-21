@@ -3,6 +3,7 @@ package daoImpl;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -22,7 +23,7 @@ public class MovimientoTipoDaoImpl implements MovimientoTipoDao {
 	private String dbName = "BancoTP";
 	
 	@Override
-	public MovimientoTipo Obtener(int id) {
+	public MovimientoTipo Obtener(int id) throws SQLException {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch(ClassNotFoundException e)
@@ -48,11 +49,16 @@ public class MovimientoTipoDaoImpl implements MovimientoTipoDao {
 		{
 			e.printStackTrace();
 		}
+		finally{
+			 if(cn!=null) {
+				 cn.close();			 
+			 }
+			}
 		return obj;
 	}
 
 	@Override
-	public ArrayList<MovimientoTipo> ObtenerTodos() {
+	public ArrayList<MovimientoTipo> ObtenerTodos() throws SQLException {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch(ClassNotFoundException e)
@@ -80,11 +86,16 @@ public class MovimientoTipoDaoImpl implements MovimientoTipoDao {
 		{
 			e.printStackTrace();
 		}
+		finally{
+			 if(cn!=null) {
+				 cn.close();			 
+			 }
+			}
 		return objs;
 	}
 
 	@Override
-	public MovimientoTipo Obtener(String descripcion) {
+	public MovimientoTipo Obtener(String descripcion) throws SQLException {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch(ClassNotFoundException e)
@@ -110,6 +121,11 @@ public class MovimientoTipoDaoImpl implements MovimientoTipoDao {
 		{
 			e.printStackTrace();
 		}
+		finally{
+			 if(cn!=null) {
+				 cn.close();			 
+			 }
+			}
 		return obj;
 	}
 

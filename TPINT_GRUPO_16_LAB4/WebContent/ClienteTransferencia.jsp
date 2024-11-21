@@ -16,47 +16,6 @@
 	<jsp:include page="style.css"></jsp:include>
 </style>
 <script>
-  // Add event listener on submit
-  document.querySelector('form').addEventListener('submit', function(event) {
-    const importeInput = document.getElementById('txtImporte');
-    const importeError = document.getElementById('importeError');
-    const selectedCuenta = document.getElementById('cmbCuenta');
-    const selectedCuentaValue = parseInt(selectedCuenta.value);
-
-    // Check if selectedCuenta has a value (to avoid errors)
-    if (isNaN(selectedCuentaValue)) {
-      event.preventDefault();
-      importeError.textContent = "Debe seleccionar una cuenta.";
-      importeInput.classList.add('is-invalid');
-      return;
-    }
-
-    const importe = parseFloat(importeInput.value);
-    
-    if (importe < 10 || importe > getMontoByCuentaId(selectedCuentaValue)) {
-      event.preventDefault();
-      importeError.textContent = "Importe debe ser mayor a 10 y menor o igual al monto disponible.";
-      importeInput.classList.add('is-invalid');
-      return;
-    }
-
-    // If validation passes, remove error message and class
-    importeError.textContent = "";
-    importeInput.classList.remove('is-invalid');
-  });
-
-  // Function to get monto based on cuentaId (assuming you have this functionality)
-  function getMontoByCuentaId(cuentaId) {
-    // Implement your logic to retrieve monto based on cuentaId
-    // This could involve searching the 'cuentas' array or making an AJAX request
-    // Replace with your actual implementation
-    for (const cuenta of cuentas) {
-      if (cuenta.getId() === cuentaId) {
-        return cuenta.getMonto();
-      }
-    }
-    return 0; // Handle case where cuenta is not found
-  }
 </script>
 </head>
 <body>
@@ -69,6 +28,9 @@ if(session.getAttribute("UsuarioActual") != null)
 ArrayList<Cuenta> cuentas = (ArrayList<Cuenta>)request.getAttribute("Lista_Cuentas");
 ArrayList<MovimientoTipo> tipos = (ArrayList<MovimientoTipo>)request.getAttribute("Lista_MovimientoTipos");
 
+
+boolean errorCuenta = request.getAttribute("ERROR_CuentaDestino") != null ? (boolean)request.getAttribute("ERROR_CuentaDestino") : false;
+boolean errorImporte = request.getAttribute("ERROR_Importe") != null ? (boolean)request.getAttribute("ERROR_Importe") : false;
 %>
 <nav class="navbar bg-success navbar-expand-lg " data-bs-theme="dark">
   <div class="container-fluid">
@@ -108,13 +70,20 @@ ArrayList<MovimientoTipo> tipos = (ArrayList<MovimientoTipo>)request.getAttribut
 			<div class="mb-3">
 			  <label for="txtCBUDestino" class="form-label">C.B.U. Cuenta de Destino:</label>
 		      <input type="number" min="0" step="1" class="form-control" id="txtCBUDestino" name="txtCBUDestino" required>
+			  	<%if(errorCuenta) {%>
+	    	    <div class="invalid-feedback" style="display:block;">
+			      El valor es inválido.
+			    </div>
+			    <%}%>
 			</div>
 			<div class="mb-3">
 			  <label for="txtImporte" class="form-label">Importe:</label>
 		      <input type="number" step="0.01" class="form-control" id="txtImporte" name="txtImporte" min="10" required>
-		      <div id="importeError" class="invalid-feedback">
+		      <%if(errorImporte) {%>
+	    	    <div class="invalid-feedback" style="display:block;">
 			      Importe debe ser mayor a 10 y menor o igual al monto de la cuenta seleccionada.
 			    </div>
+			    <%}%>
 			</div>
 			<div class="mb-3">
 			  <label for="txtDetalle" class="form-label">Detalle:</label>

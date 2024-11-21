@@ -1,8 +1,11 @@
 package negocioImpl;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 
+import dao.ClienteDao;
 import dao.CuentaDao;
+import daoImpl.ClienteDaoImpl;
 import daoImpl.CuentaDaoImpl;
 import entidad.Cuenta;
 import negocio.CuentaNegocio;
@@ -69,6 +72,32 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 			e.getStackTrace();
 		}
 		return objs;
+	}
+
+	@Override
+	public Cuenta ObtenerPorCBU(long cbu) {
+		Cuenta objs = new Cuenta();
+		CuentaDao dao = new CuentaDaoImpl();
+		try
+		{
+			objs = dao.ObtenerPorCBU(cbu);
+		}
+		catch(Exception e)
+		{
+			e.getStackTrace();
+		}
+		return objs;
+	}
+
+	@Override
+	public void Guardar(Cuenta obj) {
+		CuentaDao dao = new CuentaDaoImpl();
+		try {
+			dao.Guardar(obj);
+		} catch(Exception e)
+		{
+			e.getStackTrace();
+		}
 	}
 
 }

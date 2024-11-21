@@ -11,6 +11,11 @@ public class Movimiento {
 	private Date Fecha;
 	private String Detalle;
 	private MovimientoTipo Tipo;
+	
+	public Movimiento() {
+		this.Fecha = new Date();
+	}
+	
 	public int getId() {
 		return Id;
 	}

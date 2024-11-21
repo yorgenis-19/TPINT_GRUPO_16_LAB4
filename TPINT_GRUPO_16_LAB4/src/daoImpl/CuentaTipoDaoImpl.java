@@ -3,6 +3,7 @@ package daoImpl;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -17,7 +18,7 @@ public class CuentaTipoDaoImpl implements CuentaTipoDao {
 	private String dbName = "BancoTP";
 	
 	@Override
-	public CuentaTipo Obtener(int id) {
+	public CuentaTipo Obtener(int id) throws SQLException {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch(ClassNotFoundException e)
@@ -43,11 +44,16 @@ public class CuentaTipoDaoImpl implements CuentaTipoDao {
 		{
 			e.printStackTrace();
 		}
+		finally{
+			 if(cn!=null) {
+				 cn.close();			 
+			 }
+			}
 		return obj;
 	}
 
 	@Override
-	public ArrayList<CuentaTipo> ObtenerTodos() {
+	public ArrayList<CuentaTipo> ObtenerTodos() throws SQLException {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch(ClassNotFoundException e)
@@ -75,11 +81,16 @@ public class CuentaTipoDaoImpl implements CuentaTipoDao {
 		{
 			e.printStackTrace();
 		}
+		finally{
+			 if(cn!=null) {
+				 cn.close();			 
+			 }
+			}
 		return objs;
 	}
 
 	@Override
-	public CuentaTipo Obtener(String descripcion) {
+	public CuentaTipo Obtener(String descripcion) throws SQLException {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch(ClassNotFoundException e)
@@ -105,6 +116,11 @@ public class CuentaTipoDaoImpl implements CuentaTipoDao {
 		{
 			e.printStackTrace();
 		}
+		finally{
+			 if(cn!=null) {
+				 cn.close();			 
+			 }
+			}
 		return obj;
 	}
 

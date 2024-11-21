@@ -3,6 +3,7 @@ package daoImpl;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -19,7 +20,7 @@ public class UsuarioTipoDaoImpl implements UsuarioTipoDao {
 	private String dbName = "BancoTP";
 	
 	@Override
-	public UsuarioTipo Obtener(int id) {
+	public UsuarioTipo Obtener(int id) throws SQLException {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch(ClassNotFoundException e)
@@ -45,11 +46,16 @@ public class UsuarioTipoDaoImpl implements UsuarioTipoDao {
 		{
 			e.printStackTrace();
 		}
+		finally{
+			 if(cn!=null) {
+				 cn.close();			 
+			 }
+			}
 		return usuario;
 	}
 
 	@Override
-	public ArrayList<UsuarioTipo> ObtenerTodos() {
+	public ArrayList<UsuarioTipo> ObtenerTodos() throws SQLException {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch(ClassNotFoundException e)
@@ -77,11 +83,16 @@ public class UsuarioTipoDaoImpl implements UsuarioTipoDao {
 		{
 			e.printStackTrace();
 		}
+		finally{
+			 if(cn!=null) {
+				 cn.close();			 
+			 }
+			}
 		return objs;
 	}
 
 	@Override
-	public UsuarioTipo Obtener(String descripcion) {
+	public UsuarioTipo Obtener(String descripcion) throws SQLException {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch(ClassNotFoundException e)
@@ -107,6 +118,11 @@ public class UsuarioTipoDaoImpl implements UsuarioTipoDao {
 		{
 			e.printStackTrace();
 		}
+		finally{
+			 if(cn!=null) {
+				 cn.close();			 
+			 }
+			}
 		return usuario;
 	}
 

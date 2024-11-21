@@ -62,6 +62,15 @@ public class ClienteDaoImpl implements ClienteDao {
 		{
 			e.printStackTrace();
 		}
+		finally {
+			if(cn != null) {
+				try {
+					cn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		return obj;
 	}
 
@@ -106,6 +115,15 @@ public class ClienteDaoImpl implements ClienteDao {
 		catch(Exception e)
 		{
 			e.printStackTrace();
+		}
+		finally {
+			if(cn != null) {
+				try {
+					cn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return objs;
 	}
@@ -173,6 +191,15 @@ public class ClienteDaoImpl implements ClienteDao {
 		{
 			e.printStackTrace();
 		}
+		finally {
+			if(cn != null) {
+				try {
+					cn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		return res;
 	}
 
@@ -200,6 +227,15 @@ public class ClienteDaoImpl implements ClienteDao {
 		catch(Exception e)
 		{
 			e.printStackTrace();
+		}
+		finally {
+			if(cn != null) {
+				try {
+					cn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return res;
 	}
@@ -229,6 +265,15 @@ public class ClienteDaoImpl implements ClienteDao {
 		{
 			e.printStackTrace();
 		}
+		finally {
+			if(cn != null) {
+				try {
+					cn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		return res;
 	}
 
@@ -256,6 +301,15 @@ public class ClienteDaoImpl implements ClienteDao {
 		catch(Exception e)
 		{
 			e.printStackTrace();
+		}
+		finally {
+			if(cn != null) {
+				try {
+					cn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return res;
 	}
@@ -299,6 +353,15 @@ public class ClienteDaoImpl implements ClienteDao {
 		catch(Exception e)
 		{
 			e.printStackTrace();
+		}
+		finally {
+			if(cn != null) {
+				try {
+					cn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return obj;
 	}

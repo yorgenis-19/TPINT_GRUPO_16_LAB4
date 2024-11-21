@@ -10,4 +10,6 @@ public interface CuentaNegocio {
 	public ArrayList<Cuenta> ObtenerCuentasxClienteID (int ID);
 	public ArrayList<Cuenta> listarTodasLAsCuentas();
 	public ArrayList<Cuenta> ObtenerPorUsuario(int usuarioId);
+	public Cuenta ObtenerPorCBU(long cbu);
+	public void Guardar(Cuenta obj);
 }
