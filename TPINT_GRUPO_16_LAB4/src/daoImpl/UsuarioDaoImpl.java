@@ -34,6 +34,9 @@ public class UsuarioDaoImpl implements UsuarioDao {
 		{
 			cn = DriverManager.getConnection(host+dbName,user,pass);
 			Statement st = cn.createStatement();
+			 System.out.println("Ejecutando consulta con:");
+		        System.out.println("Nombre: " + nombre);
+		        System.out.println("Clave: " + clave);
 			String query = "SELECT * FROM Usuario WHERE Nombre = '" + nombre + "' AND Clave = '" + clave + "'";
 			ResultSet rs = st.executeQuery(query);
 			while(rs.next())
@@ -50,6 +53,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
 		catch(Exception e)
 		{
 			e.printStackTrace();
+			
 		}
 		return usuario;
 	}

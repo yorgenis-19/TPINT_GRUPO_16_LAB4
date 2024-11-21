@@ -49,4 +49,11 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 		return cuentadao.ObtenerCuentasxClienteID(ID) ;
 	}
 
+	@Override
+	public ArrayList<Cuenta> listarTodasLAsCuentas() {
+		ArrayList<Cuenta> lista = null;
+		lista = cuentadao.listarTodasLAsCuentas();
+		return lista;
+	}
+
 }

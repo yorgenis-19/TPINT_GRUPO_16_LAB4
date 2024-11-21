@@ -9,4 +9,5 @@ public interface CuentaDao {
 	public ArrayList<Cuenta> Obtener(int clienteId, int cbu, int tipo, float monto);
 	//public int Guardar(Cuenta obj);
 	public ArrayList<Cuenta> ObtenerCuentasxClienteID (int ID);
+	public ArrayList<Cuenta> listarTodasLAsCuentas();
 }
