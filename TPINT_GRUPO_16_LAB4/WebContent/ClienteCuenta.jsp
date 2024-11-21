@@ -1,5 +1,4 @@
 <%@page import="entidad.Cuenta"%>
-<%@page import="java.util.ArrayList"%>
 <%@page import="entidad.Usuario"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
@@ -7,24 +6,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Cuentas</title>
+<title>Cuenta</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <style>
 <jsp:include page="style.css"></jsp:include>
-.card{
-	text-decoration: none !important;
-	cursor: pointer;
-	width: 200px;
-	margin-right: 12px;
-}
-.card:hover{
-	opacity: 80%;
-}
-.cards-container{
-	  justify-content: center;
-}
 </style>
 </head>
 <body>
@@ -34,7 +21,7 @@ if(session.getAttribute("UsuarioActual") != null)
 {
 	usuario = (Usuario)session.getAttribute("UsuarioActual");
 }
-ArrayList<Cuenta> cuentas = (ArrayList<Cuenta>)request.getAttribute("Cuentas");
+Cuenta cuenta = (Cuenta)request.getAttribute("CuentaSeleccionada");
 
 %>
 <nav class="navbar bg-success navbar-expand-lg " data-bs-theme="dark">
@@ -58,25 +45,31 @@ ArrayList<Cuenta> cuentas = (ArrayList<Cuenta>)request.getAttribute("Cuentas");
     </div>
   </div>
 </nav>
-
-<div class="container  page-container">
-     <h1 style="text-align: center;">Cuentas</h1>
-	<div class="cards-container">
-	<%for(Cuenta cuenta : cuentas){ %>
-          <form class="card" style="width: 18rem;" action="ServletClienteCuenta" method="get">
-	          <input type="hidden" name="cuentaId" id="cuentaId" value="<%=cuenta.getId()%>">
-              <button type="submit" class="btn" name="btnClienteCuenta">
-			  <div class="card-body">
-			    <h5 class="card-title">
-					<%=cuenta.getCBU() %>
-				</h5>
-				    <p class="card-text"><%=cuenta.getTipo().getDescripcion() %></p>
-			  </div>
-			  </button>
-		  </form>
-	<%}%>
+<div class="container page-container">
+     <h1 style="text-align: center;">Cuenta</h1>
+	<div class="header">
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					Monto: <%=cuenta.getMonto()%>
+				</div>
+				<div class="col">
+					C.B.U.: <%=cuenta.getCBU()%>
+				</div>
+				<div class="col">
+					Tipo: <%=cuenta.getTipo().getDescripcion()%>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div>
+	
+        <form action="ServletClienteCuentas" method="get">
+           <button type="submit" class="btn btn-secondary" name="btnClienteCuentas">
+               Volver
+           </button>
+       </form>
 	</div>
 </div>
-
 </body>
 </html>
