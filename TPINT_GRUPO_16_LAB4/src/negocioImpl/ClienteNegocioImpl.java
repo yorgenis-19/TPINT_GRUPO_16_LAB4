@@ -98,17 +98,32 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 	}
 
 	@Override
-	public boolean ExisteUsuario(int id, String usuario) {
+	public boolean ExisteUsuario(String usuario) {
 		boolean res = false;
 		ClienteDao dao = new ClienteDaoImpl();
 		try
 		{
-			res = dao.ExisteUsuario(id,usuario);
+			res = dao.ExisteUsuario(usuario);
 		}
 		catch(Exception e)
 		{
 			e.getStackTrace();
 		}
 		return res;
+	}
+
+	@Override
+	public Cliente ObtenerPorUsuario(int usuarioId) {
+		Cliente obj = new Cliente();
+		ClienteDao dao = new ClienteDaoImpl();
+		try
+		{
+			obj = dao.ObtenerPorUsuario(usuarioId);
+		}
+		catch(Exception e)
+		{
+			e.getStackTrace();
+		}
+		return obj;
 	}
 }

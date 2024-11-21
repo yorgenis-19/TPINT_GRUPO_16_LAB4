@@ -49,6 +49,7 @@ public class ServletGuardarCliente extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
+		boolean error = false;
 		if(request.getParameter("btnGuardar") != null)
 		{
 			ClienteNegocio neg = new ClienteNegocioImpl();
@@ -56,17 +57,6 @@ public class ServletGuardarCliente extends HttpServlet {
 			String email = request.getParameter("txtEmail"); 
 			String dni = request.getParameter("txtDNI"); 
 			String cuil = request.getParameter("txtCUIL");
-			
-			boolean existeMail = neg.ExisteMail(id, email);
-			if(existeMail) {
-				request.setAttribute("Error_ExisteMail", existeMail);
-		        RequestDispatcher rd = request.getRequestDispatcher("/ABMCliente.jsp");
-		        rd.forward(request, response);
-		        return;
-			}
-			//boolean existeDNI = neg.ExisteDNI(id, dni);
-			//boolean existeCUIL = neg.ExisteCUIL(id, cuil);
-			
 			String nombre = request.getParameter("txtNombre"); 
 			String apellido = request.getParameter("txtApellido");
 			String sexo = request.getParameter("cmbSexo"); 
@@ -78,6 +68,20 @@ public class ServletGuardarCliente extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+
+			if(neg.ExisteMail(id, email)) {
+				error = true;
+				request.setAttribute("MAIL_EXISTENTE", true);
+			}
+			if(neg.ExisteDNI(id, dni)) {
+				error = true;
+				request.setAttribute("DNI_EXISTENTE", true);
+			}
+			if(neg.ExisteCUIL(id, cuil)) {
+				error = true;
+				request.setAttribute("CUIL_EXISTENTE", true);
+			}
+
 			Cliente obj = new Cliente();
 			if(id > 0) {
 				obj = neg.Obtener(id);
@@ -93,9 +97,18 @@ public class ServletGuardarCliente extends HttpServlet {
 			
 			if(id == 0) {
 				String usuario = request.getParameter("txtUsuario");
-				//boolean existeUsuario = neg.ExisteUsuario(id, usuario);
+				if(neg.ExisteUsuario(usuario)) 
+				{
+					error = true;
+					request.setAttribute("USUARIO_EXISTENTE", true);
+				}
 				String clave = request.getParameter("txtClave");
-				//int tipoId = Integer.parseInt(request.getParameter("cmbTipo"));
+				String claveConfirmacion = request.getParameter("txtClaveConfirmar");
+				if(!clave.equals(claveConfirmacion))
+				{
+					error = true;
+					request.setAttribute("CLAVE_DISTINTA", true);
+				}
 				Usuario usu = new Usuario();
 				usu.setNombre(usuario);
 				usu.setClave(clave);
@@ -106,13 +119,24 @@ public class ServletGuardarCliente extends HttpServlet {
 				negUsuario.Guardar(usu);				
 				obj.setUsuario(negUsuario.Obtener(usu.getNombre(), usu.getClave()));
 			}
+			request.setAttribute("ClienteActual", obj);
 			
-			
-	        int filas = neg.Guardar(obj);
+			if(error)
+			{
+				
+		        RequestDispatcher rd = request.getRequestDispatcher("/ABMCliente.jsp");
+		        rd.forward(request, response);
+			}
+			else
+			{
 
-	        request.setAttribute("Filas", filas);
-	        RequestDispatcher rd = request.getRequestDispatcher("/BuscadorCliente.jsp");
-	        rd.forward(request, response);
+		        int filas = neg.Guardar(obj);
+
+		        request.setAttribute("Filas", filas);
+		        RequestDispatcher rd = request.getRequestDispatcher("/BuscadorCliente.jsp");
+		        rd.forward(request, response);
+			}
+			
 		}
 		
 		doGet(request, response);

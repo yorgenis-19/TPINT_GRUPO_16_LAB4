@@ -157,13 +157,12 @@ public class ClienteDaoImpl implements ClienteDao {
 			e.printStackTrace();
 		}
 		boolean res = false;
-		Cliente obj = new Cliente();
 		Connection cn = null;
 		try
 		{
 			cn = DriverManager.getConnection(host+dbName,user,pass);
 			Statement st = cn.createStatement();
-			String query = "SELECT Id FROM Cliente WHERE Id != "+ id + "AND Email = '" + email + "' limit 1";
+			String query = "SELECT Id FROM Cliente WHERE Id != "+ id + " AND Email = '" + email + "' limit 1";
 			ResultSet rs = st.executeQuery(query);
 			while(rs.next())
 			{	
@@ -179,20 +178,129 @@ public class ClienteDaoImpl implements ClienteDao {
 
 	@Override
 	public boolean ExisteDNI(int id, String dni) {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch(ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		boolean res = false;
+		Connection cn = null;
+		try
+		{
+			cn = DriverManager.getConnection(host+dbName,user,pass);
+			Statement st = cn.createStatement();
+			String query = "SELECT Id FROM Cliente WHERE Id != "+ id + " AND DNI = '" + dni + "' limit 1";
+			ResultSet rs = st.executeQuery(query);
+			while(rs.next())
+			{	
+				res = rs.getInt("Id") > 0;
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return res;
 	}
 
 	@Override
 	public boolean ExisteCUIL(int id, String cuil) {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch(ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		boolean res = false;
+		Connection cn = null;
+		try
+		{
+			cn = DriverManager.getConnection(host+dbName,user,pass);
+			Statement st = cn.createStatement();
+			String query = "SELECT Id FROM Cliente WHERE Id != "+ id + " AND CUIL = '" + cuil + "' limit 1";
+			ResultSet rs = st.executeQuery(query);
+			while(rs.next())
+			{	
+				res = rs.getInt("Id") > 0;
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return res;
 	}
 
 	@Override
-	public boolean ExisteUsuario(int id, String usuario) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean ExisteUsuario(String usuario) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch(ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		boolean res = false;
+		Connection cn = null;
+		try
+		{
+			cn = DriverManager.getConnection(host+dbName,user,pass);
+			Statement st = cn.createStatement();
+			String query = "SELECT Id FROM Usuario WHERE Nombre = '" + usuario + "' limit 1";
+			ResultSet rs = st.executeQuery(query);
+			while(rs.next())
+			{	
+				res = rs.getInt("Id") > 0;
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return res;
+	}
+
+	@Override
+	public Cliente ObtenerPorUsuario(int usuarioId) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch(ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		
+		Cliente obj = new Cliente();
+		Connection cn = null;
+		try
+		{
+			cn = DriverManager.getConnection(host+dbName,user,pass);
+			Statement st = cn.createStatement();
+			String query = "SELECT * FROM Cliente WHERE UsuarioId ="+ usuarioId;
+			ResultSet rs = st.executeQuery(query);
+			while(rs.next())
+			{	
+				obj.setId(rs.getInt("Id"));
+				Usuario usuario = new UsuarioDaoImpl().Obtener(rs.getInt("UsuarioId"));
+				obj.setUsuario(usuario);
+				obj.setNombre(rs.getString("Nombre"));
+				obj.setApellido(rs.getString("Apellido"));
+				obj.setSexo(rs.getString("Sexo"));
+				obj.setDni(rs.getString("Dni"));
+				obj.setCuil(rs.getString("Cuil"));
+				obj.setTelefono(rs.getString("Telefono"));
+				obj.setEmail(rs.getString("Email"));
+				obj.setFechaNacimiento(rs.getDate("FechaNacimiento"));
+				obj.setDireccionId(rs.getInt("DireccionId"));
+				obj.setLocalidadId(rs.getInt("LocalidadId"));
+				obj.setProvinciaId(rs.getInt("ProvinciaId"));
+				
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return obj;
 	}
 
 }

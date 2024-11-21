@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 
+import com.mysql.jdbc.PreparedStatement;
+
 import dao.ClienteDao;
 import dao.CuentaDao;
 import entidad.Cliente;
@@ -147,4 +149,71 @@ public class CuentaDaoImpl implements CuentaDao {
 		return filas;
 	}
 */
+
+	@Override
+	public ArrayList<Cuenta> ObtenerCuentasxClienteID(int ID) {
+		 ArrayList<Cuenta> cuentas = new ArrayList<>();
+		    String query = "SELECT c.Id AS cuenta_id, c.Monto, c.CBU, " +
+	                   "ct.Descripcion AS tipo_descripcion, " +
+	                   "cl.Nombre, cl.Apellido " +
+	                   "FROM Cuenta c " +
+	                   "INNER JOIN CuentaTipo ct ON c.TipoId = ct.Id " +
+	                   "INNER JOIN Cliente cl ON c.ClienteId = cl.Id " +
+	                   "WHERE c.ClienteId = ?";
+		    Conexion cn = null;
+		    PreparedStatement preparedStatement = null;
+		    ResultSet rs = null;
+
+		    try {
+		        cn = new Conexion();
+		        cn.Open();
+		        System.out.println("CONEXIÓN ABIERTA - OBTENER CUENTAS POR CLIENTE ID");
+
+		        preparedStatement = (PreparedStatement) cn.prepareStatement(query);
+		        preparedStatement.setInt(1, ID);
+		        rs = preparedStatement.executeQuery();
+
+		        while (rs.next()) {
+		            // Crear objetos necesarios
+		            Cuenta cuenta = new Cuenta();
+		            Cliente cliente = new Cliente();
+		            CuentaTipo tipoCuenta = new CuentaTipo();
+
+		            // Mapear datos de la cuenta
+		            cuenta.setId(rs.getInt("cuenta_id"));
+		            cuenta.setMonto(rs.getFloat("Monto"));
+		            cuenta.setCBU(rs.getLong("CBU"));
+
+		            // Mapear datos del cliente
+		            cliente.setNombre(rs.getString("Nombre"));
+		            cliente.setApellido(rs.getString("Apellido"));
+
+		            // Asignar el cliente al objeto Cuenta
+		            cuenta.setCliente(cliente);
+
+		            // Mapear datos del tipo de cuenta
+		            tipoCuenta.setDescripcion(rs.getString("tipo_descripcion"));
+
+		            // Asignar el tipo de cuenta al objeto Cuenta
+		            cuenta.setTipo(tipoCuenta);
+
+		            // Agregar la cuenta a la lista
+		            cuentas.add(cuenta);
+		        }
+
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    } finally {
+		        // Cerrar recursos en el orden inverso en que fueron abiertos
+		        try {
+		            if (rs != null) rs.close();
+		            if (preparedStatement != null) preparedStatement.close();
+		            if (cn != null) cn.close();
+		        } catch (Exception ex) {
+		            ex.printStackTrace();
+		        }
+		    }
+
+		    return cuentas;
+	}
 }

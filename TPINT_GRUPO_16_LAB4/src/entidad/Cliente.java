@@ -7,6 +7,14 @@ import java.util.Date;
 public class Cliente {
 	public Cliente() {
 		this.Usuario = new Usuario();
+		this.Nombre = "";
+		this.Apellido = "";
+		this.Sexo = "";
+		this.Dni = "";
+		this.Cuil = "";
+		this.Telefono = "";
+		this.Email = "";
+		this.FechaNacimiento = new Date();
 	}
 	private int Id;
 	private Usuario Usuario;

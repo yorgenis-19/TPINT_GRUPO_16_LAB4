@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 import dao.UsuarioDao;
 import entidad.Usuario;
@@ -126,5 +127,55 @@ public class UsuarioDaoImpl implements UsuarioDao {
 			}
 		}
 		return filas;
+	}
+
+
+	@Override
+	public ArrayList<Usuario> Obtener(String nombre, int tipoId, String activo) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch(ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		
+		ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
+		Connection cn = null;
+		try
+		{
+			cn = DriverManager.getConnection(host+dbName,user,pass);
+			Statement st = cn.createStatement();
+			String query = "select * from usuario WHERE Nombre LIKE '%"+nombre+"%'";
+			if(tipoId != 0)
+			{
+				query += " AND TipoId = " +tipoId;
+			}
+			if(activo.equals("ACTIVO"))
+			{
+				query += " AND Activo = true";
+			}
+			else if (activo.equals("BAJA"))
+			{
+				query += " AND Activo = false";
+			}
+			ResultSet rs = st.executeQuery(query);
+			while(rs.next())
+			{	
+				Usuario usuario = new Usuario();
+				usuario.setId(rs.getInt("Id"));
+				usuario.setNombre(rs.getString("Nombre"));
+				usuario.setClave(rs.getString("Clave"));
+				UsuarioTipo tipo = new UsuarioTipo();
+				tipo = new UsuarioTipoDaoImpl().Obtener(rs.getInt("TipoId"));
+				usuario.setTipo(tipo);
+				usuario.setActivo(rs.getBoolean("Activo"));
+				usuarios.add(usuario);
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return usuarios;
 	}
 }
