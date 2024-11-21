@@ -16,13 +16,7 @@ import entidad.Cuenta;
 import negocio.CuentaNegocio;
 import negocioImpl.CuentaNegocioImpl;
 import negocioImpl.UsuarioNegocioImpl;
-import src.main.java.servlets.Boolean;
-import src.main.java.servlets.Cuenta;
-import src.main.java.servlets.CuentaNegocio;
-import src.main.java.servlets.CuentaNegocioImpl;
-import src.main.java.servlets.HttpSession;
-import src.main.java.servlets.List;
-import src.main.java.servlets.String;
+
 
 /**
  * Servlet implementation class ServletLogin
@@ -87,32 +81,6 @@ public class ServletLogin extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
-	}
-	
-	public Boolean iniciarSesion(HttpServletRequest request, HttpServletResponse response, Usuario usuario)
-			throws ServletException, IOException {
-		
-		HttpSession session = request.getSession();
-		session.invalidate();
-		String clave = request.getParameter("txtClave");
-		java.lang.String usu = request.getParameter("txtUsuario");
-		String DNI = request.getParameter("txtDNI");
-		usuario.setId(Integer.parseInt(DNI));
-		usuario.setNombre(usu);
-		usuario.setClave(clave);
-		UsuarioNegocioImpl usuNeg = new UsuarioNegocioImpl();
-
-		CuentaNegocio ctaNeg = new CuentaNegocioImpl();
-		Cuenta lCta = ctaNeg.Obtener(Integer.parseInt(DNI));
-
-		if (usuNeg.IniciarSesion(usuario)) {
-			request.getSession().setAttribute("Usuario", usuario);
-			request.getSession().setAttribute("cuentasDDL", lCta);
-			cuentasUsuario(request, usuario);
-			return true;
-		} else
-			return false;
-
 	}
 
 }
