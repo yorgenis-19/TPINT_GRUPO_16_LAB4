@@ -210,6 +210,7 @@ public class CuentaDaoImpl implements CuentaDao {
 	    String query = "SELECT c.Id AS cuenta_id, c.Monto, c.CBU, " +
                    "ct.Descripcion AS tipo_descripcion, " +
                    "cl.Nombre, cl.Apellido, cl.Dni, " +
+                   "c.FechaDeCreacion, c.Activa, " +
                    "c.FechaDeCreacion " +
                    "FROM Cuenta c " +
                    "INNER JOIN CuentaTipo ct ON c.TipoId = ct.Id " +
@@ -221,7 +222,7 @@ public class CuentaDaoImpl implements CuentaDao {
 	    try {
 	        cn = new Conexion();
 	        cn.Open();
-	        System.out.println("CONEXI�N ABIERTA - LISTAR TODAS LAS CUENTAS");
+	        System.out.println("CONEXIONN ABIERTA - LISTAR TODAS LAS CUENTAS");
 
 	        preparedStatement = (PreparedStatement) cn.prepareStatement(query);
 	        rs = preparedStatement.executeQuery();
@@ -237,6 +238,7 @@ public class CuentaDaoImpl implements CuentaDao {
 	            cuenta.setMonto(rs.getFloat("Monto"));
 	            cuenta.setCBU(rs.getLong("CBU"));
 	            cuenta.setFechaDeCreacion(rs.getDate("FechaDeCreacion"));
+	            cuenta.setActiva(rs.getBoolean("Activa"));
 
 	            //  datos del cliente
 	            cliente.setNombre(rs.getString("Nombre"));

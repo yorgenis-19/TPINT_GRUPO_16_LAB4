@@ -52,30 +52,38 @@
     	        },
     	        dom: 'lfrtip'
     	    });
+    	    ocultarNoHabilitadas();
     	});
-    		
+     function ocultarNoHabilitadas() {
+         var noHabilitadas = document.getElementsByClassName('no-habilitada');
+         for (var i = 0; i < noHabilitadas.length; i++) {
+             noHabilitadas[i].style.display = 'none';
+         }
+     }		
     
-   /* function toggleCuentas() {
-        var checkbox = document.getElementById('toggleHabilitados');
-        var habilitadas = document.getElementsByClassName('habilitada');
-        var noHabilitadas = document.getElementsByClassName('no-habilitada');
+     function toggleCuentas() {
+    	    var checkbox = document.getElementById('toggleHabilitados');
+    	    var habilitadas = document.getElementsByClassName('habilitada');
+    	    var noHabilitadas = document.getElementsByClassName('no-habilitada');
 
-        if (checkbox.checked) {
-            for (var i = 0; i < noHabilitadas.length; i++) {
-                noHabilitadas[i].style.display = '';
-            }
-            for (var j = 0; j < habilitadas.length; j++) {
-                habilitadas[j].style.display = '';
-            }
-        } else {
-            for (var i = 0; i < noHabilitadas.length; i++) {
-                noHabilitadas[i].style.display = 'none';
-            }
-            for (var j = 0; j < habilitadas.length; j++) {
-                habilitadas[j].style.display = '';
-            }
-        }
-    }*/
+    	    if (checkbox.checked) {
+    	        // Mostrar tanto habilitadas como no habilitadas
+    	        for (var i = 0; i < noHabilitadas.length; i++) {
+    	            noHabilitadas[i].style.display = '';
+    	        }
+    	        for (var j = 0; j < habilitadas.length; j++) {
+    	            habilitadas[j].style.display = '';
+    	        }
+    	    } else {
+    	        // Solo mostrar las habilitadas
+    	        for (var i = 0; i < noHabilitadas.length; i++) {
+    	            noHabilitadas[i].style.display = 'none';
+    	        }
+    	        for (var j = 0; j < habilitadas.length; j++) {
+    	            habilitadas[j].style.display = '';
+    	        }
+    	    }
+    	}
 
     </script>
 </head>
@@ -114,9 +122,9 @@ if(session.getAttribute("UsuarioActual") != null)
 
 <div class="table-container" >
  	<div class="toggle-container filtro-container" style="margin-top:5%;" >
-        <input type="checkbox" id="toggleHabilitados" onchange="toggleCuentas()">
-        <label for="toggleHabilitados">Mostrar todas las cuentas</label>
-    </div>
+    <input type="checkbox" id="toggleHabilitados" onchange="toggleCuentas()">
+    <label for="toggleHabilitados">Mostrar todas las cuentas</label>
+</div>
         <table id="tablaCuentas" class="display">
             <thead>
                 <tr>
@@ -144,7 +152,8 @@ if(session.getAttribute("UsuarioActual") != null)
                     <td><%= cuenta.getTipo().getDescripcion() %></td>
                     <td><%= cuenta.getCBU() %></td>
                     <td><%= cuenta.getMonto() %></td>
-                    <td><%= cuenta.isActiva()  ? "No" : "Si" %></td>
+                    <td><%= cuenta.isActiva()  ? "Si" : "No" %></td>
+
                 </tr>
                 <%
                     }

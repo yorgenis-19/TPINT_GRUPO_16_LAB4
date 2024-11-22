@@ -96,9 +96,6 @@ ArrayList<CuentaTipo> tipos = new CuentaTipoNegocioImpl().ObtenerTodos();
                 <td>
                     <form method="get" action="ServletVerCuenta">
                         <input name="Id" value="<%= cuenta.getId() %>" style="display:none;">
-                        <button type="submit" name="btnVer" class="btn btn-outline-primary">
-                            Ver
-                        </button>
                     </form>
                 </td>
             </tr>
