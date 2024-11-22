@@ -504,5 +504,39 @@ public class CuentaDaoImpl implements CuentaDao {
 		return cantidadCuentas;
 		
 	}
+
+	@Override
+	public boolean actualizarEstadoCuenta(int cuentaId, boolean estado) {
+		Connection conn = null;
+        PreparedStatement stmt = null;
+        boolean resultado = false;
+        
+        try {
+            conn = conexion.Open();
+            String query = "UPDATE cuenta SET Activa = ? WHERE id = ?";
+            stmt = (PreparedStatement) conn.prepareStatement(query);
+            stmt.setBoolean(1, estado);
+            stmt.setInt(2, cuentaId);
+            
+            int filasAfectadas = stmt.executeUpdate();
+            if (filasAfectadas > 0) {
+                resultado = true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return resultado;
+	}
+
+
+		
 	}
 
