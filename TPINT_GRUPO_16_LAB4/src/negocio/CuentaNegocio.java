@@ -14,4 +14,5 @@ public interface CuentaNegocio {
 	public void Guardar(Cuenta obj);
 	boolean insertarCuenta(Cuenta cuenta);
 	public boolean ValidarCantidad(int clienteId);
+	public boolean actualizarEstadoCuenta(int cuentaId, boolean estado);
 }

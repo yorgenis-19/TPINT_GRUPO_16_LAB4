@@ -120,6 +120,14 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 	    return cantidadCuentas < 3;
 	}
 
+	@Override
+	public boolean actualizarEstadoCuenta(int cuentaId, boolean estado) {
+		CuentaDao dao = new CuentaDaoImpl();
+		
+		return dao.actualizarEstadoCuenta(cuentaId, estado);
+	}
+
+
 
 
 }
