@@ -63,7 +63,7 @@ ArrayList<Cuenta> cuentas = (ArrayList<Cuenta>)request.getAttribute("Cuentas");
      <h1 style="text-align: center;">Cuentas</h1>
 	<div class="cards-container">
 	<%for(Cuenta cuenta : cuentas){ %>
-          <form class="card" style="width: 18rem;" action="ServletClienteCuenta" method="get">
+          <form class="card" style="width: 20rem;" action="ServletClienteCuenta" method="get">
 	          <input type="hidden" name="cuentaId" id="cuentaId" value="<%=cuenta.getId()%>">
               <button type="submit" class="btn" name="btnClienteCuenta">
 			  <div class="card-body">

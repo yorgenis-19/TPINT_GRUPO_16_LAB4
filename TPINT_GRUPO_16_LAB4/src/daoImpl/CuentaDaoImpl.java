@@ -60,7 +60,7 @@ public class CuentaDaoImpl implements CuentaDao {
 				obj.setCliente(cliente);
 				obj.setMonto(rs.getFloat("Monto"));
 				obj.setActiva(rs.getBoolean("Activa"));
-				obj.setCBU(rs.getInt("CBU"));
+				obj.setCBU(rs.getLong("CBU"));
 				obj.setFechaDeCreacion(rs.getDate("FechaDeCreacion"));
 			}
 		}
@@ -116,7 +116,7 @@ public class CuentaDaoImpl implements CuentaDao {
 				obj.setCliente(cliente);
 				obj.setMonto(rs.getFloat("Monto"));
 				obj.setActiva(rs.getBoolean("Activa"));
-				obj.setCBU(rs.getInt("CBU"));
+				obj.setCBU(rs.getLong("CBU"));
 				obj.setFechaDeCreacion(rs.getDate("FechaDeCreacion"));
 				objs.add(obj);
 			}
@@ -386,7 +386,7 @@ public class CuentaDaoImpl implements CuentaDao {
 				obj.setCliente(cliente);
 				obj.setMonto(rs.getFloat("Monto"));
 				obj.setActiva(rs.getBoolean("Activa"));
-				obj.setCBU(rs.getInt("CBU"));
+				obj.setCBU(rs.getLong("CBU"));
 				obj.setFechaDeCreacion(rs.getDate("FechaDeCreacion"));
 			}
 		}

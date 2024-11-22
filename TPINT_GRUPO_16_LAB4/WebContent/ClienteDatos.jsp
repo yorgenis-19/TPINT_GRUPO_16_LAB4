@@ -1,3 +1,4 @@
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="entidad.Cliente"%>
 <%@page import="negocioImpl.ClienteNegocioImpl"%>
 <%@page import="entidad.Usuario"%>
@@ -78,7 +79,7 @@ Cliente obj = new ClienteNegocioImpl().ObtenerPorUsuario(usuario.getId());
       <label>Teléfono: <span class="profile-value"><%=obj.getTelefono()%></span></label>
     </div>
     <div class="col-md-4">
-      <label>Fecha de Nacimiento: <span class="profile-value"><%=obj.getFechaNacimiento()%></span></label>
+      <label>Fecha de Nacimiento: <span class="profile-value"><%=new SimpleDateFormat("dd/MM/yyyy").format(obj.getFechaNacimiento())%></span></label>
     </div>
   </div>
   <div class="row">
