@@ -94,43 +94,65 @@ public class ServletNuevaCuenta extends HttpServlet {
     }
 
     private void crearCuenta(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	try {
-            // Obtener datos del formulario
-            int clienteId = Integer.parseInt(request.getParameter("IDCliente"));
-            float monto = Float.parseFloat(request.getParameter("Monto"));
-            int tipoId = Integer.parseInt(request.getParameter("TipoCuenta"));
+    	 try {
+    	        // Obtener datos del formulario
+    	        int clienteId = Integer.parseInt(request.getParameter("IDCliente"));
+    	        float monto = Float.parseFloat(request.getParameter("Monto"));
+    	        int tipoId = Integer.parseInt(request.getParameter("TipoCuenta"));
 
-            // Crear el objeto Cliente y Tipo
-            Cliente cliente = new Cliente();
-            cliente.setId(clienteId);
+    	        // Validar la cantidad de cuentas del cliente
+    	        if (!cuentaNeg.ValidarCantidad(clienteId)) {
+    	            // Si el cliente ya tiene 3 cuentas activas, mostrar el mensaje de error
+    	            request.setAttribute("mensajeError", "El cliente ya tiene el máximo permitido de 3 cuentas activas.");
+    	            RequestDispatcher dispatcher = request.getRequestDispatcher("NuevaCuenta.jsp");
+    	            dispatcher.forward(request, response);
+    	            return; // Evitar continuar con la creación de la cuenta
+    	        }
 
-            CuentaTipo tipo = new CuentaTipo();
-            tipo.setId(tipoId);
+    	        // Validar el monto
+    	        if (monto <= 0) {
+    	            request.setAttribute("mensajeError", "El monto debe ser mayor que cero.");
+    	            RequestDispatcher dispatcher = request.getRequestDispatcher("NuevaCuenta.jsp");
+    	            dispatcher.forward(request, response);
+    	            return;
+    	        }
 
-            // Crear el objeto Cuenta
-            Cuenta cuenta = new Cuenta();
-            cuenta.setCliente(cliente);
-            cuenta.setMonto(monto);
-            cuenta.setTipo(tipo);
+    	        // Crear el objeto Cliente y Tipo
+    	        Cliente cliente = new Cliente();
+    	        cliente.setId(clienteId);
 
-            // Llamar a la capa de negocio
-            boolean cuentaCreada = cuentaNeg.insertarCuenta(cuenta);
+    	        CuentaTipo tipo = new CuentaTipo();
+    	        tipo.setId(tipoId);
 
-            if (cuentaCreada) {
-                request.setAttribute("mensajeExito", "Cuenta creada con éxito.");
-                request.setAttribute("cliente", cuenta.getCliente());
-            } else {
-                request.setAttribute("mensajeError", "Error al crear la cuenta.");
-            }
+    	        // Crear el objeto Cuenta
+    	        Cuenta cuenta = new Cuenta();
+    	        cuenta.setCliente(cliente);
+    	        cuenta.setMonto(monto);
+    	        cuenta.setTipo(tipo);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("mensajeError", "Error en los datos ingresados.");
-        }
+    	        // Llamar a la capa de negocio para insertar la cuenta
+    	        boolean cuentaCreada = cuentaNeg.insertarCuenta(cuenta);
 
-        // Redirigir nuevamente al JSP
-        RequestDispatcher dispatcher = request.getRequestDispatcher("NuevaCuenta.jsp");
-        doGet(request, response);
+    	        if (cuentaCreada) {
+    	            request.setAttribute("mensajeExito", "Cuenta creada con éxito.");
+    	            request.setAttribute("cliente", cuenta.getCliente());
+    	        } else {
+    	            request.setAttribute("mensajeError", "Error al crear la cuenta.");
+    	        }
+
+    	    } catch (NumberFormatException e) {
+    	        // Este bloque maneja errores de formato de número, como cuando no se ingresa un número válido
+    	        e.printStackTrace();
+    	        request.setAttribute("mensajeError", "Datos inválidos. Por favor, ingresa valores correctos.");
+    	    } catch (Exception e) {
+    	        // Este bloque maneja otros tipos de excepciones que no hemos anticipado
+    	        e.printStackTrace();
+    	        request.setAttribute("mensajeError", "Hubo un error al procesar la solicitud.");
+    	    }
+
+    	    // Redirigir nuevamente al JSP
+    	    RequestDispatcher dispatcher = request.getRequestDispatcher("NuevaCuenta.jsp");
+    	    dispatcher.forward(request, response);
     }
 	
 }

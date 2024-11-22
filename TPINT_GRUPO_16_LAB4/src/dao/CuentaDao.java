@@ -16,4 +16,5 @@ public interface CuentaDao {
 	public Cuenta ObtenerPorCBU(long cbu) throws SQLException;
 	public void Guardar(Cuenta obj);
 	boolean insertarCuenta(Cuenta cuenta);
+	public int ValidarCantidad(int clienteId);
 }

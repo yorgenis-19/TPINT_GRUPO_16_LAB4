@@ -13,4 +13,5 @@ public interface CuentaNegocio {
 	public Cuenta ObtenerPorCBU(long cbu);
 	public void Guardar(Cuenta obj);
 	boolean insertarCuenta(Cuenta cuenta);
+	public boolean ValidarCantidad(int clienteId);
 }

@@ -52,7 +52,19 @@ if(session.getAttribute("UsuarioActual") != null)
 
 <div class="container">
     <h2>Crear Cuenta</h2>
-    
+    <% 
+String mensajeExito = (String) request.getAttribute("mensajeExito");
+String mensajeError = (String) request.getAttribute("mensajeError");
+if (mensajeExito != null) { 
+%>
+    <div class="alert alert-success">
+        <%= mensajeExito %>
+    </div>
+<% } else if (mensajeError != null) { %>
+    <div class="alert alert-danger">
+        <%= mensajeError %>
+    </div>
+<% } %>
     <form action="ServletNuevaCuenta" method="post">
     <div id="BusquedaCliente">
         <input type="number" id="IDCliente" name="IDCliente" placeholder="Ingrese el ID del cliente" required>
@@ -79,12 +91,13 @@ if(session.getAttribute("UsuarioActual") != null)
 
     <div class="mb-3">
         <label for="Monto" class="form-label">Monto Inicial</label>
-        <input type="number" step="0.01" class="form-control" id="Monto" name="Monto" required>
+        <input type="number" step="0.01" class="form-control" id="Monto" name="Monto" value="10000" readonly>
     </div>
 
     <div class="mb-3">
     <label for="TipoCuenta" class="form-label">Tipo de Cuenta</label>
     <select class="form-control" id="TipoCuenta" name="TipoCuenta" required>
+     <option value="" disabled selected>Seleccione un tipo de cuenta</option>
         <%
             ArrayList<CuentaTipo> tiposDeCuenta = (ArrayList<CuentaTipo>) request.getAttribute("tiposDeCuenta");
             if (tiposDeCuenta != null && !tiposDeCuenta.isEmpty()) {
@@ -99,23 +112,12 @@ if(session.getAttribute("UsuarioActual") != null)
         <%
             }
         %>
-        <% 
-String mensajeExito = (String) request.getAttribute("mensajeExito");
-String mensajeError = (String) request.getAttribute("mensajeError");
-if (mensajeExito != null) { 
-%>
-    <div class="alert alert-success">
-        <%= mensajeExito %>
-    </div>
-<% } else if (mensajeError != null) { %>
-    <div class="alert alert-danger">
-        <%= mensajeError %>
-    </div>
-<% } %>
+        
     </select>
 </div>
 
     <button type="submit" class="btn btn-primary">Crear Cuenta</button>
+    <input type="button" value="Volver" name="btnVolver" onclick="window.location.href='BuscadorCuenta.jsp';" class="btn btn-secondary">
 </form>
 </div>
 

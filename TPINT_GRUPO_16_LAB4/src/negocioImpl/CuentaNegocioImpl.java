@@ -112,4 +112,14 @@ public class CuentaNegocioImpl implements CuentaNegocio {
         return (long) (Math.random() * 1_000_000_000_000_000_000L);
     }
 
+	@Override
+	public boolean ValidarCantidad(int clienteId) {
+		
+	    CuentaDao dao = new CuentaDaoImpl();
+	    int cantidadCuentas = dao.ValidarCantidad(clienteId);
+	    return cantidadCuentas < 3;
+	}
+
+
+
 }

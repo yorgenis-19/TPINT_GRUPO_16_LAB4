@@ -464,5 +464,43 @@ public class CuentaDaoImpl implements CuentaDao {
             conexion.close();
         }
     }
+
+	@Override
+	public int ValidarCantidad(int clienteId) {
+		int cantidadCuentas = 0;
+		Conexion cn = new Conexion();
+		
+		String query = "SELECT COUNT(*) AS Cantidadcuentas FROM CUENTA where ClienteId = ? AND Activa = 1";
+		try {
+			cn.Open();
+			 PreparedStatement preparedStatement = (PreparedStatement) cn.prepareStatement(query);
+		     preparedStatement.setInt(1, clienteId);
+		     
+		     ResultSet rs = preparedStatement.executeQuery();
+		     
+		     
+		     if (rs.next()) {
+		            cantidadCuentas = rs.getInt("Cantidadcuentas");
+		      }
+
+
+		        rs.close();
+		        preparedStatement.close();
+			
+			
+			
+		} catch (Exception e) {
+			 e.printStackTrace();
+		}
+		
+		finally
+		{
+			cn.close();
+		}
+		
+		 System.out.println("CUENTA DAO CANTIDAD CUENTAS : " + cantidadCuentas);
+		return cantidadCuentas;
+		
+	}
 	}
 
