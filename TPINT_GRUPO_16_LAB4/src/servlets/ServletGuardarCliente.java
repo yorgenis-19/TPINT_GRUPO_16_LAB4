@@ -61,6 +61,8 @@ public class ServletGuardarCliente extends HttpServlet {
 			String apellido = request.getParameter("txtApellido");
 			String sexo = request.getParameter("cmbSexo"); 
 			String telefono = request.getParameter("txtTelefono");
+			String direccion = request.getParameter("txtDireccion");
+			int provinciaId = Integer.parseInt(request.getParameter("cmbProvincia"));
 			Date fechaNacimiento = new Date();
 			try {
 				fechaNacimiento = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("txtFechaNacimiento"));
@@ -94,6 +96,8 @@ public class ServletGuardarCliente extends HttpServlet {
 			obj.setCuil(cuil);
 			obj.setTelefono(telefono);
 			obj.setFechaNacimiento(fechaNacimiento);
+			obj.setDireccion(direccion);
+			obj.setProvinciaId(provinciaId);
 			
 			if(id == 0) {
 				String usuario = request.getParameter("txtUsuario");
@@ -109,15 +113,19 @@ public class ServletGuardarCliente extends HttpServlet {
 					error = true;
 					request.setAttribute("CLAVE_DISTINTA", true);
 				}
-				Usuario usu = new Usuario();
-				usu.setNombre(usuario);
-				usu.setClave(clave);
-				usu.setActivo(true);
-				UsuarioTipo tipo = new UsuarioTipoNegocioImpl().Obtener("Cliente");
-				usu.setTipo(tipo);
-				UsuarioNegocio negUsuario = new UsuarioNegocioImpl();
-				negUsuario.Guardar(usu);				
-				obj.setUsuario(negUsuario.Obtener(usu.getNombre(), usu.getClave()));
+				if(!error)
+				{
+					Usuario usu = new Usuario();
+					usu.setNombre(usuario);
+					usu.setClave(clave);
+					usu.setActivo(true);
+					UsuarioTipo tipo = new UsuarioTipoNegocioImpl().Obtener("Cliente");
+					usu.setTipo(tipo);
+					UsuarioNegocio negUsuario = new UsuarioNegocioImpl();
+					negUsuario.Guardar(usu);				
+					obj.setUsuario(negUsuario.Obtener(usu.getNombre(), usu.getClave()));
+					
+				}
 			}
 			request.setAttribute("ClienteActual", obj);
 			
@@ -133,7 +141,8 @@ public class ServletGuardarCliente extends HttpServlet {
 		        int filas = neg.Guardar(obj);
 
 		        request.setAttribute("Filas", filas);
-		        RequestDispatcher rd = request.getRequestDispatcher("/BuscadorCliente.jsp");
+		        request.setAttribute("ClienteActual", obj);
+		        RequestDispatcher rd = request.getRequestDispatcher("/ABMCliente.jsp");
 		        rd.forward(request, response);
 			}
 			

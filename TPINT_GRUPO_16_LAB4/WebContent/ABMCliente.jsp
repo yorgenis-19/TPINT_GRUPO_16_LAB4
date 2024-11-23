@@ -1,3 +1,7 @@
+<%@page import="entidad.Localidad"%>
+<%@page import="negocioImpl.LocalidadNegocioImpl"%>
+<%@page import="negocioImpl.ProvinciaNegocioImpl"%>
+<%@page import="entidad.Provincia"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="negocioImpl.UsuarioTipoNegocioImpl"%>
@@ -22,17 +26,44 @@
 <!-- Archivo CSS externo -->
 <link rel="stylesheet" type="text/css" href="style.css">
 <style>
-.button-row{
-	  margin: 12px 0;
-}
+	<jsp:include page="style.css"></jsp:include>
+	.button-row{
+		  margin: 12px 0;
+	}
 </style>
 </head>
 <body>
-<script>
-window.onload = function() {
-	
-}
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#cmbProvincia').on('change', function() {
+        const provinciaId = $(this).val(); 
+
+        if (provinciaId) {
+        	console.log(provinciaId);
+            $.ajax({
+                url: 'ServletLocalidades', 
+                type: 'GET',
+                data: { provinciaId: provinciaId }, 
+                success: function(response) {
+                    $('#cmbLocalidad').empty();
+                    const localidades = response;
+                    localidades.forEach(localidad => {
+                        $('#cmbLocalidad').append(
+                        	"<option value="+localidad.Nombre+">"+localidad.Nombre+"</option>"
+                        );
+                    });
+                },
+                error: function() {
+                    alert('Hubo un error al cargar las localidades. Inténtalo nuevamente.');
+                }
+            });
+        } else {
+            $('#cmbLocalidad').empty();
+        }
+    });
+});
 </script>
+
 <%
 	Usuario usuario = new Usuario(); 
 	if(session.getAttribute("UsuarioActual") != null)
@@ -52,7 +83,9 @@ window.onload = function() {
 	boolean errorUsuario = request.getAttribute("USUARIO_EXISTENTE") != null ? (boolean)request.getAttribute("USUARIO_EXISTENTE") : false;
 	boolean errorClave = request.getAttribute("CLAVE_DISTINTA") != null ? (boolean)request.getAttribute("CLAVE_DISTINTA") : false;
 	
-	
+	ArrayList<Provincia> provincias = new ProvinciaNegocioImpl().ObtenerTodos();
+	ArrayList<Localidad> localidades = new LocalidadNegocioImpl().ObtenerTodos();
+	int filas = request.getAttribute("Filas") != null ? (int)request.getAttribute("Filas") : 0;
 %>
 <nav class="navbar bg-primary navbar-expand-lg " data-bs-theme="dark">
   <div class="container-fluid">
@@ -76,7 +109,19 @@ window.onload = function() {
   </div>
 </nav>
 <div class="container page-container">
-        <h1 style="text-align: center;">Cliente</h1>
+		<div class="title" >
+			<div style="width: 240px;">
+				<div class="alert alert-success <%if(filas > 0){%> visible <%}else{%> invisible <%}%>" role="alert">
+				  Registro guardado con éxito!
+				</div>
+			</div>
+			<div>
+	        	<h1 style="text-align: center;">Clientes</h1>
+	        </div>
+			<div style="width: 240px;">
+			 	
+	        </div>
+		</div>
         <div class="header_form">
 			<form method="post" action="ServletGuardarCliente" class="container needs-validation">
 			
@@ -173,6 +218,32 @@ window.onload = function() {
 			  <div class="col-sm">
 			  
 			  </div>
+			</div>
+			
+			<div class="row">
+				<div class="col-sm">
+				  <label for="txtDireccion" class="col-sm-2 col-form-label">Dirección:</label>
+				  <input type="text" class="form-control" value="<%=cliente.getDireccion() %>" placeholder="Calle y número" aria-label="Direccion" name="txtDireccion" id="txtDireccion" required>
+				</div>
+				<div class="col-sm">
+					<label for="cmbProvincia" class="col-sm col-form-label">Provincia:</label>
+			  		<select class="form-select" value="<%=cliente.getProvinciaId() %>" id="cmbProvincia" name="cmbProvincia" required>
+			  		<%for(Provincia provincia : provincias){ %>
+					    <option value="<%=provincia.getId()%>" <%if(cliente.getProvinciaId() == provincia.getId()) {%>selected <%} %>><%=provincia.getNombre()%></option>
+					<%}%>
+				  	</select>
+				</div>
+			    <div class="col-sm">
+			    <!-- 
+					<label for="cmbLocalidad" class="col-sm col-form-label">Localidad:</label>
+			  		<select class="form-select" value="<%=cliente.getLocalidadId() %>" id="cmbLocalidad" name="cmbLocalidad" required>
+			  		<%for(Localidad localidad : localidades){ %>
+			  			
+					    <option value="<%=localidad.getId() %>"><%=localidad.getNombre()%></option>
+					<%}%>
+				  	</select>
+			    -->
+			    </div>
 			</div>
 			
 		  <%if(cliente.getId() == 0){%>

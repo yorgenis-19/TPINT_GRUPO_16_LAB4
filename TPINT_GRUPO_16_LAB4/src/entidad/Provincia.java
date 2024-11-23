@@ -2,31 +2,20 @@ package entidad;
 
 public class Provincia {
 	
-	private int idProvincia;
-	private String nombreProvincia;
-	private boolean estado;
-	public int getIdProvincia() {
-		return idProvincia;
+	private int Id;
+	private String Nombre;
+	
+	public int getId() {
+		return Id;
 	}
-	public void setIdProvincia(int idProvincia) {
-		this.idProvincia = idProvincia;
+	public void setId(int id) {
+		Id = id;
 	}
-	public String getNombreProvincia() {
-		return nombreProvincia;
+	public String getNombre() {
+		return Nombre;
 	}
-	public void setNombreProvincia(String nombreProvincia) {
-		this.nombreProvincia = nombreProvincia;
-	}
-	public boolean isEstado() {
-		return estado;
-	}
-	public void setEstado(boolean estado) {
-		this.estado = estado;
-	}
-	@Override
-	public String toString() {
-		return "Provincia [idProvincia=" + idProvincia + ", nombreProvincia=" + nombreProvincia + ", estado=" + estado
-				+ "]";
+	public void setNombre(String nombre) {
+		Nombre = nombre;
 	}
 	
 	

@@ -301,6 +301,20 @@ body {
 .card-body{
 	align-self: center;
 }
+.title{
+	display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.title.div{
+	width: 240px;
+}
+.visible{
+	display:block;
+}
+.invisible{
+	display:none;
+}
 
 /* Utilidades */
 .text-center { text-align: center; }

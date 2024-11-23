@@ -15,6 +15,7 @@ public class Cliente {
 		this.Telefono = "";
 		this.Email = "";
 		this.FechaNacimiento = new Date();
+		this.Direccion = "";
 	}
 	private int Id;
 	private Usuario Usuario;
@@ -26,7 +27,7 @@ public class Cliente {
     private String Telefono;
     private String Email;
     private Date FechaNacimiento;
-    private int DireccionId;
+    private String Direccion;
     private int LocalidadId;
     private int ProvinciaId;
 	
@@ -38,12 +39,12 @@ public class Cliente {
 		this.Usuario = usuario;
 	}
 	
-	public int getDireccionId() {
-		return DireccionId;
+	public String getDireccion() {
+		return Direccion;
 	}
 	
-	public void setDireccionId(int direccion_id) {
-		this.DireccionId = direccion_id;
+	public void setDireccion(String direccion) {
+		this.Direccion = direccion;
 	}
 
     
