@@ -122,14 +122,16 @@ if(session.getAttribute("UsuarioActual") != null)
         <h1>Portal Cliente Bancario</h1>
         
         <div class="button-container">
-        	<a  href="ClienteDatos.jsp">
+        	<form action="ServletClienteDatos" method="get">
+        	<a>
             	<div class="button-wrapper">
-                    <button type="submit" class="button">
+                    <button type="submit" name="btnClienteDatos" class="button">
                         <i class="fas fa-user-circle me-2"></i>
                         Mis Datos Personales
                     </button>
             	</div>
             </a>
+            </form>
             
             <div class="button-wrapper">
                 <form action="ServletClienteCuentas" method="get">

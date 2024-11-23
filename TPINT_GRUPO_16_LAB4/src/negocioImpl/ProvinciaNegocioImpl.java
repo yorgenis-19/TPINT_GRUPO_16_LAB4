@@ -24,4 +24,18 @@ public class ProvinciaNegocioImpl implements ProvinciaNegocio {
 		return objs;
 	}
 
+	public Provincia Obtener(int provinciaId) {
+		Provincia objs = new Provincia();
+		ProvinciaDao dao = new ProvinciaDaoImpl();
+		try
+		{
+			objs = dao.Obtener(provinciaId);
+		}
+		catch(Exception e)
+		{
+			e.getStackTrace();
+		}
+		return objs;
+	}
+
 }

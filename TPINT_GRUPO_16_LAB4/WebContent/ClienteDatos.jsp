@@ -23,7 +23,8 @@ if(session.getAttribute("UsuarioActual") != null)
 {
 	usuario = (Usuario)session.getAttribute("UsuarioActual");
 }
-Cliente obj = new ClienteNegocioImpl().ObtenerPorUsuario(usuario.getId());
+Cliente obj = (Cliente)request.getAttribute("Cliente");
+String provinciaNombre = (String)request.getAttribute("ProvinciaNombre");
 %>
 <nav class="navbar bg-success navbar-expand-lg " data-bs-theme="dark">
   <div class="container-fluid">
@@ -83,6 +84,12 @@ Cliente obj = new ClienteNegocioImpl().ObtenerPorUsuario(usuario.getId());
     </div>
   </div>
   <div class="row">
+    <div class="col-md-4">
+      <label>Dirección: <span class="profile-value"><%=obj.getDireccion()%></span></label>
+    </div>
+    <div class="col-md-4">
+      <label>Provincia: <span class="profile-value"><%=provinciaNombre%></span></label>
+    </div>
     <div class="col-md-4">
     </div>
   </div>
