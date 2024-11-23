@@ -315,6 +315,11 @@ body {
 .invisible{
 	display:none;
 }
+.btn-menu{
+  height: fit-content;
+  background-color: transparent;
+  border: none;
+}
 
 /* Utilidades */
 .text-center { text-align: center; }

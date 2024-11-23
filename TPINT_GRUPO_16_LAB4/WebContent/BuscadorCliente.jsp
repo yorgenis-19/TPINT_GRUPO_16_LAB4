@@ -15,6 +15,11 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <style>
 	<jsp:include page="style.css"></jsp:include>
+	.btn-column{
+	display: flex;
+  flex-direction: column;
+  justify-content: end;
+  }
 </style>
 <script>
 function setDeleteInfo(clientId, clientName) {
@@ -83,10 +88,12 @@ if(request.getAttribute("ClientesResultado") != null) {
 				  <div class="col-1">
 				    <button type="submit" class="btn btn-primary" name=btnBuscar>Buscar</button>
 				  </div>
-				  <div class="col-1">
-				    <a class="btn btn-success" href="ABMCliente.jsp">Nuevo</a>
+	         	</form>
+				  <div class="col-1 btn-column">
+        			<form method="post" action="ServletVerCliente">
+				    	<button class="btn btn-success" name="btnVer" type="submit">Nuevo</button>
+				    </form>
 				  </div>
-	         </form>
 	         
 	        </div>
 	         

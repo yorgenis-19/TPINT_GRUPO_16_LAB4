@@ -57,8 +57,7 @@ function setDeleteInfo(usuarioId, usuarioName) {
 		usuarios = (ArrayList<Usuario>)request.getAttribute("UsuariosResultado");
 	}
 
-	UsuarioTipoNegocio negTipo = new UsuarioTipoNegocioImpl();
-	ArrayList<UsuarioTipo> tipos = negTipo.ObtenerTodos();
+	ArrayList<UsuarioTipo> tipos = (ArrayList<UsuarioTipo>)request.getAttribute("UsuarioTipos");
 %>
 <body>
 <nav class="navbar bg-primary navbar-expand-lg " data-bs-theme="dark">

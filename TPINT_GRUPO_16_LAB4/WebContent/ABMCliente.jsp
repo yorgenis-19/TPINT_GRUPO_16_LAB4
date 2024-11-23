@@ -74,8 +74,6 @@ $(document).ready(function() {
 	if(request.getAttribute("ClienteActual") != null){
 		cliente = (Cliente)request.getAttribute("ClienteActual");
 	}
-	UsuarioTipoNegocio neg = new UsuarioTipoNegocioImpl();
-	ArrayList<UsuarioTipo> tipos = neg.ObtenerTodos();
 
 	boolean errorEmail = request.getAttribute("MAIL_EXISTENTE") != null ? (boolean)request.getAttribute("MAIL_EXISTENTE") : false;
 	boolean errorDni = request.getAttribute("DNI_EXISTENTE") != null ? (boolean)request.getAttribute("DNI_EXISTENTE") : false;
@@ -83,9 +81,11 @@ $(document).ready(function() {
 	boolean errorUsuario = request.getAttribute("USUARIO_EXISTENTE") != null ? (boolean)request.getAttribute("USUARIO_EXISTENTE") : false;
 	boolean errorClave = request.getAttribute("CLAVE_DISTINTA") != null ? (boolean)request.getAttribute("CLAVE_DISTINTA") : false;
 	
-	ArrayList<Provincia> provincias = new ProvinciaNegocioImpl().ObtenerTodos();
-	ArrayList<Localidad> localidades = new LocalidadNegocioImpl().ObtenerTodos();
 	int filas = request.getAttribute("Filas") != null ? (int)request.getAttribute("Filas") : 0;
+	
+	ArrayList<UsuarioTipo> tipos = (ArrayList<UsuarioTipo>)request.getAttribute("UsuarioTipos");
+	ArrayList<Provincia> provincias = (ArrayList<Provincia>)request.getAttribute("Provincias");
+	ArrayList<Localidad> localidades = (ArrayList<Localidad>)request.getAttribute("Localidades");
 %>
 <nav class="navbar bg-primary navbar-expand-lg " data-bs-theme="dark">
   <div class="container-fluid">
