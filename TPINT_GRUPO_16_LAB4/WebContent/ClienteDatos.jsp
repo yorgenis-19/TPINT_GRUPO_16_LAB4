@@ -25,6 +25,7 @@ if(session.getAttribute("UsuarioActual") != null)
 }
 Cliente obj = (Cliente)request.getAttribute("Cliente");
 String provinciaNombre = (String)request.getAttribute("ProvinciaNombre");
+String localidadNombre = (String)request.getAttribute("LocalidadNombre");
 %>
 <nav class="navbar bg-success navbar-expand-lg " data-bs-theme="dark">
   <div class="container-fluid">
@@ -91,6 +92,7 @@ String provinciaNombre = (String)request.getAttribute("ProvinciaNombre");
       <label>Provincia: <span class="profile-value"><%=provinciaNombre%></span></label>
     </div>
     <div class="col-md-4">
+      <label>Localidad: <span class="profile-value"><%=localidadNombre%></span></label>
     </div>
   </div>
   <div class="row"></div>

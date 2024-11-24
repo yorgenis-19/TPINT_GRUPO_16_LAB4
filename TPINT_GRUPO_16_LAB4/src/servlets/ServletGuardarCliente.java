@@ -15,11 +15,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import entidad.Cliente;
+import entidad.Localidad;
+import entidad.Provincia;
 import entidad.Usuario;
 import entidad.UsuarioTipo;
 import negocio.ClienteNegocio;
 import negocio.UsuarioNegocio;
 import negocioImpl.ClienteNegocioImpl;
+import negocioImpl.LocalidadNegocioImpl;
+import negocioImpl.ProvinciaNegocioImpl;
 import negocioImpl.UsuarioNegocioImpl;
 import negocioImpl.UsuarioTipoNegocioImpl;
 /**
@@ -63,6 +67,7 @@ public class ServletGuardarCliente extends HttpServlet {
 			String telefono = request.getParameter("txtTelefono");
 			String direccion = request.getParameter("txtDireccion");
 			int provinciaId = Integer.parseInt(request.getParameter("cmbProvincia"));
+			int localidadId = Integer.parseInt(request.getParameter("cmbLocalidad"));
 			Date fechaNacimiento = new Date();
 			try {
 				fechaNacimiento = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("txtFechaNacimiento"));
@@ -98,6 +103,7 @@ public class ServletGuardarCliente extends HttpServlet {
 			obj.setFechaNacimiento(fechaNacimiento);
 			obj.setDireccion(direccion);
 			obj.setProvinciaId(provinciaId);
+			obj.setLocalidadId(localidadId);
 			
 			if(id == 0) {
 				String usuario = request.getParameter("txtUsuario");
@@ -142,6 +148,11 @@ public class ServletGuardarCliente extends HttpServlet {
 
 		        request.setAttribute("Filas", filas);
 		        request.setAttribute("ClienteActual", obj);
+		        
+		        ArrayList<Provincia> provincias = new ProvinciaNegocioImpl().ObtenerTodos();
+		        request.setAttribute("Provincias", provincias);
+		        ArrayList<Localidad> localidades = new LocalidadNegocioImpl().ObtenerTodos();
+		        request.setAttribute("Localidades", localidades);
 		        RequestDispatcher rd = request.getRequestDispatcher("/ABMCliente.jsp");
 		        rd.forward(request, response);
 			}

@@ -34,34 +34,29 @@
 </head>
 <body>
 <script type="text/javascript">
-$(document).ready(function() {
-    $('#cmbProvincia').on('change', function() {
-        const provinciaId = $(this).val(); 
 
-        if (provinciaId) {
-        	console.log(provinciaId);
-            $.ajax({
-                url: 'ServletLocalidades', 
-                type: 'GET',
-                data: { provinciaId: provinciaId }, 
-                success: function(response) {
-                    $('#cmbLocalidad').empty();
-                    const localidades = response;
-                    localidades.forEach(localidad => {
-                        $('#cmbLocalidad').append(
-                        	"<option value="+localidad.Nombre+">"+localidad.Nombre+"</option>"
-                        );
-                    });
-                },
-                error: function() {
-                    alert('Hubo un error al cargar las localidades. Inténtalo nuevamente.');
-                }
-            });
-        } else {
-            $('#cmbLocalidad').empty();
-        }
-    });
-});
+function eventoSeleccionarProvincia() {
+		var provinciaId = document.getElementById("cmbProvincia").value;
+		var nombre = document.getElementById("txtNombre").value;
+		var apellido = document.getElementById("txtApellido").value;
+		//var usuario = document.getElementById("txtUsuario").value;
+		var sexo = document.getElementById("cmbSexo").value;
+		var dni = document.getElementById("txtDNI").value;
+		//var clave = document.getElementById("txtClave").value;
+		var cuil = document.getElementById("txtCUIL").value;
+		var telefono = document.getElementById("txtTelefono").value;
+		//var claveConfirmar = document.getElementById("txtClaveConfirmar").value;txtEmail
+		var email = document.getElementById("txtEmail").value;
+		var fechaNacimiento = document.getElementById("txtFechaNacimiento").value;
+		var direccion = document.getElementById("txtDireccion").value;
+		var id = document.getElementById("txtId").value;
+		 window.location.replace("ServletProvincia?cargaLocalidad="+provinciaId
+				 +"&txtNombre="+nombre+"&txtApellido="+apellido+
+				 "&cmbSexo="+sexo+"&txtDNI="+dni+"&txtCUIL="+cuil+
+				 "&txtTelefono="+telefono+"&txtEmail="+email+
+				 "&txtFechaNacimiento="+fechaNacimiento+"&txtDireccion="+direccion+"&txtId="+id);
+	  }
+	  
 </script>
 
 <%
@@ -83,7 +78,6 @@ $(document).ready(function() {
 	
 	int filas = request.getAttribute("Filas") != null ? (int)request.getAttribute("Filas") : 0;
 	
-	ArrayList<UsuarioTipo> tipos = (ArrayList<UsuarioTipo>)request.getAttribute("UsuarioTipos");
 	ArrayList<Provincia> provincias = (ArrayList<Provincia>)request.getAttribute("Provincias");
 	ArrayList<Localidad> localidades = (ArrayList<Localidad>)request.getAttribute("Localidades");
 %>
@@ -152,6 +146,7 @@ $(document).ready(function() {
 		  		<%} %>
 			  </div>
 			</div>
+			
 			<div class="row">
 			  <div class="col-sm">
     			<label for="cmbSexo" class="col-sm-2 col-form-label">Sexo:</label>
@@ -227,104 +222,40 @@ $(document).ready(function() {
 				</div>
 				<div class="col-sm">
 					<label for="cmbProvincia" class="col-sm col-form-label">Provincia:</label>
-			  		<select class="form-select" value="<%=cliente.getProvinciaId() %>" id="cmbProvincia" name="cmbProvincia" required>
+			  		<select class="form-select" value="<%=cliente.getProvinciaId() %>" id="cmbProvincia" name="cmbProvincia" required onchange="eventoSeleccionarProvincia()">
 			  		<%for(Provincia provincia : provincias){ %>
-					    <option value="<%=provincia.getId()%>" <%if(cliente.getProvinciaId() == provincia.getId()) {%>selected <%} %>><%=provincia.getNombre()%></option>
+					    <option value="<%=provincia.getId()%>" 
+					    <%if(cliente.getProvinciaId() == provincia.getId()) {
+					    %>selected 
+					    <%}%>><%=provincia.getNombre()%></option>
 					<%}%>
 				  	</select>
 				</div>
 			    <div class="col-sm">
-			    <!-- 
 					<label for="cmbLocalidad" class="col-sm col-form-label">Localidad:</label>
 			  		<select class="form-select" value="<%=cliente.getLocalidadId() %>" id="cmbLocalidad" name="cmbLocalidad" required>
 			  		<%for(Localidad localidad : localidades){ %>
 			  			
-					    <option value="<%=localidad.getId() %>"><%=localidad.getNombre()%></option>
+					    <option value="<%=localidad.getId() %>"
+					    <%if(cliente.getLocalidadId() == localidad.getId()) {
+					    %>selected 
+					    <%}%>>
+					    <%=localidad.getNombre()%></option>
 					<%}%>
 				  	</select>
-			    -->
 			    </div>
 			</div>
 			
-		  <%if(cliente.getId() == 0){%>
-			<div class="row">
-		    	<div class="col-sm">
-	    			
-        		</div>
-        	</div>
-        	<%} %>
-
 			<div class="row button-row">
 			  <div class="col-sm">
 			  <button type="submit" class="btn btn-primary" name="btnGuardar">
 	                GUARDAR
 	            </button>
-	            <!-- 
-			  <%if(cliente.getId() == 0){%>
-				<button type="button" class="btn btn-primary" id="btnAbrirModal" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-				  GUARDAR
-				</button>
-			  <%} else {%>
-				<button type="submit" class="btn btn-primary" name="btnGuardar">
-	                GUARDAR
-	            </button>
-	            <%} %>
-	             -->
 	            <a class="btn btn-secondary" href="BuscadorCliente.jsp">
 	                VOLVER
 	            </a>
            	  </div>
 			</div>
-			
-		  <%if(cliente.getId() == 0){%>
-			<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-			  <div class="modal-dialog">
-			    <div class="modal-content">
-			      <div class="modal-header">
-			        <h1 class="modal-title fs-5" id="staticBackdropLabel">Nuevo Usuario</h1>
-			        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			      </div>
-			      <div class="modal-body">
-			        <div class="container">
-			        	<div class="row">
-					    	<div class="col-sm">
-				    			<label for="txtUsuario" class="col-sm-2 col-form-label">Usuario</label>
-				        		<input type="text" class="form-control" placeholder="Usuario" aria-label="Nombre" id="txtUsuario" name="txtUsuario">
-			       			</div>
-			        	</div>
-			        	<div class="row">
-					    	<div class="col-sm">
-				    			<label for="txtClave" class="col-sm-2 col-form-label">Clave</label>
-			        			<input type="password" class="form-control" placeholder="Clave" aria-label="Clave" id="txtClave" name="txtClave">
-			        		</div>
-			        	</div>
-			        	<!-- 
-			        	<div class="row">
-					    	<div class="col-sm">
-			    			<label for="cmbUsuarioTipo" class="col-sm-2 col-form-label">Tipo</label>
-						    <select class="form-select" id="cmbTipo" name="cmbTipo">
-						    <%
-							    for(UsuarioTipo tipo : tipos)
-							    {%>
-							        <option value="<%=tipo.getId()%>">
-							        <%=tipo.getDescripcion()%>
-							        </option>
-							    <%}
-						    %>
-						  	</select>
-			        		</div>
-			        	</div>
-			        	 -->
-			        </div>
-			      </div>
-			      <div class="modal-footer">
-			        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-			        <button type="submit" name="btnNuevoUsuario" class="btn btn-primary">Guardar</button>
-			      </div>
-			    </div>
-			  </div>
-			</div>
-	            <%} %>
 			</form>
         </div>
 </div>

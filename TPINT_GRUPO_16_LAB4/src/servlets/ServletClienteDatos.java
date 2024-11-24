@@ -12,11 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import entidad.Cliente;
 import entidad.Cuenta;
+import entidad.Localidad;
 import entidad.Movimiento;
 import entidad.Provincia;
 import entidad.Usuario;
 import negocioImpl.ClienteNegocioImpl;
 import negocioImpl.CuentaNegocioImpl;
+import negocioImpl.LocalidadNegocioImpl;
 import negocioImpl.MovimientoNegocioImpl;
 import negocioImpl.ProvinciaNegocioImpl;
 
@@ -44,8 +46,10 @@ public class ServletClienteDatos extends HttpServlet {
 			Usuario usuario = (Usuario)request.getSession().getAttribute("UsuarioActual");
 			Cliente obj = new ClienteNegocioImpl().ObtenerPorUsuario(usuario.getId());
 			Provincia provincia = new ProvinciaNegocioImpl().Obtener(obj.getProvinciaId());
+			Localidad localidad = new LocalidadNegocioImpl().Obtener(obj.getLocalidadId());
 			request.setAttribute("Cliente", obj);
 			request.setAttribute("ProvinciaNombre", provincia.getNombre());
+			request.setAttribute("LocalidadNombre", localidad.getNombre());
 			
 			RequestDispatcher rd = request.getRequestDispatcher("/ClienteDatos.jsp");
 			rd.forward(request, response);

@@ -49,11 +49,9 @@ public class ServletVerCliente extends HttpServlet {
 			
 	        Cliente obj = neg.Obtener(Integer.parseInt(request.getParameter("Id")));
 
-	    	ArrayList<UsuarioTipo> tipos = new UsuarioTipoNegocioImpl().ObtenerTodos();
 	    	ArrayList<Provincia> provincias = new ProvinciaNegocioImpl().ObtenerTodos();
 	    	ArrayList<Localidad> localidades = new LocalidadNegocioImpl().ObtenerTodos();
 
-	        request.setAttribute("UsuarioTipos", tipos);
 	        request.setAttribute("Provincias", provincias);
 	        request.setAttribute("Localidades", localidades);
 	    	
@@ -75,11 +73,12 @@ public class ServletVerCliente extends HttpServlet {
 			
 	    	ArrayList<UsuarioTipo> tipos = new UsuarioTipoNegocioImpl().ObtenerTodos();
 	    	ArrayList<Provincia> provincias = new ProvinciaNegocioImpl().ObtenerTodos();
-	    	ArrayList<Localidad> localidades = new LocalidadNegocioImpl().ObtenerTodos();
+	    	ArrayList<Localidad> localidades = new LocalidadNegocioImpl().ObtenerPorProvincia(1);
 
 	        request.setAttribute("UsuarioTipos", tipos);
 	        request.setAttribute("Provincias", provincias);
 	        request.setAttribute("Localidades", localidades);
+	        request.setAttribute("ProvinciaSeleccionada", provincias.get(0).getId());
 	    	
 	        RequestDispatcher rd = request.getRequestDispatcher("/ABMCliente.jsp");
 	        rd.forward(request, response);

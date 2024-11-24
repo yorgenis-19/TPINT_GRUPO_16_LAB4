@@ -38,4 +38,18 @@ public class LocalidadNegocioImpl implements LocalidadNegocio {
 		return objs;
 	}
 
+	public Localidad Obtener(int id) {
+		Localidad obj = new Localidad();
+		LocalidadDao dao = new LocalidadDaoImpl();
+		try
+		{
+			obj = dao.Obtener(id);
+		}
+		catch(Exception e)
+		{
+			e.getStackTrace();
+		}
+		return obj;
+	}
+
 }
