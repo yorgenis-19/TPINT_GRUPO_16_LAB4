@@ -85,7 +85,7 @@ if(session.getAttribute("UsuarioActual") != null)
 	  </div>
 	</a>
 	
-	<a class="card" >
+	<a class="card" href="Reporte.jsp">
 	  <svg class="card-img-top" style="height: 100%;" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 2048 2048"><path fill="currentColor" d="M1920 1280h-384V384h384zM0 1024h384v640H0zm1408 512h-128v128h-256V0h384zM512 384h384v1280H512zm1536 1280v128h-256v256h-128v-256h-256v-128h256v-256h128v256z"/></svg>
 	  <div class="card-body">
 	    <h5 class="card-title">Reportes</h5>
