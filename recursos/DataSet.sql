@@ -1,10 +1,8 @@
-use BancoTp
+use BancoTp;
 
 INSERT INTO UsuarioTipo (Descripcion) VALUES ('Admin'), ('Cliente');
-INSERT INTO CuentaTipo (Descripcion) VALUES ('Caja de Ahorro'), ('Cuenta Corriente')
-INSERT INTO MovimientoTipo (Descripcion) VALUES ('Transferencia'), ('Pago')
-
-
+INSERT INTO CuentaTipo (Descripcion) VALUES ('Caja de Ahorro'), ('Cuenta Corriente');
+INSERT INTO MovimientoTipo (Descripcion) VALUES ('Transferencia'), ('Pago'), ('Alta');
 
 INSERT INTO Usuario (Nombre, Clave, TipoId, Activo) VALUES 
 ('admin',    'admin',    1, 1),
@@ -18,13 +16,13 @@ INSERT INTO Usuario (Nombre, Clave, TipoId, Activo) VALUES
 ('cliente3', 'cliente3', 2, 1),
 ('cliente4', 'cliente4', 2, 0),
 ('cliente5', 'cliente5', 2, 0),
-('cliente6', 'cliente6', 2, 0)
+('cliente6', 'cliente6', 2, 0);
 
 
 INSERT INTO Provincia (Nombre) VALUES
 ('Buenos Aires'),('Catamarca'),('Chaco'),('Chubut'),('Ciudad Autónoma de Buenos Aires'),('Córdoba'),('Corrientes'),('Entre Ríos'),
 ('Formosa'),('Jujuy'),('La Pampa'),('La Rioja'),('Mendoza'),('Misiones'),('Neuquén'),('Río Negro'),('Salta'),('San Juan'),('San Luis'),
-('Santa Cruz'),('Santa Fe'),('Santiago del Estero'),('Tierra del Fuego'),('Tucumán')
+('Santa Cruz'),('Santa Fe'),('Santiago del Estero'),('Tierra del Fuego'),('Tucumán');
 
 -- Buenos Aires
 INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
@@ -37,10 +35,7 @@ INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
 ((SELECT Id FROM Provincia WHERE Nombre = 'Buenos Aires'), 'Pergamino'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Buenos Aires'), 'Olavarría'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Buenos Aires'), 'Zárate'),
-((SELECT Id FROM Provincia WHERE Nombre = 'Buenos Aires'), 'Luján')
-
--- Catamarca
-INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
+((SELECT Id FROM Provincia WHERE Nombre = 'Buenos Aires'), 'Luján'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Catamarca'), 'San Fernando del Valle de Catamarca'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Catamarca'), 'Andalgalá'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Catamarca'), 'Belén'),
@@ -50,10 +45,7 @@ INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
 ((SELECT Id FROM Provincia WHERE Nombre = 'Catamarca'), 'Recreo'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Catamarca'), 'San José'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Catamarca'), 'Pomán'),
-((SELECT Id FROM Provincia WHERE Nombre = 'Catamarca'), 'Saujil')
-
--- Chaco
-INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
+((SELECT Id FROM Provincia WHERE Nombre = 'Catamarca'), 'Saujil'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Chaco'), 'Resistencia'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Chaco'), 'Presidencia Roque Sáenz Peña'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Chaco'), 'Villa Ángela'),
@@ -63,10 +55,7 @@ INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
 ((SELECT Id FROM Provincia WHERE Nombre = 'Chaco'), 'General San Martín'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Chaco'), 'Barranqueras'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Chaco'), 'Castelli'),
-((SELECT Id FROM Provincia WHERE Nombre = 'Chaco'), 'Puerto Tirol')
-
--- Chubut
-INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
+((SELECT Id FROM Provincia WHERE Nombre = 'Chaco'), 'Puerto Tirol'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Chubut'), 'Rawson'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Chubut'), 'Trelew'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Chubut'), 'Puerto Madryn'),
@@ -76,10 +65,7 @@ INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
 ((SELECT Id FROM Provincia WHERE Nombre = 'Chubut'), 'Sarmiento'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Chubut'), 'Trevelin'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Chubut'), 'Dolavon'),
-((SELECT Id FROM Provincia WHERE Nombre = 'Chubut'), 'El Maitén')
-
--- Ciudad Autónoma de Buenos Aires
-INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
+((SELECT Id FROM Provincia WHERE Nombre = 'Chubut'), 'El Maitén'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Ciudad Autónoma de Buenos Aires'), 'Palermo'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Ciudad Autónoma de Buenos Aires'), 'Recoleta'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Ciudad Autónoma de Buenos Aires'), 'Belgrano'),
@@ -89,10 +75,7 @@ INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
 ((SELECT Id FROM Provincia WHERE Nombre = 'Ciudad Autónoma de Buenos Aires'), 'Balvanera'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Ciudad Autónoma de Buenos Aires'), 'Villa Urquiza'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Ciudad Autónoma de Buenos Aires'), 'Flores'),
-((SELECT Id FROM Provincia WHERE Nombre = 'Ciudad Autónoma de Buenos Aires'), 'Villa Lugano')
-
--- Córdoba
-INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
+((SELECT Id FROM Provincia WHERE Nombre = 'Ciudad Autónoma de Buenos Aires'), 'Villa Lugano'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Córdoba'), 'Córdoba'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Córdoba'), 'Villa Carlos Paz'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Córdoba'), 'Río Cuarto'),
@@ -102,10 +85,7 @@ INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
 ((SELECT Id FROM Provincia WHERE Nombre = 'Córdoba'), 'La Falda'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Córdoba'), 'Cosquín'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Córdoba'), 'Jesús María'),
-((SELECT Id FROM Provincia WHERE Nombre = 'Córdoba'), 'Capilla del Monte');
-
--- Mendoza
-INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
+((SELECT Id FROM Provincia WHERE Nombre = 'Córdoba'), 'Capilla del Monte'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Mendoza'), 'Mendoza'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Mendoza'), 'San Rafael'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Mendoza'), 'Godoy Cruz'),
@@ -115,10 +95,7 @@ INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
 ((SELECT Id FROM Provincia WHERE Nombre = 'Mendoza'), 'Maipú'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Mendoza'), 'Tunuyán'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Mendoza'), 'Malargüe'),
-((SELECT Id FROM Provincia WHERE Nombre = 'Mendoza'), 'San Martín');
-
--- Santa Fe
-INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
+((SELECT Id FROM Provincia WHERE Nombre = 'Mendoza'), 'San Martín'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Santa Fe'), 'Santa Fe'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Santa Fe'), 'Rosario'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Santa Fe'), 'Rafaela'),
@@ -128,10 +105,7 @@ INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
 ((SELECT Id FROM Provincia WHERE Nombre = 'Santa Fe'), 'San Lorenzo'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Santa Fe'), 'Sunchales'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Santa Fe'), 'Cañada de Gómez'),
-((SELECT Id FROM Provincia WHERE Nombre = 'Santa Fe'), 'Esperanza');
-
--- Salta
-INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
+((SELECT Id FROM Provincia WHERE Nombre = 'Santa Fe'), 'Esperanza'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Salta'), 'Salta'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Salta'), 'Cafayate'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Salta'), 'San Ramón de la Nueva Orán'),
@@ -141,10 +115,7 @@ INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
 ((SELECT Id FROM Provincia WHERE Nombre = 'Salta'), 'Rosario de la Frontera'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Salta'), 'Cerrillos'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Salta'), 'San Lorenzo'),
-((SELECT Id FROM Provincia WHERE Nombre = 'Salta'), 'El Carril');
-
--- Neuquén
-INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
+((SELECT Id FROM Provincia WHERE Nombre = 'Salta'), 'El Carril'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Neuquén'), 'Neuquén'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Neuquén'), 'San Martín de los Andes'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Neuquén'), 'Villa La Angostura'),
@@ -154,10 +125,7 @@ INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
 ((SELECT Id FROM Provincia WHERE Nombre = 'Neuquén'), 'Junín de los Andes'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Neuquén'), 'Cutral Có'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Neuquén'), 'Chos Malal'),
-((SELECT Id FROM Provincia WHERE Nombre = 'Neuquén'), 'Rincón de los Sauces');
-
--- Jujuy
-INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
+((SELECT Id FROM Provincia WHERE Nombre = 'Neuquén'), 'Rincón de los Sauces'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Jujuy'), 'San Salvador de Jujuy'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Jujuy'), 'Palpalá'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Jujuy'), 'Humahuaca'),
@@ -167,10 +135,7 @@ INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
 ((SELECT Id FROM Provincia WHERE Nombre = 'Jujuy'), 'San Pedro de Jujuy'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Jujuy'), 'Monterrico'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Jujuy'), 'El Carmen'),
-((SELECT Id FROM Provincia WHERE Nombre = 'Jujuy'), 'Abra Pampa');
-
--- La Pampa
-INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
+((SELECT Id FROM Provincia WHERE Nombre = 'Jujuy'), 'Abra Pampa'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'La Pampa'), 'Santa Rosa'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'La Pampa'), 'General Pico'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'La Pampa'), 'Toay'),
@@ -180,10 +145,7 @@ INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
 ((SELECT Id FROM Provincia WHERE Nombre = 'La Pampa'), 'General Acha'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'La Pampa'), 'Intendente Alvear'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'La Pampa'), 'Guatraché'),
-((SELECT Id FROM Provincia WHERE Nombre = 'La Pampa'), 'Eduardo Castex');
-
--- Misiones
-INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
+((SELECT Id FROM Provincia WHERE Nombre = 'La Pampa'), 'Eduardo Castex'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Misiones'), 'Posadas'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Misiones'), 'Oberá'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Misiones'), 'Eldorado'),
@@ -193,10 +155,7 @@ INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
 ((SELECT Id FROM Provincia WHERE Nombre = 'Misiones'), 'Montecarlo'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Misiones'), 'Jardín América'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Misiones'), 'Apóstoles'),
-((SELECT Id FROM Provincia WHERE Nombre = 'Misiones'), 'Aristóbulo del Valle');
-
--- Río Negro
-INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
+((SELECT Id FROM Provincia WHERE Nombre = 'Misiones'), 'Aristóbulo del Valle'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Río Negro'), 'San Carlos de Bariloche'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Río Negro'), 'Viedma'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Río Negro'), 'Cipolletti'),
@@ -206,10 +165,7 @@ INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
 ((SELECT Id FROM Provincia WHERE Nombre = 'Río Negro'), 'Allen'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Río Negro'), 'Choele Choel'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Río Negro'), 'El Bolsón'),
-((SELECT Id FROM Provincia WHERE Nombre = 'Río Negro'), 'Luis Beltrán');
-
--- San Juan
-INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
+((SELECT Id FROM Provincia WHERE Nombre = 'Río Negro'), 'Luis Beltrán'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'San Juan'), 'San Juan'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'San Juan'), 'Rivadavia'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'San Juan'), 'Rawson'),
@@ -219,10 +175,7 @@ INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
 ((SELECT Id FROM Provincia WHERE Nombre = 'San Juan'), 'Albardón'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'San Juan'), 'Caucete'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'San Juan'), 'Jáchal'),
-((SELECT Id FROM Provincia WHERE Nombre = 'San Juan'), 'San Martín');
-
--- San Luis
-INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
+((SELECT Id FROM Provincia WHERE Nombre = 'San Juan'), 'San Martín'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'San Luis'), 'San Luis'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'San Luis'), 'Villa Mercedes'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'San Luis'), 'Merlo'),
@@ -232,10 +185,7 @@ INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
 ((SELECT Id FROM Provincia WHERE Nombre = 'San Luis'), 'Concarán'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'San Luis'), 'Quines'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'San Luis'), 'Tilisarao'),
-((SELECT Id FROM Provincia WHERE Nombre = 'San Luis'), 'Villa de Merlo');
-
--- Formosa
-INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
+((SELECT Id FROM Provincia WHERE Nombre = 'San Luis'), 'Villa de Merlo'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Formosa'), 'Formosa'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Formosa'), 'Clorinda'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Formosa'), 'Pirané'),
@@ -245,7 +195,77 @@ INSERT INTO Localidad (ProvinciaId, Nombre) VALUES
 ((SELECT Id FROM Provincia WHERE Nombre = 'Formosa'), 'Ingeniero Juárez'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Formosa'), 'Laguna Blanca'),
 ((SELECT Id FROM Provincia WHERE Nombre = 'Formosa'), 'Comandante Fontana'),
-((SELECT Id FROM Provincia WHERE Nombre = 'Formosa'), 'Estanislao del Campo');
+((SELECT Id FROM Provincia WHERE Nombre = 'Formosa'), 'Estanislao del Campo'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Tucumán'), 'San Miguel de Tucumán'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Tucumán'), 'Tafí Viejo'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Tucumán'), 'Yerba Buena'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Tucumán'), 'Concepción'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Tucumán'), 'Bella Vista'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Tucumán'), 'Monteros'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Tucumán'), 'Lules'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Tucumán'), 'Famaillá'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Tucumán'), 'Aguilares'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Tucumán'), 'Simoca'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Tierra del Fuego'), 'Ushuaia'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Tierra del Fuego'), 'Río Grande'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Tierra del Fuego'), 'Tolhuin'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Tierra del Fuego'), 'Puerto Almanza'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Tierra del Fuego'), 'Lago Escondido'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Tierra del Fuego'), 'San Sebastián'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Tierra del Fuego'), 'Cerro Sombrero'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Tierra del Fuego'), 'Bahía Thetis'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Tierra del Fuego'), 'Cabo San Pablo'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Tierra del Fuego'), 'Moat'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Santiago del Estero'), 'Santiago del Estero'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Santiago del Estero'), 'La Banda'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Santiago del Estero'), 'Termas de Río Hondo'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Santiago del Estero'), 'Añatuya'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Santiago del Estero'), 'Quimilí'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Santiago del Estero'), 'Monte Quemado'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Santiago del Estero'), 'Loreto'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Santiago del Estero'), 'Frías'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Santiago del Estero'), 'Fernández'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Santiago del Estero'), 'Clodomira'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Santa Cruz'), 'Río Gallegos'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Santa Cruz'), 'El Calafate'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Santa Cruz'), 'Caleta Olivia'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Santa Cruz'), 'Pico Truncado'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Santa Cruz'), 'Puerto Deseado'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Santa Cruz'), 'Las Heras'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Santa Cruz'), 'Puerto San Julián'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Santa Cruz'), 'Perito Moreno'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Santa Cruz'), 'Gobernador Gregores'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Santa Cruz'), 'El Chaltén'),
+((SELECT Id FROM Provincia WHERE Nombre = 'La Rioja'), 'La Rioja'),
+((SELECT Id FROM Provincia WHERE Nombre = 'La Rioja'), 'Chilecito'),
+((SELECT Id FROM Provincia WHERE Nombre = 'La Rioja'), 'Aimogasta'),
+((SELECT Id FROM Provincia WHERE Nombre = 'La Rioja'), 'Chamical'),
+((SELECT Id FROM Provincia WHERE Nombre = 'La Rioja'), 'Villa Unión'),
+((SELECT Id FROM Provincia WHERE Nombre = 'La Rioja'), 'Chepes'),
+((SELECT Id FROM Provincia WHERE Nombre = 'La Rioja'), 'Famatina'),
+((SELECT Id FROM Provincia WHERE Nombre = 'La Rioja'), 'Nonogasta'),
+((SELECT Id FROM Provincia WHERE Nombre = 'La Rioja'), 'Ulapes'),
+((SELECT Id FROM Provincia WHERE Nombre = 'La Rioja'), 'Patquía'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Entre Ríos'), 'Paraná'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Entre Ríos'), 'Concordia'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Entre Ríos'), 'Gualeguaychú'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Entre Ríos'), 'Colón'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Entre Ríos'), 'Gualeguay'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Entre Ríos'), 'Victoria'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Entre Ríos'), 'Villaguay'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Entre Ríos'), 'Federal'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Entre Ríos'), 'Nogoyá'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Entre Ríos'), 'San José'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Corrientes'), 'Corrientes'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Corrientes'), 'Goya'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Corrientes'), 'Paso de los Libres'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Corrientes'), 'Bella Vista'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Corrientes'), 'Esquina'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Corrientes'), 'Santo Tomé'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Corrientes'), 'Curuzú Cuatiá'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Corrientes'), 'Mercedes'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Corrientes'), 'Ituzaingó'),
+((SELECT Id FROM Provincia WHERE Nombre = 'Corrientes'), 'Monte Caseros');
 
 INSERT INTO Cliente (UsuarioId, Nombre, Apellido, Sexo, DNI, CUIL, Telefono, Email, FechaNacimiento, Direccion, LocalidadId, ProvinciaId) VALUES 
 ((SELECT Id FROM Usuario WHERE Nombre = 'Cliente'), 'Juan', 'Perez', 'Masculino', '33222001', '1332220010', '88881111', 'cliente@gmail.com', '19900101', 
@@ -265,7 +285,27 @@ INSERT INTO Cliente (UsuarioId, Nombre, Apellido, Sexo, DNI, CUIL, Telefono, Ema
 	(SELECT Id FROM Provincia WHERE Nombre = 'Chaco')),
 ((SELECT Id FROM Usuario WHERE Nombre = 'Cliente6'), 'Julio', 'Cesar', 'Masculino', '33222006', '1332220060', '88886666', 'cliente6@gmail.com', '19900606', 
 'Libertad 600', (SELECT l.Id FROM Localidad l INNER JOIN Provincia p ON p.Id = l.ProvinciaId WHERE p.Nombre = 'Ciudad Autónoma de Buenos Aires' AND l.Nombre = 'San Telmo'), 
-	(SELECT Id FROM Provincia WHERE Nombre = 'Ciudad Autónoma de Buenos Aires'))
+	(SELECT Id FROM Provincia WHERE Nombre = 'Ciudad Autónoma de Buenos Aires'));
 
+INSERT INTO Cuenta (ClienteId, Monto, Activa, CBU, TipoId, FechaDeCreacion) VALUES
+((SELECT Id FROM Cliente WHERE DNI = '33222001'), 10000, 1, 897546123111, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Caja de Ahorro'), '20241120'),
+((SELECT Id FROM Cliente WHERE DNI = '33222001'), 10000, 1, 897546123112, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Cuenta Corriente'), '20241121'),
+((SELECT Id FROM Cliente WHERE DNI = '33222001'), 10000, 0, 897546123113, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Caja de Ahorro'), '20241122'),
+((SELECT Id FROM Cliente WHERE DNI = '33222002'), 10000, 1, 897546123121, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Caja de Ahorro'), '20241120'),
+((SELECT Id FROM Cliente WHERE DNI = '33222002'), 10000, 1, 897546123122, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Cuenta Corriente'), '20241121'),
+((SELECT Id FROM Cliente WHERE DNI = '33222002'), 10000, 1, 897546123123, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Caja de Ahorro'), '20241122'),
+((SELECT Id FROM Cliente WHERE DNI = '33222003'), 10000, 0, 897546123131, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Caja de Ahorro'), '20241128'),
+((SELECT Id FROM Cliente WHERE DNI = '33222003'), 10000, 0, 897546123132, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Cuenta Corriente'), '20241129'),
+((SELECT Id FROM Cliente WHERE DNI = '33222003'), 10000, 0, 897546123133, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Caja de Ahorro'), '20241130');
 
-
+INSERT INTO Movimiento (CuentaOrigenId, CuentaDestinoId, Importe, Fecha, Detalle, TipoId) VALUES
+(NULL, (SELECT Id FROM Cuenta WHERE CBU = 897546123111), 10000, '20241101', 'Creación de cuenta', (SELECT Id FROM MovimientoTipo WHERE Descripcion = 'Alta')),
+(NULL, (SELECT Id FROM Cuenta WHERE CBU = 897546123112), 10000, '20241101', 'Creación de cuenta', (SELECT Id FROM MovimientoTipo WHERE Descripcion = 'Alta')),
+(NULL, (SELECT Id FROM Cuenta WHERE CBU = 897546123113), 10000, '20241101', 'Creación de cuenta', (SELECT Id FROM MovimientoTipo WHERE Descripcion = 'Alta')),
+(NULL, (SELECT Id FROM Cuenta WHERE CBU = 897546123121), 10000, '20241101', 'Creación de cuenta', (SELECT Id FROM MovimientoTipo WHERE Descripcion = 'Alta')),
+(NULL, (SELECT Id FROM Cuenta WHERE CBU = 897546123122), 10000, '20241101', 'Creación de cuenta', (SELECT Id FROM MovimientoTipo WHERE Descripcion = 'Alta')),
+(NULL, (SELECT Id FROM Cuenta WHERE CBU = 897546123123), 10000, '20241101', 'Creación de cuenta', (SELECT Id FROM MovimientoTipo WHERE Descripcion = 'Alta')),
+(NULL, (SELECT Id FROM Cuenta WHERE CBU = 897546123131), 10000, '20241101', 'Creación de cuenta', (SELECT Id FROM MovimientoTipo WHERE Descripcion = 'Alta')),
+(NULL, (SELECT Id FROM Cuenta WHERE CBU = 897546123132), 10000, '20241101', 'Creación de cuenta', (SELECT Id FROM MovimientoTipo WHERE Descripcion = 'Alta')),
+(NULL, (SELECT Id FROM Cuenta WHERE CBU = 897546123133), 10000, '20241101', 'Creación de cuenta', (SELECT Id FROM MovimientoTipo WHERE Descripcion = 'Alta')),
+(NULL, (SELECT Id FROM Cuenta WHERE CBU = 897546123111), 10000, '20241101', 'Creación de cuenta', (SELECT Id FROM MovimientoTipo WHERE Descripcion = 'Alta'))
