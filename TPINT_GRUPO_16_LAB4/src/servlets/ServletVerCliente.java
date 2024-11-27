@@ -50,7 +50,7 @@ public class ServletVerCliente extends HttpServlet {
 	        Cliente obj = neg.Obtener(Integer.parseInt(request.getParameter("Id")));
 
 	    	ArrayList<Provincia> provincias = new ProvinciaNegocioImpl().ObtenerTodos();
-	    	ArrayList<Localidad> localidades = new LocalidadNegocioImpl().ObtenerTodos();
+	    	ArrayList<Localidad> localidades = new LocalidadNegocioImpl().ObtenerPorProvincia(obj.getProvinciaId());
 
 	        request.setAttribute("Provincias", provincias);
 	        request.setAttribute("Localidades", localidades);
