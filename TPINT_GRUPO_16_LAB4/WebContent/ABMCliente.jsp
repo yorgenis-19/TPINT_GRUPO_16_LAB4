@@ -1,3 +1,7 @@
+<%@page import="entidad.Localidad"%>
+<%@page import="negocioImpl.LocalidadNegocioImpl"%>
+<%@page import="negocioImpl.ProvinciaNegocioImpl"%>
+<%@page import="entidad.Provincia"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="negocioImpl.UsuarioTipoNegocioImpl"%>
@@ -22,17 +26,39 @@
 <!-- Archivo CSS externo -->
 <link rel="stylesheet" type="text/css" href="style.css">
 <style>
-.button-row{
-	  margin: 12px 0;
-}
+	<jsp:include page="style.css"></jsp:include>
+	.button-row{
+		  margin: 12px 0;
+	}
 </style>
 </head>
 <body>
-<script>
-window.onload = function() {
-	
-}
+<script type="text/javascript">
+
+function eventoSeleccionarProvincia() {
+		var provinciaId = document.getElementById("cmbProvincia").value;
+		var nombre = document.getElementById("txtNombre").value;
+		var apellido = document.getElementById("txtApellido").value;
+		//var usuario = document.getElementById("txtUsuario").value;
+		var sexo = document.getElementById("cmbSexo").value;
+		var dni = document.getElementById("txtDNI").value;
+		//var clave = document.getElementById("txtClave").value;
+		var cuil = document.getElementById("txtCUIL").value;
+		var telefono = document.getElementById("txtTelefono").value;
+		//var claveConfirmar = document.getElementById("txtClaveConfirmar").value;txtEmail
+		var email = document.getElementById("txtEmail").value;
+		var fechaNacimiento = document.getElementById("txtFechaNacimiento").value;
+		var direccion = document.getElementById("txtDireccion").value;
+		var id = document.getElementById("txtId").value;
+		 window.location.replace("ServletProvincia?cargaLocalidad="+provinciaId
+				 +"&txtNombre="+nombre+"&txtApellido="+apellido+
+				 "&cmbSexo="+sexo+"&txtDNI="+dni+"&txtCUIL="+cuil+
+				 "&txtTelefono="+telefono+"&txtEmail="+email+
+				 "&txtFechaNacimiento="+fechaNacimiento+"&txtDireccion="+direccion+"&txtId="+id);
+	  }
+	  
 </script>
+
 <%
 	Usuario usuario = new Usuario(); 
 	if(session.getAttribute("UsuarioActual") != null)
@@ -43,8 +69,6 @@ window.onload = function() {
 	if(request.getAttribute("ClienteActual") != null){
 		cliente = (Cliente)request.getAttribute("ClienteActual");
 	}
-	UsuarioTipoNegocio neg = new UsuarioTipoNegocioImpl();
-	ArrayList<UsuarioTipo> tipos = neg.ObtenerTodos();
 
 	boolean errorEmail = request.getAttribute("MAIL_EXISTENTE") != null ? (boolean)request.getAttribute("MAIL_EXISTENTE") : false;
 	boolean errorDni = request.getAttribute("DNI_EXISTENTE") != null ? (boolean)request.getAttribute("DNI_EXISTENTE") : false;
@@ -52,7 +76,10 @@ window.onload = function() {
 	boolean errorUsuario = request.getAttribute("USUARIO_EXISTENTE") != null ? (boolean)request.getAttribute("USUARIO_EXISTENTE") : false;
 	boolean errorClave = request.getAttribute("CLAVE_DISTINTA") != null ? (boolean)request.getAttribute("CLAVE_DISTINTA") : false;
 	
+	int filas = request.getAttribute("Filas") != null ? (int)request.getAttribute("Filas") : 0;
 	
+	ArrayList<Provincia> provincias = (ArrayList<Provincia>)request.getAttribute("Provincias");
+	ArrayList<Localidad> localidades = (ArrayList<Localidad>)request.getAttribute("Localidades");
 %>
 <nav class="navbar bg-primary navbar-expand-lg " data-bs-theme="dark">
   <div class="container-fluid">
@@ -76,7 +103,19 @@ window.onload = function() {
   </div>
 </nav>
 <div class="container page-container">
-        <h1 style="text-align: center;">Cliente</h1>
+		<div class="title" >
+			<div style="width: 240px;">
+				<div class="alert alert-success <%if(filas > 0){%> visible <%}else{%> invisible <%}%>" role="alert">
+				  Registro guardado con éxito!
+				</div>
+			</div>
+			<div>
+	        	<h1 style="text-align: center;">Clientes</h1>
+	        </div>
+			<div style="width: 240px;">
+			 	
+	        </div>
+		</div>
         <div class="header_form">
 			<form method="post" action="ServletGuardarCliente" class="container needs-validation">
 			
@@ -107,6 +146,7 @@ window.onload = function() {
 		  		<%} %>
 			  </div>
 			</div>
+			
 			<div class="row">
 			  <div class="col-sm">
     			<label for="cmbSexo" class="col-sm-2 col-form-label">Sexo:</label>
@@ -175,85 +215,47 @@ window.onload = function() {
 			  </div>
 			</div>
 			
-		  <%if(cliente.getId() == 0){%>
 			<div class="row">
-		    	<div class="col-sm">
-	    			
-        		</div>
-        	</div>
-        	<%} %>
-
+				<div class="col-sm">
+				  <label for="txtDireccion" class="col-sm-2 col-form-label">Dirección:</label>
+				  <input type="text" class="form-control" value="<%=cliente.getDireccion() %>" placeholder="Calle y número" aria-label="Direccion" name="txtDireccion" id="txtDireccion" required>
+				</div>
+				<div class="col-sm">
+					<label for="cmbProvincia" class="col-sm col-form-label">Provincia:</label>
+			  		<select class="form-select" value="<%=cliente.getProvinciaId() %>" id="cmbProvincia" name="cmbProvincia" required onchange="eventoSeleccionarProvincia()">
+			  		<%for(Provincia provincia : provincias){ %>
+					    <option value="<%=provincia.getId()%>" 
+					    <%if(cliente.getProvinciaId() == provincia.getId()) {
+					    %>selected 
+					    <%}%>><%=provincia.getNombre()%></option>
+					<%}%>
+				  	</select>
+				</div>
+			    <div class="col-sm">
+					<label for="cmbLocalidad" class="col-sm col-form-label">Localidad:</label>
+			  		<select class="form-select" value="<%=cliente.getLocalidadId() %>" id="cmbLocalidad" name="cmbLocalidad" required>
+			  		<%for(Localidad localidad : localidades){ %>
+			  			
+					    <option value="<%=localidad.getId() %>"
+					    <%if(cliente.getLocalidadId() == localidad.getId()) {
+					    %>selected 
+					    <%}%>>
+					    <%=localidad.getNombre()%></option>
+					<%}%>
+				  	</select>
+			    </div>
+			</div>
+			
 			<div class="row button-row">
 			  <div class="col-sm">
 			  <button type="submit" class="btn btn-primary" name="btnGuardar">
 	                GUARDAR
 	            </button>
-	            <!-- 
-			  <%if(cliente.getId() == 0){%>
-				<button type="button" class="btn btn-primary" id="btnAbrirModal" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-				  GUARDAR
-				</button>
-			  <%} else {%>
-				<button type="submit" class="btn btn-primary" name="btnGuardar">
-	                GUARDAR
-	            </button>
-	            <%} %>
-	             -->
 	            <a class="btn btn-secondary" href="BuscadorCliente.jsp">
 	                VOLVER
 	            </a>
            	  </div>
 			</div>
-			
-		  <%if(cliente.getId() == 0){%>
-			<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-			  <div class="modal-dialog">
-			    <div class="modal-content">
-			      <div class="modal-header">
-			        <h1 class="modal-title fs-5" id="staticBackdropLabel">Nuevo Usuario</h1>
-			        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			      </div>
-			      <div class="modal-body">
-			        <div class="container">
-			        	<div class="row">
-					    	<div class="col-sm">
-				    			<label for="txtUsuario" class="col-sm-2 col-form-label">Usuario</label>
-				        		<input type="text" class="form-control" placeholder="Usuario" aria-label="Nombre" id="txtUsuario" name="txtUsuario">
-			       			</div>
-			        	</div>
-			        	<div class="row">
-					    	<div class="col-sm">
-				    			<label for="txtClave" class="col-sm-2 col-form-label">Clave</label>
-			        			<input type="password" class="form-control" placeholder="Clave" aria-label="Clave" id="txtClave" name="txtClave">
-			        		</div>
-			        	</div>
-			        	<!-- 
-			        	<div class="row">
-					    	<div class="col-sm">
-			    			<label for="cmbUsuarioTipo" class="col-sm-2 col-form-label">Tipo</label>
-						    <select class="form-select" id="cmbTipo" name="cmbTipo">
-						    <%
-							    for(UsuarioTipo tipo : tipos)
-							    {%>
-							        <option value="<%=tipo.getId()%>">
-							        <%=tipo.getDescripcion()%>
-							        </option>
-							    <%}
-						    %>
-						  	</select>
-			        		</div>
-			        	</div>
-			        	 -->
-			        </div>
-			      </div>
-			      <div class="modal-footer">
-			        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-			        <button type="submit" name="btnNuevoUsuario" class="btn btn-primary">Guardar</button>
-			      </div>
-			    </div>
-			  </div>
-			</div>
-	            <%} %>
 			</form>
         </div>
 </div>

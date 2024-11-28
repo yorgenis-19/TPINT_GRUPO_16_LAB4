@@ -1,3 +1,4 @@
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="entidad.Cliente"%>
 <%@page import="negocioImpl.ClienteNegocioImpl"%>
 <%@page import="entidad.Usuario"%>
@@ -22,7 +23,9 @@ if(session.getAttribute("UsuarioActual") != null)
 {
 	usuario = (Usuario)session.getAttribute("UsuarioActual");
 }
-Cliente obj = new ClienteNegocioImpl().ObtenerPorUsuario(usuario.getId());
+Cliente obj = (Cliente)request.getAttribute("Cliente");
+String provinciaNombre = (String)request.getAttribute("ProvinciaNombre");
+String localidadNombre = (String)request.getAttribute("LocalidadNombre");
 %>
 <nav class="navbar bg-success navbar-expand-lg " data-bs-theme="dark">
   <div class="container-fluid">
@@ -78,11 +81,18 @@ Cliente obj = new ClienteNegocioImpl().ObtenerPorUsuario(usuario.getId());
       <label>Teléfono: <span class="profile-value"><%=obj.getTelefono()%></span></label>
     </div>
     <div class="col-md-4">
-      <label>Fecha de Nacimiento: <span class="profile-value"><%=obj.getFechaNacimiento()%></span></label>
+      <label>Fecha de Nacimiento: <span class="profile-value"><%=new SimpleDateFormat("dd/MM/yyyy").format(obj.getFechaNacimiento())%></span></label>
     </div>
   </div>
   <div class="row">
     <div class="col-md-4">
+      <label>Dirección: <span class="profile-value"><%=obj.getDireccion()%></span></label>
+    </div>
+    <div class="col-md-4">
+      <label>Provincia: <span class="profile-value"><%=provinciaNombre%></span></label>
+    </div>
+    <div class="col-md-4">
+      <label>Localidad: <span class="profile-value"><%=localidadNombre%></span></label>
     </div>
   </div>
   <div class="row"></div>

@@ -66,9 +66,9 @@ ArrayList<CuentaTipo> tipos = new CuentaTipoNegocioImpl().ObtenerTodos();
 	         <form method="get" action="ServletListarCuentas"  style="margin-top: 10px;">
    				 <input type="submit" value="Listar Todas" name="btnListarCuentas" class="btn btn-primary" >
 			</form>
-			<form method="get" action="ServletNuevaCuenta"  style="margin-top: 10px;">
-   				 <input type="submit" value="Crear Cuenta" name="btnCrearC" class="btn btn-primary">
-			</form>
+				<form method="get" action="ServletNuevaCuenta" style="margin-top: 10px;">
+    			<input type="submit" value="Nueva Cuenta" name="btnCrearC" class="btn btn-primary">
+				</form>
 	        </div>
 	         
         </div>
@@ -96,9 +96,6 @@ ArrayList<CuentaTipo> tipos = new CuentaTipoNegocioImpl().ObtenerTodos();
                 <td>
                     <form method="get" action="ServletVerCuenta">
                         <input name="Id" value="<%= cuenta.getId() %>" style="display:none;">
-                        <button type="submit" name="btnVer" class="btn btn-outline-primary">
-                            Ver
-                        </button>
                     </form>
                 </td>
             </tr>

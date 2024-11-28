@@ -12,10 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import entidad.Cliente;
 import entidad.Usuario;
+import entidad.UsuarioTipo;
 import negocio.ClienteNegocio;
 import negocio.UsuarioNegocio;
+import negocio.UsuarioTipoNegocio;
 import negocioImpl.ClienteNegocioImpl;
 import negocioImpl.UsuarioNegocioImpl;
+import negocioImpl.UsuarioTipoNegocioImpl;
 
 /**
  * Servlet implementation class ServletBuscarUsuarios
@@ -49,9 +52,12 @@ public class ServletBuscarUsuarios extends HttpServlet {
 	        request.setAttribute("Filtro_Nombre", nombre);
 	        request.setAttribute("Filtro_Tipo", tipo);
 	        request.setAttribute("Filtro_Activo", activo);
-	        RequestDispatcher rd = request.getRequestDispatcher("/ABLUsuario.jsp");
-	        rd.forward(request, response);
 		}
+		UsuarioTipoNegocio negTipo = new UsuarioTipoNegocioImpl();
+		ArrayList<UsuarioTipo> tipos = negTipo.ObtenerTodos();
+        request.setAttribute("UsuarioTipos", tipos);
+        RequestDispatcher rd = request.getRequestDispatcher("/ABLUsuario.jsp");
+        rd.forward(request, response);
 	}
 
 	/**

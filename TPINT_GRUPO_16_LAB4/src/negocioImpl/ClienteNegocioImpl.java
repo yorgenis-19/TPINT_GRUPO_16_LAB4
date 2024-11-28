@@ -126,4 +126,19 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 		}
 		return obj;
 	}
+
+	@Override
+	public Cliente ObtenerClientePorId(int id) {
+		Cliente obj = new Cliente();
+		ClienteDao dao = new ClienteDaoImpl();
+		try
+		{
+			obj = dao.ObtenerClientePorId(id);
+		}
+		catch(Exception e)
+		{
+			e.getStackTrace();
+		}
+		return obj;
+	}
 }

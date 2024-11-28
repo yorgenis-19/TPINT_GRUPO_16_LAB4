@@ -1,63 +1,61 @@
 package entidad;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 public class Movimiento {
-	private int id;
-	private int cuentaOrigenId;
-	private int cuentaDestinoId;
-	private int importe;
-	private LocalDate fecha;
-	private String detalle;
-	private int idTipo;
+	private int Id;
+	private Cuenta CuentaOrigen;
+	private Cuenta CuentaDestino;
+	private float Importe;
+	private Date Fecha;
+	private String Detalle;
+	private MovimientoTipo Tipo;
+	
+	public Movimiento() {
+		this.Fecha = new Date();
+	}
+	
 	public int getId() {
-		return id;
+		return Id;
 	}
 	public void setId(int id) {
-		this.id = id;
+		this.Id = id;
 	}
-	public int getCuentaOrigenId() {
-		return cuentaOrigenId;
+	public Cuenta getCuentaOrigen() {
+		return CuentaOrigen;
 	}
-	public void setCuentaOrigenId(int cuentaOrigenId) {
-		this.cuentaOrigenId = cuentaOrigenId;
+	public void setCuentaOrigen(Cuenta cuentaOrigen) {
+		this.CuentaOrigen = cuentaOrigen;
 	}
-	public int getCuentaDestinoId() {
-		return cuentaDestinoId;
+	public Cuenta getCuentaDestino() {
+		return CuentaDestino;
 	}
-	public void setCuentaDestinoId(int cuentaDestinoId) {
-		this.cuentaDestinoId = cuentaDestinoId;
+	public void setCuentaDestino(Cuenta cuentaDestino) {
+		this.CuentaDestino = cuentaDestino;
 	}
-	public int getImporte() {
-		return importe;
+	public float getImporte() {
+		return Importe;
 	}
-	public void setImporte(int importe) {
-		this.importe = importe;
+	public void setImporte(float importe) {
+		this.Importe = importe;
 	}
-	public LocalDate getFecha() {
-		return fecha;
+	public Date getFecha() {
+		return Fecha;
 	}
-	public void setFecha(LocalDate fecha) {
-		this.fecha = fecha;
+	public void setFecha(Date fecha) {
+		this.Fecha = fecha;
 	}
 	public String getDetalle() {
-		return detalle;
+		return Detalle;
 	}
 	public void setDetalle(String detalle) {
-		this.detalle = detalle;
+		this.Detalle = detalle;
 	}
-	public int getIdTipo() {
-		return idTipo;
+	public MovimientoTipo getTipo() {
+		return Tipo;
 	}
-	public void setIdTipo(int idTipo) {
-		this.idTipo = idTipo;
+	public void setTipo(MovimientoTipo tipo) {
+		this.Tipo = tipo;
 	}
-	@Override
-	public String toString() {
-		return "Movimiento [id=" + id + ", cuentaOrigenId=" + cuentaOrigenId + ", cuentaDestinoId=" + cuentaDestinoId
-				+ ", importe=" + importe + ", fecha=" + fecha + ", detalle=" + detalle + ", idTipo=" + idTipo + "]";
-	}
-	
-	
-	
 }

@@ -1,5 +1,6 @@
 <%@page import="entidad.Usuario"%>
 <%@page import="entidad.Cuenta"%>
+<%@page import="entidad.CuentaTipo"%>
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
@@ -52,32 +53,65 @@
     	        },
     	        dom: 'lfrtip'
     	    });
+    	    ocultarNoHabilitadas();
     	});
-    		
+     function ocultarNoHabilitadas() {
+         var noHabilitadas = document.getElementsByClassName('no-habilitada');
+         for (var i = 0; i < noHabilitadas.length; i++) {
+             noHabilitadas[i].style.display = 'none';
+         }
+     }		
     
-   /* function toggleCuentas() {
-        var checkbox = document.getElementById('toggleHabilitados');
-        var habilitadas = document.getElementsByClassName('habilitada');
-        var noHabilitadas = document.getElementsByClassName('no-habilitada');
+     function toggleCuentas() {
+    	    var checkbox = document.getElementById('toggleHabilitados');
+    	    var habilitadas = document.getElementsByClassName('habilitada');
+    	    var noHabilitadas = document.getElementsByClassName('no-habilitada');
 
-        if (checkbox.checked) {
-            for (var i = 0; i < noHabilitadas.length; i++) {
-                noHabilitadas[i].style.display = '';
-            }
-            for (var j = 0; j < habilitadas.length; j++) {
-                habilitadas[j].style.display = '';
-            }
-        } else {
-            for (var i = 0; i < noHabilitadas.length; i++) {
-                noHabilitadas[i].style.display = 'none';
-            }
-            for (var j = 0; j < habilitadas.length; j++) {
-                habilitadas[j].style.display = '';
-            }
-        }
-    }*/
+    	    if (checkbox.checked) {
+    	        // Mostrar tanto habilitadas como no habilitadas
+    	        for (var i = 0; i < noHabilitadas.length; i++) {
+    	            noHabilitadas[i].style.display = '';
+    	        }
+    	        for (var j = 0; j < habilitadas.length; j++) {
+    	            habilitadas[j].style.display = '';
+    	        }
+    	    } else {
+    	        // Solo mostrar las habilitadas
+    	        for (var i = 0; i < noHabilitadas.length; i++) {
+    	            noHabilitadas[i].style.display = 'none';
+    	        }
+    	        for (var j = 0; j < habilitadas.length; j++) {
+    	            habilitadas[j].style.display = '';
+    	        }
+    	    }
+    	}
+     $(document).ready(function() {
+    	    // Detecta cuando se cambia el valor del estado de la cuenta
+    	    $('.activa').change(function() {
+    	        var cuentaId = $(this).data('id');
+    	        var nuevaEstado = $(this).val();
+    	        
+    	        // Realizar una solicitud AJAX para actualizar el estado
+    	        $.ajax({
+    	            url: 'ServletActualizarCuenta',  // Asegúrate de que esta URL corresponde a tu servlet
+    	            method: 'POST',
+    	            data: {
+    	                cuentaId: cuentaId,
+    	                estado: nuevaEstado
+    	            },
+    	            success: function(response) {
+    	                if (response === 'success') {
+    	                    alert('Estado de la cuenta actualizado correctamente.');
+    	                } else {
+    	                    alert('Hubo un error al actualizar el estado.');
+    	                }
+    	            }
+    	        });
+    	    });
+    	});
 
     </script>
+    
 </head>
 <body>
 
@@ -114,9 +148,9 @@ if(session.getAttribute("UsuarioActual") != null)
 
 <div class="table-container" >
  	<div class="toggle-container filtro-container" style="margin-top:5%;" >
-        <input type="checkbox" id="toggleHabilitados" onchange="toggleCuentas()">
-        <label for="toggleHabilitados">Mostrar todas las cuentas</label>
-    </div>
+    <input type="checkbox" id="toggleHabilitados" onchange="toggleCuentas()">
+    <label for="toggleHabilitados">Mostrar todas las cuentas</label>
+</div>
         <table id="tablaCuentas" class="display">
             <thead>
                 <tr>
@@ -126,7 +160,7 @@ if(session.getAttribute("UsuarioActual") != null)
                     <th>Tipo de Cuenta</th>
                     <th>CBU</th>
                     <th>Saldo</th>
-                    <th>Habilitado</th>
+                    <th>Activa</th>
                 </tr>
             </thead>
             <tbody>
@@ -141,10 +175,15 @@ if(session.getAttribute("UsuarioActual") != null)
                     <td><%= cuenta.getCliente().getNombreCompleto() %></td>
                     <td><%= cuenta.getCliente().getDni() %></td>
                     <td><%= cuenta.getFechaDeCreacion()%></td>
-                    <td><%= cuenta.getTipo().getDescripcion() %></td>
+					<td><%= cuenta.getTipo().getDescripcion() %></td>
                     <td><%= cuenta.getCBU() %></td>
                     <td><%= cuenta.getMonto() %></td>
-                    <td><%= cuenta.isActiva()  ? "No" : "Si" %></td>
+                    <td>
+					    <select class="activa" data-id="<%= cuenta.getId() %>">
+					        <option value="1" <%= cuenta.isActiva() ? "selected" : "" %>>Sí</option>
+					        <option value="0" <%= !cuenta.isActiva() ? "selected" : "" %>>No</option>
+					    </select>
+					</td>
                 </tr>
                 <%
                     }

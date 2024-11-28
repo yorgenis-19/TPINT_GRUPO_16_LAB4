@@ -15,11 +15,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import entidad.Cliente;
+import entidad.Localidad;
+import entidad.Provincia;
 import entidad.Usuario;
 import entidad.UsuarioTipo;
 import negocio.ClienteNegocio;
 import negocio.UsuarioNegocio;
 import negocioImpl.ClienteNegocioImpl;
+import negocioImpl.LocalidadNegocioImpl;
+import negocioImpl.ProvinciaNegocioImpl;
 import negocioImpl.UsuarioNegocioImpl;
 import negocioImpl.UsuarioTipoNegocioImpl;
 /**
@@ -61,6 +65,9 @@ public class ServletGuardarCliente extends HttpServlet {
 			String apellido = request.getParameter("txtApellido");
 			String sexo = request.getParameter("cmbSexo"); 
 			String telefono = request.getParameter("txtTelefono");
+			String direccion = request.getParameter("txtDireccion");
+			int provinciaId = Integer.parseInt(request.getParameter("cmbProvincia"));
+			int localidadId = Integer.parseInt(request.getParameter("cmbLocalidad"));
 			Date fechaNacimiento = new Date();
 			try {
 				fechaNacimiento = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("txtFechaNacimiento"));
@@ -94,6 +101,9 @@ public class ServletGuardarCliente extends HttpServlet {
 			obj.setCuil(cuil);
 			obj.setTelefono(telefono);
 			obj.setFechaNacimiento(fechaNacimiento);
+			obj.setDireccion(direccion);
+			obj.setProvinciaId(provinciaId);
+			obj.setLocalidadId(localidadId);
 			
 			if(id == 0) {
 				String usuario = request.getParameter("txtUsuario");
@@ -109,15 +119,19 @@ public class ServletGuardarCliente extends HttpServlet {
 					error = true;
 					request.setAttribute("CLAVE_DISTINTA", true);
 				}
-				Usuario usu = new Usuario();
-				usu.setNombre(usuario);
-				usu.setClave(clave);
-				usu.setActivo(true);
-				UsuarioTipo tipo = new UsuarioTipoNegocioImpl().Obtener("Cliente");
-				usu.setTipo(tipo);
-				UsuarioNegocio negUsuario = new UsuarioNegocioImpl();
-				negUsuario.Guardar(usu);				
-				obj.setUsuario(negUsuario.Obtener(usu.getNombre(), usu.getClave()));
+				if(!error)
+				{
+					Usuario usu = new Usuario();
+					usu.setNombre(usuario);
+					usu.setClave(clave);
+					usu.setActivo(true);
+					UsuarioTipo tipo = new UsuarioTipoNegocioImpl().Obtener("Cliente");
+					usu.setTipo(tipo);
+					UsuarioNegocio negUsuario = new UsuarioNegocioImpl();
+					negUsuario.Guardar(usu);				
+					obj.setUsuario(negUsuario.Obtener(usu.getNombre(), usu.getClave()));
+					
+				}
 			}
 			request.setAttribute("ClienteActual", obj);
 			
@@ -133,7 +147,13 @@ public class ServletGuardarCliente extends HttpServlet {
 		        int filas = neg.Guardar(obj);
 
 		        request.setAttribute("Filas", filas);
-		        RequestDispatcher rd = request.getRequestDispatcher("/BuscadorCliente.jsp");
+		        request.setAttribute("ClienteActual", obj);
+		        
+		        ArrayList<Provincia> provincias = new ProvinciaNegocioImpl().ObtenerTodos();
+		        request.setAttribute("Provincias", provincias);
+		        ArrayList<Localidad> localidades = new LocalidadNegocioImpl().ObtenerTodos();
+		        request.setAttribute("Localidades", localidades);
+		        RequestDispatcher rd = request.getRequestDispatcher("/ABMCliente.jsp");
 		        rd.forward(request, response);
 			}
 			

@@ -12,5 +12,6 @@ public interface ClienteDao {
 	public boolean ExisteDNI(int id, String dni);
 	public boolean ExisteCUIL(int id, String cuil);
 	public boolean ExisteUsuario(String usuario);
-	public Cliente ObtenerPorUsuario(int usuarioId);	
+	public Cliente ObtenerPorUsuario(int usuarioId);
+	public Cliente ObtenerClientePorId(int id);
 }

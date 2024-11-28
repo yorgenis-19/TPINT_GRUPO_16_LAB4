@@ -2,38 +2,26 @@ package entidad;
 
 public class Localidad {
 	
-	private int idLocalidad;
-	private String nombreLocalidad;
-	private int idProvincia;
-	private boolean estado;
-	public int getIdLocalidad() {
-		return idLocalidad;
+	private int Id;
+	private String Nombre;
+	private int ProvinciaId;
+	public int getId() {
+		return Id;
 	}
-	public void setIdLocalidad(int idLocalidad) {
-		this.idLocalidad = idLocalidad;
+	public void setId(int id) {
+		Id = id;
 	}
-	public String getNombreLocalidad() {
-		return nombreLocalidad;
+	public String getNombre() {
+		return Nombre;
 	}
-	public void setNombreLocalidad(String nombreLocalidad) {
-		this.nombreLocalidad = nombreLocalidad;
+	public void setNombre(String nombre) {
+		Nombre = nombre;
 	}
-	public int getIdProvincia() {
-		return idProvincia;
+	public int getProvinciaId() {
+		return ProvinciaId;
 	}
-	public void setIdProvincia(int idProvincia) {
-		this.idProvincia = idProvincia;
-	}
-	public boolean isEstado() {
-		return estado;
-	}
-	public void setEstado(boolean estado) {
-		this.estado = estado;
-	}
-	@Override
-	public String toString() {
-		return "Localidad [idLocalidad=" + idLocalidad + ", nombreLocalidad=" + nombreLocalidad + ", idProvincia="
-				+ idProvincia + ", estado=" + estado + "]";
+	public void setProvinciaId(int provinciaId) {
+		ProvinciaId = provinciaId;
 	}
 	
 	

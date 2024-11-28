@@ -122,18 +122,20 @@ if(session.getAttribute("UsuarioActual") != null)
         <h1>Portal Cliente Bancario</h1>
         
         <div class="button-container">
-        	<a  href="ClienteDatos.jsp">
+        	<form action="ServletClienteDatos" method="get">
+        	<a>
             	<div class="button-wrapper">
-                    <button type="submit" class="button">
+                    <button type="submit" name="btnClienteDatos" class="button">
                         <i class="fas fa-user-circle me-2"></i>
                         Mis Datos Personales
                     </button>
             	</div>
             </a>
+            </form>
             
             <div class="button-wrapper">
-                <form action="Cuentas.jsp" method="get">
-                    <button type="submit" class="button">
+                <form action="ServletClienteCuentas" method="get">
+                    <button type="submit" class="button" name="btnClienteCuentas">
                         <i class="fas fa-wallet me-2"></i>
                         Mis Cuentas
                     </button>
@@ -141,8 +143,8 @@ if(session.getAttribute("UsuarioActual") != null)
             </div>
             
             <div class="button-wrapper">
-                <form action="Transferencias.jsp" method="get">
-                    <button type="submit" class="button">
+                <form action="ServletClienteTransferencia" method="get">
+                    <button type="submit" class="button" name="btnClienteTransferencia">
                         <i class="fas fa-exchange-alt me-2"></i>
                         Transferencias
                     </button>

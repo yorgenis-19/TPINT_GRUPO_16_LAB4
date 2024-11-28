@@ -15,8 +15,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import entidad.Cliente;
+import entidad.Localidad;
+import entidad.Provincia;
+import entidad.UsuarioTipo;
 import negocio.ClienteNegocio;
 import negocioImpl.ClienteNegocioImpl;
+import negocioImpl.LocalidadNegocioImpl;
+import negocioImpl.ProvinciaNegocioImpl;
+import negocioImpl.UsuarioTipoNegocioImpl;
 /**
  * Servlet implementation class ServletVerCliente
  */
@@ -43,6 +49,12 @@ public class ServletVerCliente extends HttpServlet {
 			
 	        Cliente obj = neg.Obtener(Integer.parseInt(request.getParameter("Id")));
 
+	    	ArrayList<Provincia> provincias = new ProvinciaNegocioImpl().ObtenerTodos();
+	    	ArrayList<Localidad> localidades = new LocalidadNegocioImpl().ObtenerPorProvincia(obj.getProvinciaId());
+
+	        request.setAttribute("Provincias", provincias);
+	        request.setAttribute("Localidades", localidades);
+	    	
 	        request.setAttribute("ClienteActual", obj);
 	        RequestDispatcher rd = request.getRequestDispatcher("/ABMCliente.jsp");
 	        rd.forward(request, response);
@@ -54,8 +66,23 @@ public class ServletVerCliente extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
-		
-		doGet(request, response);
+
+		if(request.getParameter("btnVer") != null)
+		{
+			ClienteNegocio neg = new ClienteNegocioImpl();
+			
+	    	ArrayList<UsuarioTipo> tipos = new UsuarioTipoNegocioImpl().ObtenerTodos();
+	    	ArrayList<Provincia> provincias = new ProvinciaNegocioImpl().ObtenerTodos();
+	    	ArrayList<Localidad> localidades = new LocalidadNegocioImpl().ObtenerPorProvincia(1);
+
+	        request.setAttribute("UsuarioTipos", tipos);
+	        request.setAttribute("Provincias", provincias);
+	        request.setAttribute("Localidades", localidades);
+	        request.setAttribute("ProvinciaSeleccionada", provincias.get(0).getId());
+	    	
+	        RequestDispatcher rd = request.getRequestDispatcher("/ABMCliente.jsp");
+	        rd.forward(request, response);
+		}
 	}
 
 }

@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 
+import com.mysql.jdbc.PreparedStatement;
+
 import dao.ClienteDao;
 import entidad.Cliente;
 import entidad.Usuario;
@@ -52,15 +54,25 @@ public class ClienteDaoImpl implements ClienteDao {
 				obj.setEmail(rs.getString("Email"));
 				//obj.setFechaNacimiento(rs.getDate("FechaNacimiento").toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 				obj.setFechaNacimiento(rs.getDate("FechaNacimiento"));
-				obj.setDireccionId(rs.getInt("DireccionId"));
+				obj.setDireccion(rs.getString("Direccion"));
 				obj.setLocalidadId(rs.getInt("LocalidadId"));
 				obj.setProvinciaId(rs.getInt("ProvinciaId"));
+				
 				
 			}
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
+		}
+		finally {
+			if(cn != null) {
+				try {
+					cn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return obj;
 	}
@@ -97,7 +109,7 @@ public class ClienteDaoImpl implements ClienteDao {
 				obj.setEmail(rs.getString("Email"));
 				//obj.setFechaNacimiento(rs.getDate("FechaNacimiento").toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 				obj.setFechaNacimiento(rs.getDate("FechaNacimiento"));
-				obj.setDireccionId(rs.getInt("DireccionId"));
+				obj.setDireccion(rs.getString("Direccion"));
 				obj.setLocalidadId(rs.getInt("LocalidadId"));
 				obj.setProvinciaId(rs.getInt("ProvinciaId"));
 				objs.add(obj);
@@ -106,6 +118,15 @@ public class ClienteDaoImpl implements ClienteDao {
 		catch(Exception e)
 		{
 			e.printStackTrace();
+		}
+		finally {
+			if(cn != null) {
+				try {
+					cn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return objs;
 	}
@@ -119,10 +140,10 @@ public class ClienteDaoImpl implements ClienteDao {
 			e.printStackTrace();
 		}
 		
-		String query = "INSERT INTO `Cliente`(`UsuarioId`,`Nombre`,`Apellido`,`Sexo`,`DNI`,`CUIL`,`Telefono`,`Email`,`FechaNacimiento`,`DireccionId`,`LocalidadId`,`ProvinciaId`)VALUES("+obj.getUsuario().getId()+",'"+obj.getNombre()+"','"+obj.getApellido()+"','"+obj.getSexo()+"','"+obj.getDni()+"','"+obj.getCuil()+"','"+obj.getTelefono()+"','"+obj.getEmail()+"','"+new SimpleDateFormat("yyyyMMdd").format(obj.getFechaNacimiento())+"',"+obj.getDireccionId()+","+obj.getLocalidadId()+","+obj.getProvinciaId()+")";
+		String query = "INSERT INTO `Cliente`(`UsuarioId`,`Nombre`,`Apellido`,`Sexo`,`DNI`,`CUIL`,`Telefono`,`Email`,`FechaNacimiento`,`Direccion`,`LocalidadId`,`ProvinciaId`)VALUES("+obj.getUsuario().getId()+",'"+obj.getNombre()+"','"+obj.getApellido()+"','"+obj.getSexo()+"','"+obj.getDni()+"','"+obj.getCuil()+"','"+obj.getTelefono()+"','"+obj.getEmail()+"','"+new SimpleDateFormat("yyyyMMdd").format(obj.getFechaNacimiento())+"','"+obj.getDireccion()+"',"+obj.getLocalidadId()+","+obj.getProvinciaId()+")";
 		if(obj.getId() > 0)
 		{
-			query = "UPDATE Cliente SET UsuarioId = "+obj.getUsuario().getId()+", Nombre = '"+obj.getNombre()+"', Apellido = '"+obj.getApellido()+"', Sexo = '"+obj.getSexo()+"', DNI = '"+obj.getDni()+"', CUIL = '"+obj.getCuil()+"', Telefono = '"+obj.getTelefono()+"', Email = '"+obj.getEmail()+"', FechaNacimiento = '"+new SimpleDateFormat("yyyyMMdd").format(obj.getFechaNacimiento())+"', DireccionId = "+obj.getDireccionId()+", LocalidadId = "+obj.getLocalidadId()+", ProvinciaId = "+obj.getProvinciaId()+" WHERE ID = " + obj.getId();
+			query = "UPDATE Cliente SET UsuarioId = "+obj.getUsuario().getId()+", Nombre = '"+obj.getNombre()+"', Apellido = '"+obj.getApellido()+"', Sexo = '"+obj.getSexo()+"', DNI = '"+obj.getDni()+"', CUIL = '"+obj.getCuil()+"', Telefono = '"+obj.getTelefono()+"', Email = '"+obj.getEmail()+"', FechaNacimiento = '"+new SimpleDateFormat("yyyyMMdd").format(obj.getFechaNacimiento())+"', Direccion = '"+obj.getDireccion()+"', LocalidadId = "+obj.getLocalidadId()+", ProvinciaId = "+obj.getProvinciaId()+" WHERE ID = " + obj.getId();
 		}
 		
 		Connection cn = null;
@@ -173,6 +194,15 @@ public class ClienteDaoImpl implements ClienteDao {
 		{
 			e.printStackTrace();
 		}
+		finally {
+			if(cn != null) {
+				try {
+					cn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		return res;
 	}
 
@@ -200,6 +230,15 @@ public class ClienteDaoImpl implements ClienteDao {
 		catch(Exception e)
 		{
 			e.printStackTrace();
+		}
+		finally {
+			if(cn != null) {
+				try {
+					cn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return res;
 	}
@@ -229,6 +268,15 @@ public class ClienteDaoImpl implements ClienteDao {
 		{
 			e.printStackTrace();
 		}
+		finally {
+			if(cn != null) {
+				try {
+					cn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		return res;
 	}
 
@@ -256,6 +304,15 @@ public class ClienteDaoImpl implements ClienteDao {
 		catch(Exception e)
 		{
 			e.printStackTrace();
+		}
+		finally {
+			if(cn != null) {
+				try {
+					cn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return res;
 	}
@@ -290,7 +347,7 @@ public class ClienteDaoImpl implements ClienteDao {
 				obj.setTelefono(rs.getString("Telefono"));
 				obj.setEmail(rs.getString("Email"));
 				obj.setFechaNacimiento(rs.getDate("FechaNacimiento"));
-				obj.setDireccionId(rs.getInt("DireccionId"));
+				obj.setDireccion(rs.getString("Direccion"));
 				obj.setLocalidadId(rs.getInt("LocalidadId"));
 				obj.setProvinciaId(rs.getInt("ProvinciaId"));
 				
@@ -300,7 +357,71 @@ public class ClienteDaoImpl implements ClienteDao {
 		{
 			e.printStackTrace();
 		}
+		finally {
+			if(cn != null) {
+				try {
+					cn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		return obj;
+	}
+
+	@Override
+	public Cliente ObtenerClientePorId(int id) {
+		Cliente cliente = null;
+	    Conexion conexion = new Conexion();
+	    Connection cn = null;
+
+	    try {
+	        // Abre la conexión usando la clase Conexion
+	        cn = conexion.Open();
+
+	        // Consulta SQL
+	        String query = "SELECT * FROM Cliente WHERE Id = ?";
+	        PreparedStatement ps = (PreparedStatement) conexion.prepareStatement(query);
+	        ps.setInt(1, id);
+	        System.out.println("Consulta preparada: " + ps.toString());
+
+	        ResultSet rs = ps.executeQuery();
+	        System.out.println("Consulta ejecutada.");
+
+	        // Mapear resultados
+	        if (rs.next()) {
+	            cliente = new Cliente();
+	            cliente.setId(rs.getInt("Id"));
+	            cliente.setNombre(rs.getString("Nombre"));
+	            cliente.setApellido(rs.getString("Apellido"));
+	            cliente.setSexo(rs.getString("Sexo"));
+	            cliente.setDni(rs.getString("DNI"));
+	            cliente.setCuil(rs.getString("CUIL"));
+	            cliente.setTelefono(rs.getString("Telefono"));
+	            cliente.setEmail(rs.getString("Email"));
+	            cliente.setFechaNacimiento(rs.getDate("FechaDeNacimiento"));
+	          
+
+	            System.out.println("Datos del cliente obtenidos: " + cliente);
+	        } else {
+	            System.out.println("No se encontró un cliente con el ID: " + id);
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error en la consulta SQL:");
+	        e.printStackTrace();
+	    } finally {
+	        // Cerrar conexión
+	        if (cn != null) {
+	            try {
+	                conexion.close();
+	                System.out.println("Conexión cerrada.");
+	            } catch (Exception e) {
+	                System.out.println("Error al cerrar la conexión:");
+	                e.printStackTrace();
+	            }
+	        }
+	    }
+	    return cliente;
 	}
 
 }

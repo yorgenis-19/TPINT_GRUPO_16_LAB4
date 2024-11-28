@@ -58,4 +58,19 @@ public class CuentaTipoNegocioImpl implements CuentaTipoNegocio {
 		return obj;
 	}
 
+	@Override
+	public ArrayList<CuentaTipo> ObtenerTodosLosTiposDeCuenta() {
+		ArrayList<CuentaTipo> objs = new ArrayList<CuentaTipo>();
+		CuentaTipoDao dao = new CuentaTipoDaoImpl();
+		try
+		{
+			objs = dao.ObtenerTodosLosTiposDeCuenta();
+		}
+		catch(Exception e)
+		{
+			e.getStackTrace();
+		}
+		return objs;
+	}
+
 }

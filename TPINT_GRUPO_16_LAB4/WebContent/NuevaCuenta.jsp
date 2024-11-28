@@ -2,6 +2,7 @@
 <%@page import="entidad.CuentaTipo"%>
 <%@page import="negocioImpl.ClienteNegocioImpl"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
 <%@page import="entidad.Cliente"%>
 <%@page import="entidad.Usuario"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -25,8 +26,7 @@ if(session.getAttribute("UsuarioActual") != null)
 {
 	usuario = (Usuario)session.getAttribute("UsuarioActual");
 }
-ArrayList<Cliente> clientes = new ClienteNegocioImpl().Obtener("", "", "", "", true);
-ArrayList<CuentaTipo> tipos = new CuentaTipoNegocioImpl().ObtenerTodos();
+
 %>
 <nav class="navbar bg-primary navbar-expand-lg " data-bs-theme="dark">
   <div class="container-fluid">
@@ -49,56 +49,76 @@ ArrayList<CuentaTipo> tipos = new CuentaTipoNegocioImpl().ObtenerTodos();
     </div>
   </div>
 </nav>
-<div class="container page-container">
-	<h1 style="text-align: center;">Cuenta</h1>
-	<div class="header_form">
-		<form method="post" action="ServletGuardarCliente" class="container needs-validation">
-			<div class="row">
-			  <div class="col-sm">
-    			<label for="cmbCliente" class="col-sm-2 col-form-label">Cliente</label>
-   			    <div class="input-group has-validation">
-				    <select class="form-select" id="cmbCliente" name="cmbCliente" required>
-				    <%
-					    for(Cliente cliente : clientes)
-					    {%>
-					        <option value="<%=cliente.getId()%>">
-					        <%=cliente.getNombreCompleto()%>
-					        </option>
-					    <%}
-				    %>
-				  	</select>
-			    </div>
-			  </div>
-			</div>
-			<div class="row">
-			  <div class="col-sm">
-    			<label for="cmbTipo" class="col-sm-2 col-form-label">Tipo</label>
-   			    <div class="input-group has-validation">
-				    <select class="form-select" id="cmbTipo" name="cmbTipo" required>
-				    <%
-					    for(CuentaTipo tipo : tipos)
-					    {%>
-					        <option value="<%=tipo.getId()%>">
-					        <%=tipo.getDescripcion()%>
-					        </option>
-					    <%}
-				    %>
-				  	</select>
-			    </div>
-			  </div>
-			</div>
-			<div class="row button-row">
-			  <div class="col-sm">
-				  <button type="submit" class="btn btn-primary" name="btnGuardar">
-		                GUARDAR
-		          </button>
-	            <a class="btn btn-secondary" href="BuscadorCuenta.jsp">
-	                VOLVER
-	            </a>
-			  </div>
-			 </div>
-		</form>
-	</div>
+
+<div class="container">
+    <h2>Crear Cuenta</h2>
+    <% 
+String mensajeExito = (String) request.getAttribute("mensajeExito");
+String mensajeError = (String) request.getAttribute("mensajeError");
+if (mensajeExito != null) { 
+%>
+    <div class="alert alert-success">
+        <%= mensajeExito %>
+    </div>
+<% } else if (mensajeError != null) { %>
+    <div class="alert alert-danger">
+        <%= mensajeError %>
+    </div>
+<% } %>
+    <form action="ServletNuevaCuenta" method="post">
+    <div id="BusquedaCliente">
+        <input type="number" id="IDCliente" name="IDCliente" placeholder="Ingrese el ID del cliente" required>
+        <input type="hidden" name="action" value="buscarCliente">
+        <input type="submit" value="Buscar Cliente" class="btn btn-primary">
+    </div>
+</form>
+    
+    <% 
+    Cliente cliente = (Cliente) request.getAttribute("cliente");
+    if (cliente != null) {
+    %>
+         <p><strong>Cliente ID:</strong> <%= cliente.getId() %></p>
+    <p><strong>Nombre:</strong> <%= cliente.getNombre() %></p>
+    <p><strong>Apellido:</strong> <%= cliente.getApellido() %></p>
+    <p><strong>DNI:</strong> <%= cliente.getDni() %></p>
+<% } else if (request.getParameter("IDCliente") != null) { %>
+    <p style="color: red;">No se encontró información del cliente.</p>
+<% } %>
+
+    <form method="post" action="ServletNuevaCuenta">
+    <input type="hidden" name="IDCliente" value="<%= cliente != null ? cliente.getId() : "" %>">
+    <input type="hidden" name="action" value="crearCuenta">
+
+    <div class="mb-3">
+        <label for="Monto" class="form-label">Monto Inicial</label>
+        <input type="number" step="0.01" class="form-control" id="Monto" name="Monto" value="10000" readonly>
+    </div>
+
+    <div class="mb-3">
+    <label for="TipoCuenta" class="form-label">Tipo de Cuenta</label>
+    <select class="form-control" id="TipoCuenta" name="TipoCuenta" required>
+     <option value="" disabled selected>Seleccione un tipo de cuenta</option>
+        <%
+            ArrayList<CuentaTipo> tiposDeCuenta = (ArrayList<CuentaTipo>) request.getAttribute("tiposDeCuenta");
+            if (tiposDeCuenta != null && !tiposDeCuenta.isEmpty()) {
+                for (CuentaTipo tipo : tiposDeCuenta) {
+        %>
+                    <option value="<%= tipo.getId() %>"><%= tipo.getDescripcion() %></option>
+        <%
+                }
+            } else {
+        %>
+                <option disabled>No hay tipos de cuenta disponibles.</option>
+        <%
+            }
+        %>
+        
+    </select>
+</div>
+
+    <button type="submit" class="btn btn-primary">Crear Cuenta</button>
+    <input type="button" value="Volver" name="btnVolver" onclick="window.location.href='BuscadorCuenta.jsp';" class="btn btn-secondary">
+</form>
 </div>
 
 </body>
