@@ -1,5 +1,6 @@
 package negocioImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.PrestamosDao;
@@ -67,8 +68,8 @@ public class PrestamosNegocioImpl implements PrestamosNegocio {
 	}
 
 	@Override
-	public List<Prestamo> BuscarAcivos() {
-		List<Prestamo> prestamo;
+	public ArrayList<Prestamo> BuscarAcivos() {
+		ArrayList<Prestamo> prestamo;
 		prestamo = pxaDao.BuscarActivos();
 		return prestamo;
 	

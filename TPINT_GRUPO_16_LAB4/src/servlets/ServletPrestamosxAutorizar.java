@@ -12,6 +12,7 @@ import negocio.PrestamosNegocio;
 import negocioImpl.PrestamosNegocioImpl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.ListIterator;
 
 import javax.servlet.RequestDispatcher;
@@ -33,7 +34,7 @@ import jakarta.servlet.http.HttpServletResponse;*/
  */
 @WebServlet("/ServletPrestamosxAutorizar")
 public class ServletPrestamosxAutorizar extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	//private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -47,21 +48,21 @@ public class ServletPrestamosxAutorizar extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		if (request.getParameter("btnRealizarSolicitudPrestamo")!=null) {
+		
+    	this.cargarPrestamos(request, response);
+		
+    	if (request.getParameter("btnRealizarSolicitudPrestamo")!=null) {
 			btnRealizarSolicitudPrestamo(request, response);
 		}
-		if (request.getParameter("getPrestamos") != null || request.getParameter("pag") != null) {
-			cargarPrestamos(request, response);
-		}
+		
 		if (request.getParameter("btnAutorizar") != null) {
 			updatePrestamo(request, response,2);
 		}
 		if (request.getParameter("btnRechazar") != null) {
 			updatePrestamo(request, response,0);
 		}
-		
-		
+		RequestDispatcher rd = request.getRequestDispatcher("/AltaPrestamo.jsp");
+	    rd.forward(request, response);
 		
 	}
 
@@ -133,55 +134,43 @@ public class ServletPrestamosxAutorizar extends HttpServlet {
 	}
 
 	private void cargarPrestamos(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher rd;
-		boolean solicitado = false;
-		String resString="";
-		PrestamosNegocio pdxaNeg = new PrestamosNegocioImpl();
-		ArrayList<Prestamo> lPrestamos = (ArrayList<Prestamo>)pdxaNeg.BuscarAcivos() ;
-		if(lPrestamos != null)
-		{
-	
-			if(!lPrestamos.isEmpty())
-				solicitado =true;
-			else
-			resString="No hay Prestamos pendientes de aprobacion";
-		}
-		
-		
-		
-		//PAGINADO
-		int cantTotal = (int) pdxaNeg.ContarPrestamos();  //Cantidad de registros activos en la BD
+	    RequestDispatcher rd;
+	    boolean solicitado = false;
+	    String resString = "";
+	    PrestamosNegocio pdxaNeg = new PrestamosNegocioImpl();
+	    
+	    // Obtener lista de préstamos activos
+	    ArrayList<Prestamo> lPrestamos = (ArrayList<Prestamo>) pdxaNeg.BuscarAcivos();
+	    
+	    // Imprimir el número de préstamos recuperados
+	    if (lPrestamos != null) {
+	        System.out.println("Número de préstamos recuperados: " + lPrestamos.size());
 
-		int pag = 1;
-		if(request.getParameter("pag") != null) {
-			pag = Integer.parseInt(request.getParameter("pag"));	
-		}
-		
-		int limit = 10;                      //Elementos por página.		
-		int offset = 0;
-		if(pag > 1) offset = limit * (pag - 1);	 //inicio paginado   	
-		int cantPag = (cantTotal / limit) + 1 ; // Cantidad de páginas.	
-		int resto = offset + limit;
-		int index = 0;
-		
-		ListIterator<Prestamo> itLista = lPrestamos.listIterator();
-		while (itLista.hasNext()) {
-			Prestamo pres = itLista.next();
-			index += 1;
-	       
-			if(index < offset + 1 || index > offset + limit ) {
-				itLista.remove();
-			}
-		}
+	        // Imprime los detalles de cada préstamo
+	        for (Prestamo prestamo : lPrestamos) {
+	            System.out.println("Préstamo - ID: " + prestamo.getIdEstadoPrestamo() +
+	                               ", Monto: " + prestamo.getMontoSolicitado() +
+	                               ", Cuotas: " + prestamo.getCantidadCuotas());
+	        }
 
-		request.setAttribute("pag", pag);
-		request.setAttribute("cantPag", cantPag);
-		request.setAttribute("resString", resString);
-		request.setAttribute("resBoolean", solicitado);
-		request.setAttribute("Prestamos", lPrestamos);
+	        // Verificar si hay préstamos activos y establecer el estado de solicitud
+	        if (!lPrestamos.isEmpty()) {
+	            solicitado = true;
+	        } else {
+	            resString = "No hay préstamos pendientes de aprobación";
+	        }
+	    } else {
+	        resString = "Error al recuperar los préstamos.";
+	    }
 
-	    rd = request.getRequestDispatcher("/AltaPrestamo.jsp");
-		rd.forward(request, response);
+	    // Establecer atributos para el JSP
+	    request.setAttribute("resString", resString);
+	    request.setAttribute("resBoolean", solicitado);
+	    request.setAttribute("Prestamos", lPrestamos);
+
+	    // Redirigir a la página AltaPrestamo.jsp
+	    rd = request.getRequestDispatcher("AltaPrestamo.jsp");
+	    rd.forward(request, response);
 	}
 
 	/**
@@ -192,39 +181,88 @@ public class ServletPrestamosxAutorizar extends HttpServlet {
 		
 	}
 	
-	public void btnRealizarSolicitudPrestamo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException  {
-		RequestDispatcher rd;
-		
-		
-		PrestamosNegocio pdxaNeg = new PrestamosNegocioImpl();
-		boolean solicitado = false;
-		String resString="";
-		Prestamo pxa = new Prestamo();
-		try
-		{
-		pxa.setCuentaId(Integer.parseInt(request.getParameter("getCuenta")));
-		pxa.setCantidadCuotas(Integer.parseInt(request.getParameter("txtCuotas")));
-		pxa.setImporteMensualAPagar(new Float(request.getParameter("txtMonto")));
-		
-		
-		solicitado = pdxaNeg.Insert(pxa);
+	public void btnRealizarSolicitudPrestamo(HttpServletRequest request, HttpServletResponse response) 
+	        throws ServletException, IOException {
+	    RequestDispatcher rd;
+	    PrestamosNegocio pdxaNeg = new PrestamosNegocioImpl();
+	    String resString = "";
+	    boolean solicitado = false;
 
-		if(solicitado)
-			resString="Solicitud procesada Satisfactoriamente";
-		else
-			resString="Solicitud no pudo ser agregada Satisfactoriamente";
-		}
-		catch(Exception e)
-		{
-			resString="Solicitud no pudo ser agregada Satisfactoriamente";
-			request.setAttribute("cuentaSeleccionada",null);
-		}
-		request.setAttribute("cuentaSeleccionada", pxa.getCuentaId());
-		request.setAttribute("resBoolean", solicitado);
-		request.setAttribute("resString", resString);
-		rd = request.getRequestDispatcher("/solicitarPrestamo.jsp");
-		rd.forward(request, response);
-		
+	    try {
+	        // Obtener datos de la solicitud
+	        String montoSolicitadoStr = request.getParameter("txtMonto");
+	        String cuotasStr = request.getParameter("txtCuotas");
+	        String cuentaIdStr = request.getParameter("getCuenta");
+	        String clienteIdStr = request.getParameter("getCliente"); // Nuevo parámetro clienteId
+
+	        // Validaciones iniciales
+	        if (montoSolicitadoStr == null || montoSolicitadoStr.isEmpty() || 
+	            cuotasStr == null || cuotasStr.isEmpty() || 
+	            cuentaIdStr == null || cuentaIdStr.isEmpty() || 
+	            clienteIdStr == null || clienteIdStr.isEmpty()) { // Verifica que clienteId no sea nulo o vacío
+	            resString = "Error: Todos los campos son obligatorios.";
+	        } else {
+	            // Verificar que los valores sean números válidos
+	            float montoSolicitado = 0;
+	            int cuotas = 0;
+	            int cuentaId = 0;
+	            int clienteId = 0;
+
+	            try {
+	                montoSolicitado = Float.parseFloat(montoSolicitadoStr);
+	                cuotas = Integer.parseInt(cuotasStr);
+	                cuentaId = Integer.parseInt(cuentaIdStr);
+	                clienteId = Integer.parseInt(clienteIdStr); // Convertir clienteId
+	            } catch (NumberFormatException e) {
+	                resString = "Error: Verifica que los datos ingresados sean válidos.";
+	                e.printStackTrace();
+	                request.setAttribute("resBoolean", solicitado);
+	                request.setAttribute("resString", resString);
+	                rd = request.getRequestDispatcher("Cliente.jsp");
+	                rd.forward(request, response);
+	                return;
+	            }
+
+	            // Validación de valores lógicos
+	            if (montoSolicitado <= 0) {
+	                resString = "Error: El monto solicitado debe ser mayor a 0.";
+	            } else if (cuotas <= 0) {
+	                resString = "Error: La cantidad de cuotas debe ser mayor a 0.";
+	            } else {
+	                // Calcular importe mensual directamente aquí
+	                float importeMensual = montoSolicitado / cuotas; // Realiza la división del monto entre las cuotas
+
+	                // Crear objeto Prestamo
+	                Prestamo nuevoPrestamo = new Prestamo();
+	                BigDecimal montoSolicitadoBD = BigDecimal.valueOf(montoSolicitado);
+	                BigDecimal importeMensualBD = BigDecimal.valueOf(importeMensual);
+	                nuevoPrestamo.setMontoSolicitado(montoSolicitadoBD);
+	                nuevoPrestamo.setCantidadCuotas(cuotas);
+	                nuevoPrestamo.setCuentaId(2);
+	                nuevoPrestamo.setClienteId(2); // Establecer clienteId
+	                nuevoPrestamo.setIdEstadoPrestamo(1); // Estado inicial, por ejemplo "pendiente"
+	                nuevoPrestamo.setFechaAlta(new Date(System.currentTimeMillis()));
+	                nuevoPrestamo.setImporteMensualAPagar(importeMensualBD); // Establecer importe mensual
+
+	                // Insertar el préstamo a través de la capa de negocio
+	                solicitado = pdxaNeg.Insert(nuevoPrestamo);
+
+	                if (solicitado) {
+	                    resString = "¡Solicitud de préstamo realizada con éxito!";
+	                } else {
+	                    resString = "Error al procesar la solicitud de préstamo.";
+	                }
+	            }
+	        }
+	    } catch (Exception e) {
+	        resString = "Error inesperado: " + e.getMessage();
+	        e.printStackTrace();
+	    }
+
+	    // Establecer los mensajes y redirigir a la vista
+	    request.setAttribute("resBoolean", solicitado);
+	    request.setAttribute("resString", resString);
+	    rd = request.getRequestDispatcher("Cliente.jsp");
+	    rd.forward(request, response);
 	}
-
 }

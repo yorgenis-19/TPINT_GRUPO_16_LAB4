@@ -8,15 +8,12 @@ public class Prestamo {
 	private int id;
 	private int clienteId;
 	private int cuentaId;
-	private LocalDate fechaAlta;
-	private float montoSolicitado;
+	private Date fechaAlta;
+	private BigDecimal montoSolicitado;
 	private int idEstadoPrestamo;
 	private int cantidadCuotas;
-	private float importeMensualAPagar;
-	public Prestamo(int nroCuenta, int codPrestamoPendinte, Date fecha_creacion, BigDecimal importe,
-			int cantidad_cuotas, int estado) {
-		// TODO Auto-generated constructor stub
-	}
+	private BigDecimal importeMensualAPagar;
+	
 	public Prestamo() {
 		// TODO Auto-generated constructor stub
 	}
@@ -32,22 +29,22 @@ public class Prestamo {
 	public void setClienteId(int clienteId) {
 		this.clienteId = clienteId;
 	}
-	public int getCuentaId() {
+	public Integer getCuentaId() {
 		return cuentaId;
 	}
 	public void setCuentaId(int cuentaId) {
 		this.cuentaId = cuentaId;
 	}
-	public LocalDate getFechaAlta() {
+	public Date getFechaAlta() {
 		return fechaAlta;
 	}
-	public void setFechaAlta(LocalDate fechaAlta) {
+	public void setFechaAlta(Date fechaAlta) {
 		this.fechaAlta = fechaAlta;
 	}
-	public float getMontoSolicitado() {
+	public BigDecimal getMontoSolicitado() {
 		return montoSolicitado;
 	}
-	public void setMontoSolicitado(float montoSolicitado) {
+	public void setMontoSolicitado(BigDecimal montoSolicitado) {
 		this.montoSolicitado = montoSolicitado;
 	}
 	public int getIdEstadoPrestamo() {
@@ -62,10 +59,10 @@ public class Prestamo {
 	public void setCantidadCuotas(int cantidadCuotas) {
 		this.cantidadCuotas = cantidadCuotas;
 	}
-	public float getImporteMensualAPagar() {
+	public BigDecimal getImporteMensualAPagar() {
 		return importeMensualAPagar;
 	}
-	public void setImporteMensualAPagar(float importeMensualAPagar) {
+	public void setImporteMensualAPagar(BigDecimal importeMensualAPagar) {
 		this.importeMensualAPagar = importeMensualAPagar;
 	}
 	@Override
@@ -74,7 +71,19 @@ public class Prestamo {
 				+ ", montoSolicitado=" + montoSolicitado + ", idEstadoPrestamo=" + idEstadoPrestamo
 				+ ", cantidadCuotas=" + cantidadCuotas + ", importeMensualAPagar=" + importeMensualAPagar + "]";
 	}
+	public void setFechaAlta(java.sql.Date date) {
+	    this.fechaAlta = date;
+	}
 	
-	
+	public Prestamo(int id, int clienteId, int cuentaId, Date fechaAlta, BigDecimal montoSolicitado, int estadoId, int cantidadDeCuotas, BigDecimal importeMensualAPagar) {
+	    this.id = id;
+	    this.clienteId = clienteId;
+	    this.cuentaId = cuentaId;
+	    this.fechaAlta = fechaAlta;
+	    this.montoSolicitado = montoSolicitado;
+	    this.idEstadoPrestamo = estadoId;
+	    this.cantidadCuotas = cantidadDeCuotas;
+	    this.importeMensualAPagar = importeMensualAPagar;
+	}
 	
 }

@@ -1,6 +1,12 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="entidad.Prestamo"%>
 <%@page import="entidad.Usuario"%>
+<%
+if(request.getAttribute("Prestamos") == null) {
+    response.sendRedirect("ServletPrestamosxAutorizar");
+    return;
+}
+%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
@@ -61,11 +67,16 @@
 <title>Administrar Prestamos - Admin</title>
 </head>
 <body>
-<% 
-	ArrayList<Prestamo> listaPrestamos = (ArrayList<Prestamo>) request.getAttribute("Prestamos");
-	Usuario usuario = (Usuario)session.getAttribute("Usuario");
- 	//Para paginado:
-%>
+	<% 
+    ArrayList<Prestamo> listaPrestamos = null;
+    if(request.getAttribute("Prestamos") != null) 
+        listaPrestamos = (ArrayList<Prestamo>) request.getAttribute("Prestamos");
+
+    String resString = (String) request.getAttribute("resString");
+    Boolean solicitado = (Boolean) request.getAttribute("resBoolean");
+
+    Usuario usuario = (Usuario) session.getAttribute("Usuario");
+	%>
 
 <header style="padding: 25px;">
     <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
@@ -91,7 +102,7 @@
 <div class="container col-8 mt-5 pt-5">
     <br><br>
     <h2 style="color: #007bff; font-family: 'Arial', sans-serif; text-align: center;">Autorizacion de Prestamos</h2>
-	
+	<div>Cantidad de prestamos: <%= listaPrestamos != null ? listaPrestamos.size() : "Lista nula" %></div>
     <table id="miTabla" class="table table-striped table-hover text-center p-3">
         <caption>Prestamos disponibles para aprobacion</caption>
         <thead class="thead-dark">
@@ -111,11 +122,12 @@
             for(Prestamo p : listaPrestamos) { 
         %>
             <tr>
-                <form method="get" action="ServletPrestamosxAutorizar">
-                    <td><%=p.getCuentaId()%></td>
-                    <td>$ <%= String.format("%.2f", p.getImporteMensualAPagar())%></td>
-                    <td><%=p.getCantidadCuotas()%></td>
-                    <td><%=p.getFechaAlta()%></td>
+                <form action="ServletPrestamosxAutorizar" method="GET">
+                    <td><%=p.getIdEstadoPrestamo()%></td>  <!-- Código de préstamo pendiente -->
+        			<td><%=p.getCuentaId()%></td>  <!-- Número de cuenta -->
+        			<td><%=p.getMontoSolicitado()%></td>  <!-- Importe solicitado -->
+        			<td><%=p.getCantidadCuotas()%></td>  <!-- Cuotas -->
+        			<td><%=p.getFechaAlta()%></td>  <!-- Fecha alta -->
                     <td>
                     <% 
                     switch(p.getIdEstadoPrestamo()) {
@@ -155,5 +167,21 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#miTabla').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+            },
+            "columnDefs": [
+                {
+                    "targets": [0, 1, 2, 3, 4, 5, 6],
+                    "searchable": true, // Permite la búsqueda en estas columnas
+                    "orderable": false // Evita que se pueda ordenar por estas columnas si no es necesario
+                }
+            ]
+        });
+    });
+</script>
 </body>
 </html>
