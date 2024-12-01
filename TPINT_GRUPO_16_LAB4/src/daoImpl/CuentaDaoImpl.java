@@ -24,6 +24,7 @@ import negocioImpl.CuentaTipoNegocioImpl;
 
 public class CuentaDaoImpl implements CuentaDao {
 	private Conexion conexion = new Conexion();
+	
 
 	private String host = "jdbc:mysql://localhost:3306/";
 	private String user ="root";
@@ -277,7 +278,7 @@ public class CuentaDaoImpl implements CuentaDao {
 	@Override
 	public ArrayList<Cuenta> ObtenerPorUsuario(int usuarioId) {
 		ArrayList<Cuenta> cuentas = new ArrayList<>();
-	    String query = "select cu.* from cuenta cu INNER JOIN Cliente cl ON cl.Id = cu.ClienteId WHERE cl.UsuarioId = " + usuarioId;
+	    String query = "select cu.* from cuenta cu INNER JOIN Cliente cl ON cl.Id = cu.ClienteId WHERE cl.UsuarioId = " + usuarioId + " AND cu.Activa = 1 ";
 	    Conexion cn = null;
 	    PreparedStatement preparedStatement = null;
 	    ResultSet rs = null;
@@ -353,6 +354,7 @@ public class CuentaDaoImpl implements CuentaDao {
 	}
 
 	private long generarCBU() {
+		
 	    // Generar un n�mero aleatorio de 16 d�gitos
 	    return (long) (Math.random() * 1_000_000_000_000_000L);
 	}
