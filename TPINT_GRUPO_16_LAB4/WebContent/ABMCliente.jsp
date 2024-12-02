@@ -132,19 +132,12 @@ function eventoSeleccionarProvincia() {
     			<label for="txtApellido" class="col-sm-2 col-form-label">Apellido:</label>
 			    <input type="text" class="form-control"value="<%=cliente.getApellido() %>"  placeholder="Apellido" aria-label="Apellido"  id="txtApellido" name="txtApellido" required>
 			  </div>
-			  <div class="col-sm">		
-    			<label for="txtUsuario" class="col-sm-2 col-form-label">Usuario:</label>
-		  		<%if(cliente.getId() == 0){%>
-	        		<input type="text" class="form-control" placeholder="Usuario" aria-label="Nombre" id="txtUsuario" name="txtUsuario" required>
-	        		<%if(errorUsuario) {%>
-		    	    <div class="invalid-feedback" style="display:block;">
-				      El usuario ingresado ya existe.
-				    </div>
-				    <%}%>
-		  		<%} else {%>
-		  			<input type="text" class="form-control" value="<%=cliente.getUsuario().getNombre() %>" disabled placeholder="Nombre" aria-label="Nombre" id="txtNombre" name="txtNombre">
-		  		<%} %>
-			  </div>
+			  
+			  
+				<div class="col-sm">
+				  <label for="txtDireccion" class="col-sm-2 col-form-label">Dirección:</label>
+				  <input type="text" class="form-control" value="<%=cliente.getDireccion() %>" placeholder="Calle y número" aria-label="Direccion" name="txtDireccion" id="txtDireccion" required>
+				</div>
 			</div>
 			
 			<div class="row">
@@ -165,13 +158,18 @@ function eventoSeleccionarProvincia() {
 			    <%}%>
 			  </div>
 			  
-			  <div class="col-sm">		
-		  		<%if(cliente.getId() == 0){%>
-	    			<label for="txtClave" class="col-sm-2 col-form-label">Clave:</label>
-        			<input type="password" class="form-control" placeholder="Clave" aria-label="Clave" id="txtClave" name="txtClave" required>
-        			
-		  		<%}%>		  	
-			  </div>
+			  
+				<div class="col-sm">
+					<label for="cmbProvincia" class="col-sm col-form-label">Provincia:</label>
+			  		<select class="form-select" value="<%=cliente.getProvinciaId() %>" id="cmbProvincia" name="cmbProvincia" required onchange="eventoSeleccionarProvincia()">
+			  		<%for(Provincia provincia : provincias){ %>
+					    <option value="<%=provincia.getId()%>" 
+					    <%if(cliente.getProvinciaId() == provincia.getId()) {
+					    %>selected 
+					    <%}%>><%=provincia.getNombre()%></option>
+					<%}%>
+				  	</select>
+				</div>
 			</div>
 			
 			<div class="row">
@@ -183,17 +181,21 @@ function eventoSeleccionarProvincia() {
 			    <label for="txtTelefono" class="col-sm-2 col-form-label">Teléfono:</label>
 			    <input type="text" class="form-control" value="<%=cliente.getTelefono() %>" placeholder="Telefono" aria-label="Telefono"  name="txtTelefono" id="txtTelefono" required>
 			  </div>
-			  <div class="col-sm">
-		  		<%if(cliente.getId() == 0){%>
-	    			<label for="txtClaveConfirmar" class="col-sm col-form-label">Confirmar Clave:</label>
-        			<input type="password" class="form-control" placeholder="Clave" aria-label="Clave" id="txtClaveConfirmar" name="txtClaveConfirmar" required>
-        			<%if(errorClave) {%>
-		    	    <div class="invalid-feedback" style="display:block;">
-				      Las claves ingresadas no coinciden.
-				    </div>
-				    <%}%>
-		  		<%}%>
-			  </div>
+				
+			  
+			    <div class="col-sm">
+					<label for="cmbLocalidad" class="col-sm col-form-label">Localidad:</label>
+			  		<select class="form-select" value="<%=cliente.getLocalidadId() %>" id="cmbLocalidad" name="cmbLocalidad" required>
+			  		<%for(Localidad localidad : localidades){ %>
+			  			
+					    <option value="<%=localidad.getId() %>"
+					    <%if(cliente.getLocalidadId() == localidad.getId()) {
+					    %>selected 
+					    <%}%>>
+					    <%=localidad.getNombre()%></option>
+					<%}%>
+				  	</select>
+			    </div>
 			</div>
 			
 			<div class="row">
@@ -216,34 +218,42 @@ function eventoSeleccionarProvincia() {
 			</div>
 			
 			<div class="row">
-				<div class="col-sm">
-				  <label for="txtDireccion" class="col-sm-2 col-form-label">Dirección:</label>
-				  <input type="text" class="form-control" value="<%=cliente.getDireccion() %>" placeholder="Calle y número" aria-label="Direccion" name="txtDireccion" id="txtDireccion" required>
-				</div>
-				<div class="col-sm">
-					<label for="cmbProvincia" class="col-sm col-form-label">Provincia:</label>
-			  		<select class="form-select" value="<%=cliente.getProvinciaId() %>" id="cmbProvincia" name="cmbProvincia" required onchange="eventoSeleccionarProvincia()">
-			  		<%for(Provincia provincia : provincias){ %>
-					    <option value="<%=provincia.getId()%>" 
-					    <%if(cliente.getProvinciaId() == provincia.getId()) {
-					    %>selected 
-					    <%}%>><%=provincia.getNombre()%></option>
-					<%}%>
-				  	</select>
-				</div>
-			    <div class="col-sm">
-					<label for="cmbLocalidad" class="col-sm col-form-label">Localidad:</label>
-			  		<select class="form-select" value="<%=cliente.getLocalidadId() %>" id="cmbLocalidad" name="cmbLocalidad" required>
-			  		<%for(Localidad localidad : localidades){ %>
-			  			
-					    <option value="<%=localidad.getId() %>"
-					    <%if(cliente.getLocalidadId() == localidad.getId()) {
-					    %>selected 
-					    <%}%>>
-					    <%=localidad.getNombre()%></option>
-					<%}%>
-				  	</select>
-			    </div>
+			
+			  <div class="col-sm">		
+    			<label for="txtUsuario" class="col-sm-2 col-form-label">Usuario:</label>
+		  		<%if(cliente.getId() == 0){%>
+	        		<input type="text" class="form-control" placeholder="Usuario" aria-label="Nombre" id="txtUsuario" name="txtUsuario" required>
+	        		<%if(errorUsuario) {%>
+		    	    <div class="invalid-feedback" style="display:block;">
+				      El usuario ingresado ya existe.
+				    </div>
+				    <%}%>
+		  		<%} else {%>
+		  			<input type="text" class="form-control" value="<%=cliente.getUsuario().getNombre() %>" disabled placeholder="Nombre" aria-label="Nombre" id="txtNombre" name="txtNombre">
+		  		<%} %>
+			  </div>
+				
+			  <div class="col-sm">
+		  		<%if(cliente.getId() == 0){%>
+	    			<label for="txtClaveConfirmar" class="col-sm col-form-label">Confirmar Clave:</label>
+        			<input type="password" class="form-control" placeholder="Clave" aria-label="Clave" id="txtClaveConfirmar" name="txtClaveConfirmar" required>
+        			<%if(errorClave) {%>
+		    	    <div class="invalid-feedback" style="display:block;">
+				      Las claves ingresadas no coinciden.
+				    </div>
+				    <%}%>
+		  		<%}%>
+			  </div>
+			  
+			  
+			  
+			  <div class="col-sm">		
+		  		<%if(cliente.getId() == 0){%>
+	    			<label for="txtClave" class="col-sm-2 col-form-label">Clave:</label>
+        			<input type="password" class="form-control" placeholder="Clave" aria-label="Clave" id="txtClave" name="txtClave" required>
+        			
+		  		<%}%>		  	
+			  </div>
 			</div>
 			
 			<div class="row button-row">

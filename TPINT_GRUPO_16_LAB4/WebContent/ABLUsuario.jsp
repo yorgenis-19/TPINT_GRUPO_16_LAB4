@@ -14,6 +14,7 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
+	<jsp:include page="style.css"></jsp:include>
         /* Estilos CSS en línea */
         .container {
             max-width: 800px;
@@ -58,6 +59,9 @@ function setDeleteInfo(usuarioId, usuarioName) {
 	}
 
 	ArrayList<UsuarioTipo> tipos = (ArrayList<UsuarioTipo>)request.getAttribute("UsuarioTipos");
+	String nombreFiltro = request.getAttribute("Filtro_Nombre") != null ? request.getAttribute("Filtro_Nombre").toString() : "";
+	int tipoFiltro = request.getAttribute("Filtro_Tipo") != null ? (int)request.getAttribute("Filtro_Tipo") : 0;
+	String activoFiltro = request.getAttribute("Filtro_Activo") != null ? request.getAttribute("Filtro_Activo").toString() : "";
 %>
 <body>
 <nav class="navbar bg-primary navbar-expand-lg " data-bs-theme="dark">
@@ -88,15 +92,15 @@ function setDeleteInfo(usuarioId, usuarioName) {
 	         <form class="row g-3" method="get" action="ServletBuscarUsuarios">
 	         	  <div class="col-md-4">
 				    <label for="txtNombre" class="form-label">Nombre</label>
-				    <input type="text" class="form-control" id="txtNombre" name="txtNombre" value="<%if(request.getAttribute("Filtro_Nombre") != null){ %><%=request.getAttribute("Filtro_Nombre")%><%} %>" >
+				    <input type="text" class="form-control" id="txtNombre" name="txtNombre" value="<%=nombreFiltro%>" >
 				  </div>
 			      <div class="col-md-4">
 				    <label for="cmbTipo" class="form-label">Tipo</label>
 				    <select class="form-select" id="cmbTipo" name="cmbTipo">
-					    <option value="0">Todos</option>
+					    <option value="0" <%if(tipoFiltro == 0){%>selected<%}%>>Todos</option>
 					    <%for(UsuarioTipo tipo : tipos)
 				    	{%>
-				        <option value="<%=tipo.getId()%>">
+				        <option value="<%=tipo.getId()%>" <%if(tipoFiltro == tipo.getId()){%>selected<%}%>>
 				        <%=tipo.getDescripcion()%>
 				        </option>
 				    	<%}%>
@@ -105,9 +109,9 @@ function setDeleteInfo(usuarioId, usuarioName) {
 			      <div class="col-md-4">
 				    <label for="cmbActivo" class="form-label">Activo</label>
 				    <select class="form-select" value="" id="cmbActivo" name="cmbActivo">
-				        <option value="TODOS">Todos</option>
-				        <option value="ACTIVO">Si</option>
-				        <option value="BAJA">No</option>
+				        <option value="TODOS" <%if(activoFiltro.equals("TODOS")){%>selected<%}%>>Todos</option>
+				        <option value="ACTIVO" <%if(activoFiltro.equals("ACTIVO")){%>selected<%}%>>Si</option>
+				        <option value="BAJA" <%if(activoFiltro.equals("BAJA")){%>selected<%}%>>No</option>
 				  	</select>
 				  </div>
 				  <div class="col-10">
@@ -127,7 +131,7 @@ function setDeleteInfo(usuarioId, usuarioName) {
         		<tr>
         			<th>NOMBRE</th>
         			<th>TIPO</th>
-        			<th>ESTADO</th>
+        			<th>ACTIVO</th>
         			<th></th>
         			<th></th>
         		</tr>
