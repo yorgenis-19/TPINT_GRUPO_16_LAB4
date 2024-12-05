@@ -297,15 +297,3 @@ INSERT INTO Cuenta (ClienteId, Monto, Activa, CBU, TipoId, FechaDeCreacion) VALU
 ((SELECT Id FROM Cliente WHERE DNI = '33222003'), 10000, 0, 897546123131, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Caja de Ahorro'), '20241128'),
 ((SELECT Id FROM Cliente WHERE DNI = '33222003'), 10000, 0, 897546123132, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Cuenta Corriente'), '20241129'),
 ((SELECT Id FROM Cliente WHERE DNI = '33222003'), 10000, 0, 897546123133, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Caja de Ahorro'), '20241130');
-
-INSERT INTO Movimiento (CuentaOrigenId, CuentaDestinoId, Importe, Fecha, Detalle, TipoId) VALUES
-(NULL, (SELECT Id FROM Cuenta WHERE CBU = 897546123111), 10000, '20241101', 'Creación de cuenta', (SELECT Id FROM MovimientoTipo WHERE Descripcion = 'Alta')),
-(NULL, (SELECT Id FROM Cuenta WHERE CBU = 897546123112), 10000, '20241101', 'Creación de cuenta', (SELECT Id FROM MovimientoTipo WHERE Descripcion = 'Alta')),
-(NULL, (SELECT Id FROM Cuenta WHERE CBU = 897546123113), 10000, '20241101', 'Creación de cuenta', (SELECT Id FROM MovimientoTipo WHERE Descripcion = 'Alta')),
-(NULL, (SELECT Id FROM Cuenta WHERE CBU = 897546123121), 10000, '20241101', 'Creación de cuenta', (SELECT Id FROM MovimientoTipo WHERE Descripcion = 'Alta')),
-(NULL, (SELECT Id FROM Cuenta WHERE CBU = 897546123122), 10000, '20241101', 'Creación de cuenta', (SELECT Id FROM MovimientoTipo WHERE Descripcion = 'Alta')),
-(NULL, (SELECT Id FROM Cuenta WHERE CBU = 897546123123), 10000, '20241101', 'Creación de cuenta', (SELECT Id FROM MovimientoTipo WHERE Descripcion = 'Alta')),
-(NULL, (SELECT Id FROM Cuenta WHERE CBU = 897546123131), 10000, '20241101', 'Creación de cuenta', (SELECT Id FROM MovimientoTipo WHERE Descripcion = 'Alta')),
-(NULL, (SELECT Id FROM Cuenta WHERE CBU = 897546123132), 10000, '20241101', 'Creación de cuenta', (SELECT Id FROM MovimientoTipo WHERE Descripcion = 'Alta')),
-(NULL, (SELECT Id FROM Cuenta WHERE CBU = 897546123133), 10000, '20241101', 'Creación de cuenta', (SELECT Id FROM MovimientoTipo WHERE Descripcion = 'Alta')),
-(NULL, (SELECT Id FROM Cuenta WHERE CBU = 897546123111), 10000, '20241101', 'Creación de cuenta', (SELECT Id FROM MovimientoTipo WHERE Descripcion = 'Alta'))

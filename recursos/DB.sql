@@ -118,4 +118,15 @@ CREATE TABLE Cuota
     FOREIGN KEY (PrestamoId) REFERENCES Prestamo(Id)
 );
 
+DELIMITER $$
+
+CREATE TRIGGER tr_InsertarPrimerMovimiento
+AFTER INSERT ON Cuenta
+FOR EACH ROW
+BEGIN
+    INSERT INTO Movimiento (CuentaOrigenId, CuentaDestinoId, Importe, Fecha, Detalle, TipoId)
+    VALUES (NULL, NEW.Id, 10000.00, NEW.FechaDeCreacion, 'Alta de cuenta', 3);
+END$$
+
+DELIMITER ;
 
