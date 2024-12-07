@@ -76,7 +76,9 @@ ArrayList<Cuenta> cuentas = (ArrayList<Cuenta>)request.getAttribute("Cuentas");
 		  </form>
 	<%}%>
 	</div>
+	 <div style="display: flex; justify-content: end; margin: 2%;">
+        <input type="button" value="Volver" name="btnVolver" onclick="window.location.href='Cliente.jsp';" class="btn btn-secondary">
+    </div>
 </div>
-
 </body>
 </html>

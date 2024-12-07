@@ -399,7 +399,7 @@ public class ClienteDaoImpl implements ClienteDao {
 	            cliente.setCuil(rs.getString("CUIL"));
 	            cliente.setTelefono(rs.getString("Telefono"));
 	            cliente.setEmail(rs.getString("Email"));
-	            cliente.setFechaNacimiento(rs.getDate("FechaDeNacimiento"));
+	            cliente.setFechaNacimiento(rs.getDate("FechaNacimiento"));
 	          
 
 	            System.out.println("Datos del cliente obtenidos: " + cliente);
