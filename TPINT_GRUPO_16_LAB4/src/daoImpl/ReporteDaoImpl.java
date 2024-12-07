@@ -36,15 +36,17 @@ public class ReporteDaoImpl implements ReporteDao {
         }
         return saldoTotal;
     }
-	public Map<String, Integer> obtenerCuentaPorTipo(String fechaInicio, String fechaFin) {
+	public Map<String, Object> obtenerCuentaPorTipo(String fechaInicio, String fechaFin) {
 	    Conexion conexion = new Conexion();
-	    Map<String, Integer> cuentasPorTipo = new HashMap<String, Integer>();
+	    Map<String, Object> resultado = new HashMap<String, Object>();
 
-	    String query = "SELECT CuentaTipo.Descripcion, COUNT(Cuenta.Id) AS TotalCuentas " +
-	                   "FROM Cuenta " +
-	                   "INNER JOIN CuentaTipo ON Cuenta.TipoId = CuentaTipo.Id " +
-	                   "WHERE FechaDeCreacion BETWEEN ? AND ? " +
-	                   "GROUP BY CuentaTipo.Descripcion";
+	    String query = "SELECT CuentaTipo.Descripcion, COUNT(Cuenta.Id) AS TotalCuentas, " +
+                "SUM(CASE WHEN Cuenta.Activa = 1 THEN 1 ELSE 0 END) AS CuentasActivas, " +
+                "SUM(CASE WHEN Cuenta.Activa = 0 THEN 1 ELSE 0 END) AS CuentasInactivas " +
+                "FROM Cuenta " +
+                "INNER JOIN CuentaTipo ON Cuenta.TipoId = CuentaTipo.Id " +
+                "WHERE FechaDeCreacion BETWEEN ? AND ? " +
+                "GROUP BY CuentaTipo.Descripcion";
 
 	    try {
 	        conexion.Open(); // Abre la conexión
@@ -60,15 +62,16 @@ public class ReporteDaoImpl implements ReporteDao {
 	        while (resultSet.next()) {
 	            String descripcion = resultSet.getString("Descripcion");
 	            int totalCuentas = resultSet.getInt("TotalCuentas");
-
-	            // Agregar el resultado al Map
-	            cuentasPorTipo.put(descripcion, totalCuentas); // No es necesario el cast a HashMap
+	            int cuentasActivas = resultSet.getInt("CuentasActivas");
+	            int cuentasInactivas = resultSet.getInt("CuentasInactivas");
+	            
+	            Map<String, Integer> cuentaData = new HashMap<>();
+	            cuentaData.put("TotalCuentas", totalCuentas);
+	            cuentaData.put("CuentasActivas", cuentasActivas);
+	            cuentaData.put("CuentasInactivas", cuentasInactivas);
+	  
+	            resultado.put(descripcion, cuentaData);
 	        }
-	        System.out.println("Datos obtenidos de cuentas por tipo:");
-	        for (Map.Entry<String, Integer> entry : cuentasPorTipo.entrySet()) {
-	            System.out.println("Tipo de Cuenta: " + entry.getKey() + " - Total Cuentas: " + entry.getValue());}
-
-	        // Cierra los recursos
 	        resultSet.close();
 	        preparedStatement.close();
 
@@ -78,7 +81,7 @@ public class ReporteDaoImpl implements ReporteDao {
 	        conexion.close(); // Cierra la conexión
 	    }
 
-	    return cuentasPorTipo;
+	    return resultado;
 	}
 
 

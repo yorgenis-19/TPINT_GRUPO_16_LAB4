@@ -21,7 +21,7 @@ public class ReporteNegocioImpl implements ReporteNegocio{
 	}
 	 
 	@Override
-	public Map<String, Integer> obtenerCuentaPorTipo(String fechaInicio, String fechaFin) {
+	public Map<String, Object> obtenerCuentaPorTipo(String fechaInicio, String fechaFin) {
 		// TODO Auto-generated method stub
 		return reportedao.obtenerCuentaPorTipo(fechaInicio, fechaFin);
 	}

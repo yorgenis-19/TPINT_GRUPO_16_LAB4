@@ -16,6 +16,7 @@
     <title>Reportes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
     <style>
         /* Include external CSS */
         <jsp:include page="style.css"></jsp:include>
@@ -88,26 +89,47 @@
             </div>
 <%
         } else if (tipoReporte.equals("cuentasPorTipo")) {
-            Map<String, Integer> cuentasPorTipo = (Map<String, Integer>) request.getAttribute("cuentasPorTipo");
+        	Map<String, Object> cuentasPorTipo = (Map<String, Object>) request.getAttribute("cuentasPorTipo");
             if (cuentasPorTipo != null && !cuentasPorTipo.isEmpty()) {
 %>
                 <div class="report-container">
                     <h2>Cuentas agrupadas por tipo</h2>
-                    <table class="table table-striped">
+                    <table id="tablaCuentas" class="table table-striped">
+                    <thead>
                         <tr>
                             <th>Tipo de Cuenta</th>
-                            <th>Cantidad</th>
+                             <th>Total de Cuentas</th>
+                            <th>Cuentas Activas</th>
+                            <th>Cuentas Inactivas</th>
+                            <th>Porcentaje Activas</th>
+                            <th>Porcentaje Inactivas</th>
+                            
                         </tr>
+                        </thead>
+       					<tbody>
                         <%
-                            for (Map.Entry<String, Integer> entry : cuentasPorTipo.entrySet()) {
+                        for (Map.Entry<String, Object> entry : cuentasPorTipo.entrySet()) {
+                            Map<String, Integer> cuentaData = (Map<String, Integer>) entry.getValue();
+                            String descripcion = entry.getKey();
+                            int totalCuentas = cuentaData.get("TotalCuentas");
+                            int cuentasActivas = cuentaData.get("CuentasActivas");
+                            int cuentasInactivas = cuentaData.get("CuentasInactivas");
+
+                            double porcentajeActivas = (totalCuentas > 0) ? ((double) cuentasActivas / totalCuentas) * 100 : 0;
+                            double porcentajeInactivas = (totalCuentas > 0) ? ((double) cuentasInactivas / totalCuentas) * 100 : 0;
                         %>
                             <tr>
-                                <td><%= entry.getKey() %></td>  <!-- Descripción de cuenta -->
-                                <td><%= entry.getValue() %></td> <!-- Cantidad de cuentas -->
+                                <td><%= descripcion %></td>
+                                <td><%= totalCuentas %></td>
+                                <td><%= cuentasActivas %></td>
+                                <td><%= cuentasInactivas %></td>
+                                <td><%= String.format("%.2f", porcentajeActivas) + "%" %></td>
+                                <td><%= String.format("%.2f", porcentajeInactivas) + "%" %></td>
                             </tr>
                         <%
                             }
                         %>
+                        </tbody>
                     </table>
                 </div>
 <%
@@ -119,6 +141,39 @@
         }
     }
 %>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+    // Inicializar DataTables en la tabla
+    $(document).ready(function() {
+        $('#tablaCuentas').DataTable({
+        order: [[0, 'desc']],
+        language: {
+            lengthMenu: "Mostrar _MENU_ registros",
+            info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+            infoEmpty: "Mostrando 0 a 0 de 0 registros",
+            infoFiltered: "(filtrado de _MAX_ registros en total)",
+            loadingRecords: "Cargando...",
+            zeroRecords: "No se encontraron registros coincidentes",
+            emptyTable: "No hay datos disponibles en la tabla",
+            paginate: {
+                first: "Primero",
+                previous: "Anterior",
+                next: "Siguiente",
+                last: "Último"
+            },
+            aria: {
+                sortAscending: ": activar para ordenar columna ascendente",
+                sortDescending: ": activar para ordenar columna descendente"
+            },
+            lengthMenu: "Cantidad registros MENU",
+            search: "Buscar:"
+        },
+        dom: 'lfrtip'
+    });
+   });
+</script>
 </body>
 </html>
 

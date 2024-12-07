@@ -54,7 +54,7 @@ public class ServletGenerarReporte extends HttpServlet {
         request.setAttribute("tipoReporte", "saldoTotal");
     	    } else if (request.getParameter("btnReporte2") != null) {
     	        // Lógica para el botón "Generar Informe de Cuentas por Tipo"
-    	    	 Map<String, Integer> cuentasPorTipo = (Map<String, Integer>) reportenegocio.obtenerCuentaPorTipo(fechaInicio, fechaFin);
+    	    	Map<String, Object> cuentasPorTipo = reportenegocio.obtenerCuentaPorTipo(fechaInicio, fechaFin);
     	         request.setAttribute("cuentasPorTipo", cuentasPorTipo);
     	         request.setAttribute("tipoReporte", "cuentasPorTipo");
     	    }
