@@ -82,7 +82,7 @@ if (mensajeExito != null) {
     <p><strong>Apellido:</strong> <%= cliente.getApellido() %></p>
     <p><strong>DNI:</strong> <%= cliente.getDni() %></p>
 <% } else if (request.getParameter("IDCliente") != null) { %>
-    <p style="color: red;">No se encontró información del cliente.</p>
+    <p style="color: red;">No se encontró información del cliente o el cliente esta Inactivo.</p>
 <% } %>
 
     <form method="post" action="ServletNuevaCuenta">
