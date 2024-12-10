@@ -46,7 +46,7 @@ public class ServletLogin extends HttpServlet {
 			String clave = request.getParameter("txtClave");
 			
 			obj = negocio.Obtener(nombre, clave);
-			if(obj.getId() == 0) {
+			if(obj.getId() == 0 || obj.getActivo() == false) {
 				request.setAttribute("usuarioIncorrecto", true);
 				RequestDispatcher rd = request.getRequestDispatcher("/Login.jsp");
 				rd.forward(request, response);
