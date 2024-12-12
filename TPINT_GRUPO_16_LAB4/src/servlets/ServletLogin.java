@@ -52,6 +52,7 @@ public class ServletLogin extends HttpServlet {
 			List<Cuenta> lCta = ctaNeg.ObtenerPorUsuario(obj.getId());
 			System.out.println("objjjjj: " + lCta);
 			if(obj.getId() == 0) {
+			if(obj.getId() == 0 || obj.getActivo() == false) {
 				request.setAttribute("usuarioIncorrecto", true);
 				RequestDispatcher rd = request.getRequestDispatcher("/Login.jsp");
 				rd.forward(request, response);
