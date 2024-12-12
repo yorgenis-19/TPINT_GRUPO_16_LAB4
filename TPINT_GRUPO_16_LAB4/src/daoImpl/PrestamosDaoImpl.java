@@ -128,9 +128,52 @@ public class PrestamosDaoImpl implements PrestamosDao {
 		return false;
 	}
 
-	public Prestamo BuscarUno(int nroCuenta) {
-		// TODO Auto-generated method stub
-		return null;
+	public Prestamo BuscarUno(int id) {
+	    Prestamo prestamo = null;
+	    Connection conexion = null;
+	    PreparedStatement statement = null;
+	    ResultSet resultSet = null;
+
+	    try {
+	        // Establecer conexión a la base de datos
+	        conexion = DriverManager.getConnection(host + dbName + "?useSSL=false", user, pass);
+	        
+	        // Consulta SQL para buscar el préstamo asociado a la cuenta
+	        String query = "SELECT p.Id, p.ClienteId, p.CuentaId, p.FechaAlta, p.MontoSolicitado, " +
+	                       "p.EstadoId, p.CantidadDeCuotas, p.ImporteMensualAPagar " +
+	                       "FROM Prestamo p " +
+	                       "WHERE p.Id = ?";
+	        
+	        statement = conexion.prepareStatement(query);
+	        statement.setInt(1, id);
+	        resultSet = statement.executeQuery(); // Ejecutar la consulta
+	        
+	        // Verificar si se encontró un préstamo
+	        if (resultSet.next()) {
+	            prestamo = new Prestamo();
+	            prestamo.setId(resultSet.getInt("Id"));
+	            prestamo.setClienteId(resultSet.getInt("ClienteId"));
+	            prestamo.setCuentaId(resultSet.getInt("CuentaId"));
+	            prestamo.setFechaAlta(resultSet.getDate("FechaAlta"));
+	            prestamo.setMontoSolicitado(resultSet.getBigDecimal("MontoSolicitado"));
+	            prestamo.setIdEstadoPrestamo(resultSet.getInt("EstadoId"));
+	            prestamo.setCantidadCuotas(resultSet.getInt("CantidadDeCuotas"));
+	            prestamo.setImporteMensualAPagar(resultSet.getBigDecimal("ImporteMensualAPagar"));
+	        }
+	    } catch (SQLException e) {
+	        System.err.println("Error al buscar el préstamo: " + e.getMessage());
+	    } finally {
+	        // Cerrar recursos
+	        try {
+	            if (resultSet != null) resultSet.close();
+	            if (statement != null) statement.close();
+	            if (conexion != null) conexion.close();
+	        } catch (SQLException e) {
+	            System.err.println("Error al cerrar la conexión: " + e.getMessage());
+	        }
+	    }
+
+	    return prestamo; // Retornar el préstamo encontrado o null si no se encontró
 	}
 	
 	public List<Prestamo> BuscarTodos() {
@@ -234,44 +277,77 @@ public class PrestamosDaoImpl implements PrestamosDao {
 	    return prestamoxAutorizar;
 	}
 
+	@Override
 	public boolean Update(Prestamo prestamo) {
-		
-		PreparedStatement statement;
-		Connection conexion = null;
-		try {
-			conexion = DriverManager.getConnection(host+dbName,user,pass);
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
-		boolean isUpdateExitoso = false;
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
+	    PreparedStatement statement = null;
+	    Connection conexion = null;
+	    boolean isUpdateExitoso = false;
 
+	    try {
+	        // Validar que el objeto prestamo no sea nulo y tenga los campos obligatorios
+	        if (prestamo == null || prestamo.getId() == 0) {
+	            throw new IllegalArgumentException("El objeto prestamo o su ID es nulo");
+	        }
 
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		try {
-				statement = conexion.prepareStatement(update);	
-				
-				statement.setInt(1,prestamo.getIdEstadoPrestamo());
-				statement.setInt(2,prestamo.getId());
-				
-				
-				
+	        // Cargar el driver de MySQL
+	        Class.forName("com.mysql.jdbc.Driver");
 
-			if(statement.executeUpdate() > 0){
-				conexion.commit();
-				isUpdateExitoso  = true;
-				}
-			} 
-		catch (SQLException e1) {
-				e1.printStackTrace();
-			}
+	        // Establecer conexión a la base de datos
+	        conexion = DriverManager.getConnection(host + dbName + "?useSSL=false", user, pass);
+	        conexion.setAutoCommit(false); // Desactivar auto-commit para manejar transacciones
 
+	        // Preparar la sentencia para actualizar el préstamo
+	        statement = conexion.prepareStatement(update);
+	        
+	        // Establecer los parámetros para la actualización del préstamo
+	        statement.setInt(1, 2); 
+	        statement.setInt(2, prestamo.getId()); // ID del préstamo
+	        System.out.println("no    oo  o o o o o o entrooooooooooo: " + prestamo);
+	        // Ejecutar la actualización del préstamo
+	        if (statement.executeUpdate() > 0) {
+	        	System.out.println("entrooooooooooo: " + prestamo);
+	            // Si la actualización fue exitosa, actualizar el saldo de la cuenta
+	            BigDecimal montoSolicitado = prestamo.getMontoSolicitado(); // Monto solicitado (puedes ajustar según tu lógica)
+	            int cuentaId = prestamo.getCuentaId(); // ID de la cuenta asociada al préstamo
+	            
+	            // Actualizar saldo en la tabla Cuenta
+	            String updateSaldoQuery = "UPDATE Cuenta SET Monto = Monto + ? WHERE Id = ?";
+	            
+	            try (PreparedStatement ps = conexion.prepareStatement(updateSaldoQuery)) {
+	                ps.setBigDecimal(1, montoSolicitado); // Monto a agregar a la cuenta
+	                ps.setInt(2, cuentaId); // ID de la cuenta
+	                ps.executeUpdate(); // Ejecutar actualización del saldo
+	            }
 
-		return isUpdateExitoso;
-		}
+	            conexion.commit(); // Confirmar transacción si todo fue exitoso
+	            isUpdateExitoso = true; // Marcar como exitoso
+	        } else {
+	            conexion.rollback(); // Revertir si no se afectaron filas
+	        }
+
+	    } catch (ClassNotFoundException e) {
+	        System.err.println("Error: No se encontró el driver de MySQL: " + e.getMessage());
+	    } catch (SQLException e) {
+	        System.err.println("Error SQL al actualizar el préstamo: " + e.getMessage());
+	        if (conexion != null) {
+	            try {
+	                conexion.rollback(); // Revertir en caso de error
+	            } catch (SQLException ex) {
+	                System.err.println("Error al hacer rollback: " + ex.getMessage());
+	            }
+	        }
+	    } finally {
+	        try {
+	            if (statement != null) statement.close();
+	            if (conexion != null) conexion.close();
+	        } catch (SQLException e) {
+	            System.err.println("Error al cerrar la conexión: " + e.getMessage());
+	        }
+	    }
+
+	    return isUpdateExitoso; // Retornar resultado de la operación
+	}
+
 	
 	private Prestamo getPrestamoxAutorizar(ResultSet resultSet) throws SQLException {
 	    int id = resultSet.getInt("Id");

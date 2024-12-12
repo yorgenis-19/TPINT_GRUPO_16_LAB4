@@ -69,14 +69,14 @@ public class ServletPrestamosxAutorizar extends HttpServlet {
 	private void updatePrestamo(HttpServletRequest request, HttpServletResponse response, int i) throws ServletException, IOException {
 		RequestDispatcher rd;
 		PrestamosNegocio pdxaNeg = new PrestamosNegocioImpl();
+		
 		boolean solicitado = false;
 		String resString="";
 		Prestamo pxa = new Prestamo();
 		
 		try
 		{
-		pxa.setId(Integer.parseInt(request.getParameter("codPrestamo")));
-		pxa.setIdEstadoPrestamo(i);
+	    pxa = pdxaNeg.BuscarUno(Integer.parseInt(request.getParameter("codPrestamo")));
 		solicitado = pdxaNeg.Update(pxa);
 
 		if(solicitado)

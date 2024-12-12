@@ -12,12 +12,12 @@ public class CuotasNegocioImpl implements CuotasNegocio {
     private final CuotasDaoImpl cuotasDao = new CuotasDaoImpl();
 
     @Override
-    public boolean PagarCuota(int NroCuenta, int idCuota, BigDecimal importe, String detalle) {
+    public boolean PagarCuota(int NroCuenta, int idCuota, BigDecimal importe, String detalle, int idCliente) {
         // Crear una instancia del DAO de cuentas
         CuentaDaoImpl cuentaDao = new CuentaDaoImpl();
 
         // Obtener la lista de cuentas asociadas al cliente
-        List<Cuenta> cuentas = cuentaDao.ObtenerCuentasxClienteID(NroCuenta);
+        List<Cuenta> cuentas = cuentaDao.ObtenerCuentasxClienteID(idCliente);
 
         // Verificar si la lista está vacía
         if (cuentas.isEmpty()) {
@@ -40,7 +40,8 @@ public class CuotasNegocioImpl implements CuotasNegocio {
             NroCuenta,
             idCuota,
             saldoActual.subtract(importe), // Nuevo saldo después del pago
-            "Pago cuota - ID" + idCuota   // Descripción del pago
+            "Pago cuota - ID" + idCuota,   // Descripción del pago
+            idCliente
         );
 
         return pagoExitoso;

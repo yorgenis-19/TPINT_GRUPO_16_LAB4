@@ -1,128 +1,54 @@
 <%@page import="entidad.Usuario"%>
-
 <%@page import="entidad.Prestamo"%>
 <%@page import="entidad.Cuenta"%>
 <%@page import="entidad.CuotaPrestamo"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.math.BigDecimal"%>
 
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>Pagar prestamo</title>
-<link rel="stylesheet"
-	href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
-	integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
-	crossorigin="anonymous">
-<link rel="stylesheet"
-	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-	crossorigin="anonymous">
-<style type="text/css">
-</style>
+    <meta charset="ISO-8859-1">
+    <title>Pagar prestamo</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
-	<%
-    // Depuración de sesión de usuario
-    System.out.println("UsuarioActual en sesión: " + session.getAttribute("UsuarioActual"));
- 
-
-    Usuario usuario = new Usuario(); 
-    if(session.getAttribute("UsuarioActual") != null)
-    {
-        usuario = (Usuario)session.getAttribute("UsuarioActual");
-    }
-    ArrayList<Prestamo> prestamoList = new ArrayList<>();
-    if(request.getAttribute("Prestamos") != null)
-    {
-        prestamoList = (ArrayList<Prestamo>) request.getAttribute("Prestamos");
-        System.out.println("Número de préstamos recibidos: " + prestamoList.size());
-        // Imprimir detalles de los préstamos
-        for(Prestamo prestamo : prestamoList) {
-            System.out.println("Préstamo - ID: " + prestamo.getId() + 
-                               ", Importe: " + prestamo.getImporteMensualAPagar() + 
-                               ", Estado: " + prestamo.getIdEstadoPrestamo());
-        }
-    } else {
-        System.out.println("No se recibieron préstamos en el atributo de request");
-    }
-%>
-	<%
-    // Validaciones de seguridad
-    if(session.getAttribute("Usuario") != null) {
-        usuario = (Usuario)session.getAttribute("Usuario");
+    <%
+    Usuario usuario = (Usuario) session.getAttribute("UsuarioActual");
+    if(usuario == null) {
+        response.sendRedirect("login.jsp");
+        return;
     }
 
-    // Inicializar listas
-    ArrayList<Cuenta> cuentasList = new ArrayList<>();
-    ArrayList<CuotaPrestamo> cuotasList = new ArrayList<>();
+    ArrayList<Prestamo> prestamoList = (ArrayList<Prestamo>) request.getAttribute("Prestamos");
+    ArrayList<CuotaPrestamo> cuotasList = (ArrayList<CuotaPrestamo>) request.getAttribute("Cuotas");
+    ArrayList<Cuenta> cuentasList = (ArrayList<Cuenta>) request.getSession().getAttribute("cuentasDDL");
+    Integer nroCuenta = (Integer) request.getAttribute("NroCuenta");
+    BigDecimal currentSaldo = (BigDecimal) request.getAttribute("Saldo");
 
-    // Recuperar prestamos
-    if(request.getAttribute("Prestamos") != null) {
-        prestamoList = (ArrayList<Prestamo>) request.getAttribute("Prestamos");
-        System.out.println("Número de préstamos (segunda verificación): " + prestamoList.size());
+    // Validación de parámetros necesarios
+    if (prestamoList == null || cuotasList == null || cuentasList == null || nroCuenta == null || currentSaldo == null) {
+        request.setAttribute("error", "Error en la carga de datos. Por favor, intente nuevamente.");
+        response.sendRedirect("error.jsp");
+        return;
     }
 
-    // Recuperar cuentas
-    if(request.getSession().getAttribute("cuentasDDL") != null) {
-        cuentasList = (ArrayList<Cuenta>) request.getSession().getAttribute("cuentasDDL");
-        System.out.println("Número de cuentas: " + cuentasList.size());
-        // Imprimir detalles de las cuentas
-        for(Cuenta cuenta : cuentasList) {
-            System.out.println("Cuenta - ID: " + cuenta.getId() + 
-                               ", Tipo: " + cuenta.getTipo().getDescripcion() + 
-                               ", Activa: " + cuenta.isActiva());
-        }
-    } else {
-        System.out.println("No se encontraron cuentas en la sesión");
+    // Encontrar la cuenta actual
+    Cuenta cuentaActual = cuentasList.stream()
+        .filter(c -> c.isActiva() && c.getId() == nroCuenta)
+        .findFirst()
+        .orElse(null);
+
+    if (cuentaActual == null) {
+        response.sendRedirect("error.jsp");
+        return;
     }
+    %>
 
-    // Recuperar cuotas
-    if(request.getAttribute("Cuotas") != null) {
-        cuotasList = (ArrayList<CuotaPrestamo>) request.getAttribute("Cuotas");
-        System.out.println("Número de cuotas: " + cuotasList.size());
-        // Imprimir detalles de las cuotas
-        for(CuotaPrestamo cuota : cuotasList) {
-            System.out.println("Cuota - ID: " + cuota.getId() + 
-                               ", Préstamo ID: " + cuota.getPrestamoId() + 
-                               ", Número de Cuota: " + cuota.getNumeroCuota() + 
-                               ", Monto: " + cuota.getMonto() + 
-                               ", Estado: " + cuota.getEstado());
-        }
-    } else {
-        System.out.println("No se recibieron cuotas en el atributo de request");
-    }
-
-    // Validar que existan cuentas
-    int pos = 0;
-    Cuenta cuentaSeleccionada = null;
-    if(cuentasList != null && !cuentasList.isEmpty()) {
-        // Encontrar primera cuenta activa
-        for(int i = 0; i < cuentasList.size(); i++) {
-            if(cuentasList.get(i).isActiva()) {
-                pos = i;
-                cuentaSeleccionada = cuentasList.get(i);
-                break;
-            }
-        }
-    }
-
-    // Validar saldo
-    BigDecimal currentSaldo = BigDecimal.ZERO;
-    if(request.getAttribute("Saldo") != null) {
-        currentSaldo = (BigDecimal) request.getAttribute("Saldo");
-        System.out.println("Saldo actual: " + currentSaldo);
-    } else {
-        System.out.println("No se recibió saldo en el atributo de request");
-    }
-%>
-
-	<header class="header bg-info p-3">
-
-
+    <!-- Header -->
+    <header class="header bg-info p-3">
 
 		<div class="logged">
 			<a class="navbar-brand" href="Cliente.jsp"> <svg
@@ -147,148 +73,122 @@
 		</div>
 	</header>
 
-	<h1 class="mt-5"
-		style="margin: auto; text-align: center; margin-bottom: 30px;">Pagar
-		prestamos</h1>
+    <h1 class="mt-5 text-center mb-4">Pagar prestamos</h1>
 
-	<section class="eleccion-prestamos">
-		<label>SELECCIONAR PRESTAMO</label> <select class="select"
-			id="select-prestamo">
-			<option value="-1">Seleccione un prestamo</option>
-			<% 
-            if (prestamoList != null && !prestamoList.isEmpty()) {
-                for(Prestamo p : prestamoList) { 
-            %>
-			<option value="<%=p.getId()%>">Codigo:
-				<%=p.getId()%> - Monto: $<%=p.getImporteMensualAPagar()%></option>
-			<% 
-                } 
-            } else { 
-            %>
-			<option value="-1">No hay préstamos disponibles</option>
-			<% } %>
-		</select>
-		<button id="btnElegirPrestamo" class="btnSeleccionar"
-			onclick="getCuotasPretamo()">Elegir prestamo</button>
-	</section>
+    <!-- Selector de préstamos -->
+    <section class="container mb-4">
+        <div class="form-group">
+            <label>SELECCIONAR PRESTAMO</label>
+            <select class="form-control" id="select-prestamo">
+                <option value="-1">Seleccione un prestamo</option>
+                <% if (!prestamoList.isEmpty()) {
+                    for(Prestamo p : prestamoList) { %>
+                        <option value="<%=p.getId()%>">
+                            Codigo: <%=p.getId()%> - Monto: $<%=p.getImporteMensualAPagar()%>
+                        </option>
+                    <% }
+                } %>
+            </select>
+            <button id="btnElegirPrestamo" class="btn btn-primary mt-2" onclick="getCuotasPrestamo()">
+                Elegir prestamo
+            </button>
+        </div>
+    </section>
 
-	<% if (cuentaSeleccionada != null) { %>
-	<section class="Cuenta" style="margin-bottom: 30px;">
-		<div class="Cuenta-Tipo">
-			<label id="lblCuentaTipo"> <%= cuentaSeleccionada.getTipo().getId() == 1 ? "CA$" : "CC$" %>
-			</label>
-		</div>
-		<div class="Cuenta-Detalle">
-			<label>$<%= String.format("%.2f", currentSaldo) %></label> <label
-				id="lblDetalleCuenta"> <%= cuentaSeleccionada.getTipo().getDescripcion() %>
-				- Cuenta Nro: <%= cuentaSeleccionada.getId() %>
-			</label>
-		</div>
-	</section>
-	<% } %>
+    <!-- Información de la cuenta -->
+    <% if(cuentaActual.getTipo().getId() == 1) { %>
+    <section class="container mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title"><%=cuentaActual.getTipo().getDescripcion()%> - Cuenta Nro: <%=cuentaActual.getId()%></h5>
+                <p class="card-text">Saldo disponible: $<%= String.format("%.2f", currentSaldo) %></p>
+            </div>
+        </div>
+    </section>
+    <% } %>
 
-	<section class="detalle-cuota mb-5">
-		<table
-			class="table text-dark shadow-lg p-3 mb-5 bg-body-tertiary rounded"
-			id="tabla-cuotas"
-			style="display: none; text-align: center; width: 80%; margin: auto;">
-			<tr class="" style="text-align: center;">
-				<th>Cuota</th>
-				<th>Importe</th>
-				<th>Fecha de pago</th>
-				<th>Fecha vencimiento</th>
-				<th>Estado</th>
-				<th>Pagar</th>
-			</tr>
-			<% 
-            if (cuotasList != null && !cuotasList.isEmpty()) {
-                for(CuotaPrestamo c : cuotasList){ 
-            %>
-			<tr class="cuotasTr cuoPrestamo-<%=c.getPrestamoId()%>"
-				style="display: none">
-				<td><%=c.getNumeroCuota()%></td>
-				<td>$<%= String.format("%.2f", c.getMonto())%></td>
-				<td><%= c.getFechaPago() == null ? "-" : c.getFechaPago() %></td>
-				<td><%=c.getFechaVencimiento() %></td>
-				<td><%= c.getEstado() ? "Pendiente de pago" : "Pago" %></td>
-				<td>
-					<button class="btn btn-outline-success fw-bold"
-						onclick="cuotaSeleccionada(<%=c.getId()%>, <%=c.getMonto()%>);">Pagar</button>
-				</td>
-			</tr>
-			<% 
-                } 
-            } 
-            %>
-		</table>
-	</section>
+    <!-- Tabla de cuotas -->
+    <section class="container mb-5">
+        <div class="table-responsive">
+            <table class="table table-hover" id="tabla-cuotas" style="display: none;">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Cuota</th>
+                        <th>Importe</th>
+                        <th>Fecha de pago</th>
+                        <th>Fecha vencimiento</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for(CuotaPrestamo c : cuotasList) { %>
+                    <tr class="cuotasTr cuoPrestamo-<%=c.getPrestamoId()%>" style="display: none">
+                        <td><%=c.getNumeroCuota()%></td>
+                        <td>$<%= String.format("%.2f", c.getMonto())%></td>
+                        <td><%= c.getFechaPago() == null ? "-" : c.getFechaPago() %></td>
+                        <td><%=c.getFechaVencimiento()%></td>
+                        <td><%= c.getEstado() ? "Pendiente de pago" : "Pagado" %></td>
+                        <td>
+                            <% if(c.getEstado()) { %>
+                            <button class="btn btn-success btn-sm"
+                                    onclick="cuotaSeleccionada(<%=c.getId()%>, <%=c.getMonto()%>, <%= cuentasList.get(0).getCliente().getId() %>);"
+                                    <%= currentSaldo.compareTo(BigDecimal.valueOf(c.getMonto())) < 0 ? "disabled" : "" %>>
+                                Pagar
+                            </button>
+                            <% } else { %>
+                            <span class="badge badge-success">Completado</span>
+                            <% } %>
+                        </td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </section>
 
-	<form method="post" action="ServletCuota" hidden>
-		<input type="text" hidden id="IdCuotaAPagar" name="IdCuotaAPagar">
-		<input type="text" hidden id="NroCuenta" name="NroCuenta"
-			value="<%= cuentaSeleccionada != null ? cuentaSeleccionada.getId() : "" %>">
-		<input type="text" hidden id="impCuot" name="impCuota"> <input
-			type="text" name="OPPAGARCUOTA">
-	</form>
+    <!-- Formulario oculto para el pago -->
+    <form id="formPago" method="post" action="ServletCuota" style="display: none;">
+        <input type="hidden" id="IdCuotaAPagar" name="IdCuotaAPagar">
+        <input type="hidden" id="NroCuenta" name="NroCuenta" value="<%= cuentaActual.getId() %>">
+        <input type="hidden" id="impCuota" name="impCuota">
+        <input type="hidden" id="clienteId" name="clienteId">
+        <input type="hidden" name="OPPAGARCUOTA" value="PAGAR">
+    </form>
 
-	<script>
-    function cuotaSeleccionada(idCuota, importe){
-        var requestID = document.getElementById("IdCuotaAPagar");
-        var requestImporte = document.getElementById("impCuot");
-        requestID.value = idCuota;
-        requestImporte.value = importe;
-
-        <% if (cuentaSeleccionada != null) { %>
-        if (importe > <%= currentSaldo %>) {
+    <script>
+    function cuotaSeleccionada(idCuota, importe, clienteId) {
+        const saldoDisponible = <%= currentSaldo %>;
+        
+        if (importe > saldoDisponible) {
             alert("No tiene saldo suficiente para realizar el pago.");
             return;
         }
-        <% } %>
 
-        if(confirm("Presione aceptar para confirmar el pago de la cuota...")){
-            document.forms[0].submit();
-        } else {
-            alert("Pago cancelado");
+        if(confirm("¿Está seguro que desea pagar la cuota por $" + importe + "?")) {
+            document.getElementById("IdCuotaAPagar").value = idCuota;
+            document.getElementById("impCuota").value = importe;
+            document.getElementById("clienteId").value = clienteId;
+            document.getElementById("formPago").submit();
         }
     }
 
-    var tabla = document.getElementById("tabla-cuotas");
-    var prestamoSeleccionado = document.getElementById("select-prestamo");
+    function getCuotasPrestamo() {
+        const prestamoId = document.getElementById("select-prestamo").value;
+        const tabla = document.getElementById("tabla-cuotas");
+        const todasLasCuotas = document.querySelectorAll('.cuotasTr');
         
-    function getCuotasPretamo(){
-        var btnElegirPrestamo = document.getElementById("btnElegirPrestamo");
-        var CodPrestamo = prestamoSeleccionado.options[prestamoSeleccionado.selectedIndex].value;
+        // Ocultar todas las cuotas
+        todasLasCuotas.forEach(cuota => cuota.style.display = 'none');
         
-        var allCuo = document.querySelectorAll('.cuotasTr');
-        OcultarCuotas(allCuo);
-        
-        if (CodPrestamo != -1){
-            var cuotasPrestamoSeleccionado = document.querySelectorAll(".cuoPrestamo-"+CodPrestamo);
-            MostrarCuotas(cuotasPrestamoSeleccionado);
-            MostrarTabla();
+        if (prestamoId !== "-1") {
+            // Mostrar cuotas del préstamo seleccionado
+            document.querySelectorAll(".cuoPrestamo-" + prestamoId)
+                .forEach(cuota => cuota.style.display = 'table-row');
+            tabla.style.display = 'table';
         } else {
-            OcultarTabla();
+            tabla.style.display = 'none';
         }
-    }
-
-    function OcultarCuotas(allCuo){
-        for (var cuo of allCuo){
-            cuo.style.display = 'none';
-        }   
-    }
-    
-    function MostrarCuotas(allCuo){
-        for (var cuo of allCuo){
-            cuo.style.display = "";
-        }   
-    }
-    
-    function OcultarTabla(){
-        tabla.style.display = 'none';
-    }
-    
-    function MostrarTabla(){
-        tabla.style.display = '';
     }
     </script>
 </body>

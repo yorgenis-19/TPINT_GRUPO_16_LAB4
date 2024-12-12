@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import entidad.Cuenta;
+import negocioImpl.ClienteNegocioImpl;
 import negocioImpl.CuentaNegocioImpl;
 import negocioImpl.CuotasNegocioImpl;
 
@@ -52,11 +53,15 @@ public class ServletCuota extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		RequestDispatcher rd;
+		System.out.println("Valor de OPPAGARCUOTA: " + request.getParameter("OPPAGARCUOTA"));
 		if(request.getParameter("OPPAGARCUOTA")!=null) {
+			System.out.println("entra al OPPAGARCUOTA:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx xx x x xxxxxxxxxxxxxxxxxx************************ ");
 			if(pagarCuota(request, response)) {
 				int nroCta = Integer.parseInt(request.getParameter("NroCuenta"));
 				CuentaNegocioImpl cuentaNegocio = new CuentaNegocioImpl();
-			    List<Cuenta> cuentasActualizadas = cuentaNegocio.ObtenerCuentasxClienteID(nroCta);
+				int clienteId = Integer.parseInt(request.getParameter("clienteId"));
+				
+				List<Cuenta> cuentasActualizadas = cuentaNegocio.ObtenerCuentasxClienteID(clienteId);
 			    request.getSession().setAttribute("cuentas", cuentasActualizadas);
 				request.setAttribute("CuotaPaga", true);
 				}
@@ -70,10 +75,12 @@ public class ServletCuota extends HttpServlet {
 	protected boolean pagarCuota(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int idCuota =  Integer.parseInt(request.getParameter("IdCuotaAPagar"));
 		int NroCuenta = Integer.parseInt(request.getParameter("NroCuenta"));
+		int clienteId = Integer.parseInt(request.getParameter("clienteId"));
+		System.out.println("CLIENTEEEEEEEEEEEEEEEEEEEEEEEEE IDIDIDIDIDIDIDIDI" + clienteId);
 		String importe = request.getParameter("impCuota");
 		BigDecimal importeBig = new BigDecimal(importe);
 		CuotasNegocioImpl cuotasneg =  new CuotasNegocioImpl();
-		if(cuotasneg.PagarCuota(NroCuenta, idCuota, importeBig, "ok"))
+		if(cuotasneg.PagarCuota(NroCuenta, idCuota, importeBig, "ok", clienteId))
 			return true;
 		else
 			return false;

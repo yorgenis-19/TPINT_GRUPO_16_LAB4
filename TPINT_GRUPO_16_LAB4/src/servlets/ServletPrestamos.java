@@ -74,7 +74,6 @@ public class ServletPrestamos extends HttpServlet {
 		/*Levanto solo los prestamos activos*/
 		while (it.hasNext()) {
 			Prestamo p = it.next();
-			System.out.println("axxxxaxxxxxxxxxxxxixaixxxxxxxa: " + p);
 			if(p.getIdEstadoPrestamo() == 2) {
 				prestamosActivos.add(p);
 				cuotaList.addAll((ArrayList<CuotaPrestamo>)prestamos.ObtenerCuota(p.getId()));
