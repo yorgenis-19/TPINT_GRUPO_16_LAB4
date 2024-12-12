@@ -49,20 +49,20 @@ public class ServletPrestamosxAutorizar extends HttpServlet {
 	 */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-    	this.cargarPrestamos(request, response);
-		
     	if (request.getParameter("btnRealizarSolicitudPrestamo")!=null) {
 			btnRealizarSolicitudPrestamo(request, response);
 		}
-		
+		if (request.getParameter("getPrestamos") != null) {
+			cargarPrestamos(request, response);
+		}
 		if (request.getParameter("btnAutorizar") != null) {
 			updatePrestamo(request, response,2);
 		}
 		if (request.getParameter("btnRechazar") != null) {
-			updatePrestamo(request, response,0);
+			updatePrestamo(request, response,4);
 		}
-		RequestDispatcher rd = request.getRequestDispatcher("/AltaPrestamo.jsp");
-	    rd.forward(request, response);
+		//RequestDispatcher rd = request.getRequestDispatcher("/AltaPrestamo.jsp");
+	    //rd.forward(request, response);
 		
 	}
 
@@ -75,7 +75,7 @@ public class ServletPrestamosxAutorizar extends HttpServlet {
 		
 		try
 		{
-		pxa.setIdEstadoPrestamo(Integer.parseInt(request.getParameter("codPrestamo")));
+		pxa.setId(Integer.parseInt(request.getParameter("codPrestamo")));
 		pxa.setIdEstadoPrestamo(i);
 		solicitado = pdxaNeg.Update(pxa);
 
@@ -128,7 +128,7 @@ public class ServletPrestamosxAutorizar extends HttpServlet {
 		request.setAttribute("resBoolean", solicitado);
 		request.setAttribute("resString", resString);
 		request.setAttribute("Prestamos", lPrestamos);
-		rd = request.getRequestDispatcher("/AltaPrestamo.jsp");
+		rd = request.getRequestDispatcher("AltaPrestamo.jsp");
 		///rd = request.getRequestDispatcher("/AltaPrestamo.jsp?getPrestamos");
 		rd.forward(request, response);
 	}
@@ -238,8 +238,8 @@ public class ServletPrestamosxAutorizar extends HttpServlet {
 	                BigDecimal importeMensualBD = BigDecimal.valueOf(importeMensual);
 	                nuevoPrestamo.setMontoSolicitado(montoSolicitadoBD);
 	                nuevoPrestamo.setCantidadCuotas(cuotas);
-	                nuevoPrestamo.setCuentaId(2);
-	                nuevoPrestamo.setClienteId(2); // Establecer clienteId
+	                nuevoPrestamo.setCuentaId(cuentaId);
+	                nuevoPrestamo.setClienteId(clienteId); // Establecer clienteId
 	                nuevoPrestamo.setIdEstadoPrestamo(1); // Estado inicial, por ejemplo "pendiente"
 	                nuevoPrestamo.setFechaAlta(new Date(System.currentTimeMillis()));
 	                nuevoPrestamo.setImporteMensualAPagar(importeMensualBD); // Establecer importe mensual
@@ -262,7 +262,7 @@ public class ServletPrestamosxAutorizar extends HttpServlet {
 	    // Establecer los mensajes y redirigir a la vista
 	    request.setAttribute("resBoolean", solicitado);
 	    request.setAttribute("resString", resString);
-	    rd = request.getRequestDispatcher("Cliente.jsp");
+	    rd = request.getRequestDispatcher("SolicitudPrestamo.jsp");
 	    rd.forward(request, response);
 	}
 }

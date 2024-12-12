@@ -75,13 +75,14 @@ public class PrestamosNegocioImpl implements PrestamosNegocio {
 	
 	}
 
-	PrestamosDaoImpl prestamos = new PrestamosDaoImpl();
-	public List<Prestamo> LeerDni(String dni){
-		return prestamos.BuscarDni(dni);
+	
+	@Override
+	public List<Prestamo> BuscarByIdCliente(int id){
+		return pxaDao.BuscarByIdCliente(id);
 	}
 	
 	public List<CuotaPrestamo> ObtenerCuota(int codPrestamo){
-		return prestamos.ObtenerCuota(codPrestamo);
+		return pxaDao.ObtenerCuota(codPrestamo);
 	}
 	
 	

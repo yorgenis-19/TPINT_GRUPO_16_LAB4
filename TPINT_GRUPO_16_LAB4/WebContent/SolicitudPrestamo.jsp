@@ -18,9 +18,12 @@
 <body>
 <%
 Usuario usuario = new Usuario(); 
+ArrayList<Cuenta> cuentasList = new ArrayList<>();
 if(session.getAttribute("UsuarioActual") != null)
 {
 	usuario = (Usuario)session.getAttribute("UsuarioActual");
+	cuentasList = (ArrayList<Cuenta>) request.getSession().getAttribute("cuentasDDL");
+	
 }
 %>
 
@@ -61,13 +64,24 @@ if(session.getAttribute("UsuarioActual") != null)
     <h1 class="text-center mb-4">Nuevo préstamo</h1>
 
     <fieldset>
-        <legend>Solicitud de préstamo para cuenta <%=usuario.getId()%></legend>
+        <legend>Solicitud de préstamo para Usuario <%=usuario.getId()%></legend>
 
         <div class="mb-3">
             <label for="txtMonto" class="form-label">Monto solicitado</label>
             <input id="txtMonto" type="number" step="0.01" required name="txtMonto" class="form-control" placeholder="$..">
         </div>
-
+		<div class="mb-3">
+    		<label for="getCuenta" class="form-label">Seleccione una cuenta</label>
+    			<select name="getCuenta" id="getCuenta" class="form-select">
+				    <% 
+				    for(Cuenta cuenta : cuentasList) { 
+				    %>
+				        <option value="<%= cuenta.getId() %>"><%= cuenta.getCBU() %></option>
+				    <% 
+				    } 
+				    %>
+				</select>
+		</div>
         <div class="mb-3">
             <label for="txtCuotas" class="form-label">Cant. De cuotas</label>
             <select name="txtCuotas" id="txtCuotas" class="form-select">
@@ -83,8 +97,8 @@ if(session.getAttribute("UsuarioActual") != null)
             </select>
         </div>
 
-        <input type="hidden" name="getCuenta" value=<%=usuario.getId()%>>
-        <input type="hidden" name="getCliente" value=<%=usuario.getId()%>>
+
+        <input type="hidden" name="getCliente" value=<%= cuentasList.get(0).getCliente().getId() %>>
 
         <div class="mb-3">
             <button type="submit" class="btn btn-primary" name="btnRealizarSolicitudPrestamo">Solicitar Préstamo</button>

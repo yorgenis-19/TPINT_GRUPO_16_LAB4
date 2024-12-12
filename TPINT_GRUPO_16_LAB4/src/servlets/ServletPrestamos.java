@@ -12,9 +12,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import entidad.Cliente;
 import entidad.CuotaPrestamo;
 import entidad.Prestamo;
 import entidad.Usuario;
+import negocioImpl.ClienteNegocioImpl;
 import negocioImpl.PrestamosNegocioImpl;
 
 
@@ -54,37 +56,42 @@ public class ServletPrestamos extends HttpServlet {
 	
 	public void obtenerPrestamos(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException  {
 		Usuario usuario = new Usuario();
+		Cliente cliente = new Cliente();
 		int nroCuenta = Integer.parseInt(request.getParameter("pagoPrestamos"));
 		ArrayList<Prestamo> prestamosList = new ArrayList<Prestamo>();
 		ArrayList<CuotaPrestamo> cuotaList = new ArrayList<CuotaPrestamo>();
-		usuario = (Usuario)request.getSession().getAttribute("Usuario");
+		usuario = (Usuario)request.getSession().getAttribute("UsuarioActual");
+		
+		ClienteNegocioImpl clienteNegocio = new ClienteNegocioImpl();
 		PrestamosNegocioImpl prestamos = new PrestamosNegocioImpl();
-		//prestamosList=(ArrayList<Prestamo>) prestamos.LeerDni(usuario.getId());	
+		cliente = clienteNegocio.ObtenerPorUsuario(usuario.getId());
+		prestamosList=(ArrayList<Prestamo>) prestamos.BuscarByIdCliente(cliente.getId());	
+		
 		ArrayList<Prestamo> prestamosActivos  = new ArrayList<Prestamo>();
 		ListIterator<Prestamo> it = prestamosList.listIterator();
-		
 		BigDecimal csaldo = new BigDecimal(request.getParameter("getSaldo"));
 		
 		/*Levanto solo los prestamos activos*/
-		/*while (it.hasNext()) {
+		while (it.hasNext()) {
 			Prestamo p = it.next();
-			if(p.getEstado()) {
+			System.out.println("axxxxaxxxxxxxxxxxxixaixxxxxxxa: " + p);
+			if(p.getIdEstadoPrestamo() == 2) {
 				prestamosActivos.add(p);
-				cuotaList.addAll((ArrayList<Cuota>)prestamos.ObtenerCuota(p.getCodPrestamo()));
+				cuotaList.addAll((ArrayList<CuotaPrestamo>)prestamos.ObtenerCuota(p.getId()));
 			}
-		} */
+		} 
 		
-		//if (prestamosActivos != null && cuotaList != null) {
+		if (prestamosActivos != null && cuotaList != null) {
 			request.setAttribute("Prestamos", prestamosActivos);
 			request.setAttribute("NroCuenta", nroCuenta);	
 			request.setAttribute("Cuotas", cuotaList);	
 			request.setAttribute("Saldo", csaldo);
-		//}
-		//else {
-		//	request.setAttribute("SinPrestamos", true);
-		//}
+		}
+		else {
+			request.setAttribute("SinPrestamos", true);
+		}
 		RequestDispatcher rd;
-		rd = request.getRequestDispatcher("/pagarPrestamo.jsp");
+		rd = request.getRequestDispatcher("/PagarPrestamo.jsp");
 		rd.forward(request, response);
 		
 	}

@@ -45,6 +45,11 @@ public class Cuenta {
 	public long getCBU() {
 		return CBU;
 	}
+	@Override
+	public String toString() {
+		return "Cuenta [Id=" + Id + ", Cliente=" + Cliente + ", Monto=" + Monto + ", Activa=" + Activa + ", CBU=" + CBU
+				+ ", Tipo=" + Tipo + ", FechaDeCreacion=" + FechaDeCreacion + "]";
+	}
 	public void setCBU(long cBU) {
 		CBU = cBU;
 	}

@@ -39,13 +39,18 @@ public class ServletLogin extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int filas = 0;
 		if(request.getParameter("btnIngresar") != null) 
+			
 		{
 			Usuario obj = new Usuario();
 			UsuarioNegocio negocio = new UsuarioNegocioImpl();
 			String nombre = request.getParameter("txtUsuario");
 			String clave = request.getParameter("txtClave");
+			CuentaNegocio ctaNeg = new CuentaNegocioImpl();
 			
 			obj = negocio.Obtener(nombre, clave);
+			
+			List<Cuenta> lCta = ctaNeg.ObtenerPorUsuario(obj.getId());
+			System.out.println("objjjjj: " + lCta);
 			if(obj.getId() == 0) {
 				request.setAttribute("usuarioIncorrecto", true);
 				RequestDispatcher rd = request.getRequestDispatcher("/Login.jsp");
@@ -53,6 +58,7 @@ public class ServletLogin extends HttpServlet {
 			} 
 			else {
 				request.getSession().setAttribute("UsuarioActual", obj);
+				request.getSession().setAttribute("cuentasDDL", lCta);
 				
 				if(new String("Cliente").equals(obj.getTipo().getDescripcion()))
 				{

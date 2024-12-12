@@ -1,4 +1,8 @@
 <%@page import="entidad.Usuario"%>
+<%@page import="entidad.Cuenta" %>
+<%@page import="entidad.Usuario" %>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.math.BigDecimal"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -91,11 +95,42 @@
 </head>
 <body>
 <%
-Usuario usuario = new Usuario(); 
-if(session.getAttribute("UsuarioActual") != null)
-{
-	usuario = (Usuario)session.getAttribute("UsuarioActual");
-}
+    // Inicialización de variables
+    Usuario usuario = null;
+    int currentCuenta = -1;
+    float currentSaldo = 0.0f;
+    long currentCbu = -1;
+
+    // Verificar si la sesión tiene el atributo "UsuarioActual"
+    if (session.getAttribute("UsuarioActual") != null) {
+        // Obtener el usuario de la sesión
+        usuario = (Usuario) session.getAttribute("UsuarioActual");
+        
+        // Inicialización de la lista de cuentas
+        ArrayList<Cuenta> listaCuentasddl = (ArrayList<Cuenta>) request.getSession().getAttribute("cuentasDDL");
+        
+        // Depuración
+        System.out.println("Usuario: " + (usuario != null ? usuario.getNombre() : "nulo"));
+        System.out.println("Número de cuentas: " + (listaCuentasddl != null ? listaCuentasddl.size() : "0"));
+        
+        // Verificar si la lista de cuentas no está vacía
+        if (listaCuentasddl != null && !listaCuentasddl.isEmpty()) {
+            // Obtener la primera cuenta de la lista
+            Cuenta cuenta = listaCuentasddl.get(0);
+            
+            currentCuenta = cuenta.getId();
+            currentSaldo = cuenta.getMonto();
+            currentCbu = cuenta.getCBU();
+            
+            // Depuración adicional
+            System.out.println("ID de Cuenta: " + currentCuenta);
+            System.out.println("Saldo: " + currentSaldo);
+        } else {
+            System.out.println("No se encontraron cuentas para el usuario");
+        }
+    } else {
+        System.out.println("No hay usuario en la sesión");
+    }
 %>
 <nav class="navbar bg-success navbar-expand-lg " data-bs-theme="dark">
   <div class="container-fluid">
@@ -152,7 +187,7 @@ if(session.getAttribute("UsuarioActual") != null)
             </div>
             
             <div class="button-wrapper">
-                <form action="AltaPrestamo.jsp" method="get">
+                <form action="SolicitudPrestamo.jsp" method="get">
                     <button type="submit" class="button">
                         <i class="fas fa-hand-holding-usd me-2"></i>
                         Solicitar Préstamo
@@ -161,13 +196,15 @@ if(session.getAttribute("UsuarioActual") != null)
             </div>
             
             <div class="button-wrapper">
-                <form action="PagarPrestamos.jsp" method="get">
-                    <button type="submit" class="button">
-                        <i class="fas fa-file-invoice-dollar me-2"></i>
-                        Pagar Cuotas
-                    </button>
-                </form>
-            </div>
+    			<a href="/TPINT_GRUPO_16_LAB4/ServletPrestamos?pagoPrestamos=<%= currentCuenta %>&getSaldo=<%= currentSaldo %>" 
+       			   class="text-dark fw-bold fs-3" 
+       			   style="color: white;">
+        			<button type="submit" class="button">
+            			<i class="fas fa-file-invoice-dollar me-2"></i>
+            				Pagar cuotas
+        			</button>
+    			</a>
+			</div>
         </div>
     </div>
 

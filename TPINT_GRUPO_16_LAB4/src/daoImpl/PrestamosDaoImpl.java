@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +18,8 @@ import dao.PrestamosDao;
 import entidad.Cuenta;
 import entidad.CuotaPrestamo;
 import entidad.Prestamo;
+
+
 
 
 public class PrestamosDaoImpl implements PrestamosDao {
@@ -30,9 +33,37 @@ public class PrestamosDaoImpl implements PrestamosDao {
             "EstadoId, CantidadDeCuotas, ImporteMensualAPagar) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?)";
 	private static final String readallActive = "SELECT * FROM prestamo";
-	private static final String countallActive = "SELECT COUNT(codPrestamoPendinte) as total  FROM prestamos_x_autorizar where estado = 1";
-	private static final String update = "UPDATE prestamos_x_autorizar SET estado = ? WHERE codPrestamoPendinte = ?";
-	private static final String countAll = "SELECT COUNT(codPrestamoPendinte) as total FROM agregarPrestamoxAutorizar where estado = 1 ORDER by apellido, dni codPrestamoPendinte";
+	private static final String countallActive = "SELECT COUNT(Id) as total  FROM prestamo where EstadoId = 2";
+	private static final String update = "UPDATE prestamo SET estadoId = ? WHERE Id = ?";
+	private static final String countAll = "SELECT COUNT(Id) as total FROM prestamo where estadoId = 1 ORDER by CuentaId, ClienteId, Id";
+	private static final String readallbyid = "SELECT * FROM prestamo WHERE clienteId = ?";
+	private static final String getcuotas = "SELECT * FROM cuota WHERE PrestamoId =  ? ";
+	
+    @Override	
+	public List<Prestamo> BuscarByIdCliente(int id) {
+		PreparedStatement statement;
+		ResultSet resultSet; // Guarda el resultado de la query
+		ArrayList<Prestamo> prestamos = new ArrayList<Prestamo>();
+		Connection conexion = null;
+		System.out.println("el id exxxxxxxxxxxxxx " + id);
+		try {
+			conexion = DriverManager.getConnection(host+dbName,user,pass);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		try {
+			 System.out.println("el id exxxxxxxxxxxxxx " + id);
+			statement = conexion.prepareStatement(readallbyid);
+			statement.setInt(1, id);
+			resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				prestamos.add(getPrestamoxAutorizar(resultSet));
+			}
+		} catch (SQLException e) {
+			System.out.print("Error al Querer obtener todos los registros(SQL ERROR)");
+		}
+		return prestamos;
+	}
 	
 	@Override
 	public boolean Insert(Prestamo prestamo) {
@@ -214,7 +245,7 @@ public class PrestamosDaoImpl implements PrestamosDao {
 		}
 		boolean isUpdateExitoso = false;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
+			Class.forName("com.mysql.jdbc.Driver");
 
 
 		} catch (ClassNotFoundException e) {
@@ -224,7 +255,7 @@ public class PrestamosDaoImpl implements PrestamosDao {
 				statement = conexion.prepareStatement(update);	
 				
 				statement.setInt(1,prestamo.getIdEstadoPrestamo());
-				statement.setBigDecimal(2,prestamo.getMontoSolicitado());
+				statement.setInt(2,prestamo.getId());
 				
 				
 				
@@ -279,17 +310,43 @@ public class PrestamosDaoImpl implements PrestamosDao {
 		return cant;
 	}
 
-	public List<Prestamo> BuscarDni(String dni) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<CuotaPrestamo> ObtenerCuota(int codPrestamo){
+		PreparedStatement statement;
+		ResultSet resultSet; // Guarda el resultado de la query
+		ArrayList<CuotaPrestamo> cuotas = new ArrayList<CuotaPrestamo>();
+		Connection conexion = null;
+		System.out.println("SHHHHHHHHHHH: " + codPrestamo);
+		try {
+			conexion = DriverManager.getConnection(host+dbName,user,pass);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		try {
+			statement = conexion.prepareStatement(getcuotas);
+			statement.setInt(1, codPrestamo);
+			resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				cuotas.add(getCuota(resultSet));
+			}
+		} catch (SQLException e) {
+			 e.printStackTrace();
+			System.out.print("Error al Querer obtener todos los registros(SQL ERROR)");
+		}
+		System.out.print("ESTAS SON LAS CUOTAS: " + cuotas);
+		return cuotas;
 	}
-
-	public List<CuotaPrestamo> ObtenerCuota(int codPrestamo) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	
+	private CuotaPrestamo getCuota(ResultSet resultSet) throws SQLException {
+
+		int id = resultSet.getInt("Id");
+		int prestamoId= resultSet.getInt("PrestamoId");
+		int numeroCuota= resultSet.getInt("Numero");
+		float monto = resultSet.getFloat("Monto");
+		Date fechaPago = resultSet.getDate("FechaPago");
+		Date fechaVencimiento = resultSet.getDate("FechaVencimiento");
+		boolean estado = resultSet.getBoolean("Estado");
+		return new CuotaPrestamo(id, prestamoId, numeroCuota, monto, fechaPago, fechaVencimiento, estado);
+	}
 	
 	
 	

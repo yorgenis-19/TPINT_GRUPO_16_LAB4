@@ -3,6 +3,7 @@ package dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import entidad.CuotaPrestamo;
 import entidad.Prestamo;
 
 public interface PrestamosDao {
@@ -14,6 +15,7 @@ public interface PrestamosDao {
 	public Prestamo BuscarUno(int nroCuenta);
 	public ArrayList<Prestamo> BuscarActivos();
 	public int ContarPrestamos();
-
+	public List<Prestamo> BuscarByIdCliente(int id);
+	public List<CuotaPrestamo> ObtenerCuota(int codPrestamo);
 
 }

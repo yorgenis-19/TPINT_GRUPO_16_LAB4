@@ -3,7 +3,7 @@
 <%@page import="entidad.Usuario"%>
 <%
 if(request.getAttribute("Prestamos") == null) {
-    response.sendRedirect("ServletPrestamosxAutorizar");
+    response.sendRedirect("ServletPrestamosxAutorizar?getPrestamos");
     return;
 }
 %>
@@ -84,7 +84,7 @@ if(request.getAttribute("Prestamos") == null) {
             <div class="collapse navbar-collapse" id="navbarExample01">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item active" style="background-color: highlight;">
-                        <a class="nav-link" href="/TPINT_GRUPO_16_LAB4/Cliente.jsp">
+                        <a class="nav-link" href="/TPINT_GRUPO_16_LAB4/Administrador.jsp">
                             <i class="fas fa-arrow-left"></i> Menu Principal
                         </a>
                     </li>
@@ -123,7 +123,7 @@ if(request.getAttribute("Prestamos") == null) {
         %>
             <tr>
                 <form action="ServletPrestamosxAutorizar" method="GET">
-                    <td><%=p.getIdEstadoPrestamo()%></td>  <!-- Código de préstamo pendiente -->
+                    <td><%=p.getId()%></td>  <!-- Código de préstamo pendiente -->
         			<td><%=p.getCuentaId()%></td>  <!-- Número de cuenta -->
         			<td><%=p.getMontoSolicitado()%></td>  <!-- Importe solicitado -->
         			<td><%=p.getCantidadCuotas()%></td>  <!-- Cuotas -->
@@ -157,7 +157,7 @@ if(request.getAttribute("Prestamos") == null) {
                             </svg>
                         </button>
                     </td>
-                    <input type="hidden" name="codPrestamo" value="<%=p.getIdEstadoPrestamo()%>">
+                    <input type="hidden" name="codPrestamo" value="<%=p.getId()%>">
                 </form>
             </tr>
         <% } } %>
