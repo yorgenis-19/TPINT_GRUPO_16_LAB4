@@ -6,6 +6,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Map"%>
 <%@page import="entidad.Usuario"%>
+<%@ page import="java.util.HashMap" %>
 
 <!DOCTYPE html>
 
@@ -17,11 +18,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* Include external CSS */
         <jsp:include page="style.css"></jsp:include>
     </style>
 </head>
+
 <body>
 <%
     Usuario usuario = new Usuario(); 
@@ -74,7 +77,7 @@
         <button type="submit" name="btnReporte1" class="button button-primary">Generar Informe</button>
     </div>
         <div class="abm_form-column">
-        <button type="submit" class="button button-primary" name="btnReporte2">Generar Informe2</button>
+        <button type="submit" class="button button-primary" name="btnReporte2">Informe Detallado</button>
     </div>
 </form>
 
@@ -91,47 +94,141 @@
         } else if (tipoReporte.equals("cuentasPorTipo")) {
         	Map<String, Object> cuentasPorTipo = (Map<String, Object>) request.getAttribute("cuentasPorTipo");
             if (cuentasPorTipo != null && !cuentasPorTipo.isEmpty()) {
+            	
 %>
-                <div class="report-container">
+                <div class="report-container" >
                     <h2>Cuentas agrupadas por tipo</h2>
-                    <table id="tablaCuentas" class="table table-striped">
+                                     
+                    <table id="tablaCuentas" class="table table-striped" style="max-width: 98%" >
                     <thead>
                         <tr>
                             <th>Tipo de Cuenta</th>
-                             <th>Total de Cuentas</th>
+                            <th>Total de Cuentas</th>
                             <th>Cuentas Activas</th>
                             <th>Cuentas Inactivas</th>
-                            <th>Porcentaje Activas</th>
-                            <th>Porcentaje Inactivas</th>
+                            <th>Préstamos Aprobados</th>
+		                    <th>Préstamos Desaprobados</th>
+		                    <th>Préstamos Pendientes</th>
                             
                         </tr>
                         </thead>
        					<tbody>
                         <%
+                        int totalCuentasActivas = 0;
+                        int totalCuentasInactivas = 0;
+                        int totalPrestamosAprobados = 0;
+                        int totalPrestamosDesaprobados = 0;
+                        int totalPrestamosPendientes = 0;
+                        
                         for (Map.Entry<String, Object> entry : cuentasPorTipo.entrySet()) {
                             Map<String, Integer> cuentaData = (Map<String, Integer>) entry.getValue();
                             String descripcion = entry.getKey();
                             int totalCuentas = cuentaData.get("TotalCuentas");
                             int cuentasActivas = cuentaData.get("CuentasActivas");
                             int cuentasInactivas = cuentaData.get("CuentasInactivas");
+                            int prestamosAprobados = cuentaData.get("PrestamosAprobados");
+                            int prestamosDesaprobados = cuentaData.get("PrestamosDesaprobados");
+                            int prestamosPendientes = cuentaData.get("PrestamosPendientes");
+                            
+                            totalCuentasActivas += cuentasActivas;
+                            totalCuentasInactivas += cuentasInactivas;
+                            totalPrestamosAprobados += prestamosAprobados;
+                            totalPrestamosDesaprobados += prestamosDesaprobados;
+                            totalPrestamosPendientes += prestamosPendientes;
 
-                            double porcentajeActivas = (totalCuentas > 0) ? ((double) cuentasActivas / totalCuentas) * 100 : 0;
-                            double porcentajeInactivas = (totalCuentas > 0) ? ((double) cuentasInactivas / totalCuentas) * 100 : 0;
+
                         %>
                             <tr>
                                 <td><%= descripcion %></td>
                                 <td><%= totalCuentas %></td>
                                 <td><%= cuentasActivas %></td>
                                 <td><%= cuentasInactivas %></td>
-                                <td><%= String.format("%.2f", porcentajeActivas) + "%" %></td>
-                                <td><%= String.format("%.2f", porcentajeInactivas) + "%" %></td>
+                                <td><%= prestamosAprobados %></td>
+		                        <td><%= prestamosDesaprobados %></td>
+		                        <td><%= prestamosPendientes %></td>
                             </tr>
                         <%
                             }
                         %>
                         </tbody>
                     </table>
+                    
                 </div>
+                <div class="grafico-container">
+                <canvas id="graficoCuentas" class="grafico"></canvas>
+                <canvas id="graficoPrestamos" class="grafico"></canvas>
+                </div>
+                
+                <script>
+                    // Datos para las cuentas activas e inactivas
+                    const cuentasActivas = <%= totalCuentasActivas %>;
+                    const cuentasInactivas = <%= totalCuentasInactivas %>;
+
+                    // Datos para los préstamos
+                    const prestamosAprobados = <%= totalPrestamosAprobados %>;
+                    const prestamosDesaprobados = <%= totalPrestamosDesaprobados %>;
+                    const prestamosPendientes = <%= totalPrestamosPendientes %>;
+
+                    // Gráfico de Cuentas
+                    const ctxCuentas = document.getElementById('graficoCuentas').getContext('2d');
+                    new Chart(ctxCuentas, {
+                        type: 'pie',
+                        data: {
+                            labels: ['Cuentas Activas', 'Cuentas Inactivas'],
+                            datasets: [{
+                                data: [cuentasActivas, cuentasInactivas],
+                                backgroundColor: ['#4CAF50', '#F44336'],
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Porcentaje de Cuentas Activas e Inactivas'
+                                }
+                            }
+                        }
+                    });
+
+                    // Gráfico de Préstamos
+                    const ctxPrestamos = document.getElementById('graficoPrestamos').getContext('2d');
+                    new Chart(ctxPrestamos, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Aprobados', 'Desaprobados', 'Pendientes'],
+                            datasets: [{
+                                label: 'Préstamos',
+                                data: [prestamosAprobados, prestamosDesaprobados, prestamosPendientes],
+                                backgroundColor: ['#2196F3', '#FF9800', '#9C27B0'],
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    display: false,
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Préstamos por Estado'
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true, // Asegura que el eje Y comience en cero
+                                    ticks: {
+                                        stepSize: 1, // Esto controla la distancia entre los valores del eje Y
+                                        precision: 0 // Asegura que los valores sean enteros
+                                    }
+                                }
+                            }
+                        }
+                    });
+                </script> 
 <%
             } else {
 %>
@@ -167,7 +264,7 @@
                 sortAscending: ": activar para ordenar columna ascendente",
                 sortDescending: ": activar para ordenar columna descendente"
             },
-            lengthMenu: "Cantidad registros MENU",
+            lengthMenu: "Cantidad registros",
             search: "Buscar:"
         },
         dom: 'lfrtip'

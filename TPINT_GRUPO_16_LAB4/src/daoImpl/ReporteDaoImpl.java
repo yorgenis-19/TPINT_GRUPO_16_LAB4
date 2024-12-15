@@ -40,11 +40,16 @@ public class ReporteDaoImpl implements ReporteDao {
 	    Conexion conexion = new Conexion();
 	    Map<String, Object> resultado = new HashMap<String, Object>();
 
-	    String query = "SELECT CuentaTipo.Descripcion, COUNT(Cuenta.Id) AS TotalCuentas, " +
+	    String query = "SELECT CuentaTipo.Descripcion, " +
+                "COUNT(Cuenta.Id) AS TotalCuentas, " +
                 "SUM(CASE WHEN Cuenta.Activa = 1 THEN 1 ELSE 0 END) AS CuentasActivas, " +
-                "SUM(CASE WHEN Cuenta.Activa = 0 THEN 1 ELSE 0 END) AS CuentasInactivas " +
+                "SUM(CASE WHEN Cuenta.Activa = 0 THEN 1 ELSE 0 END) AS CuentasInactivas, " +
+                "COALESCE(SUM(CASE WHEN Prestamo.EstadoId = 2 THEN 1 ELSE 0 END), 0) AS PrestamosAprobados, " +
+                "COALESCE(SUM(CASE WHEN Prestamo.EstadoId = 4 THEN 1 ELSE 0 END), 0) AS PrestamosDesaprobados, " +
+                "COALESCE(SUM(CASE WHEN Prestamo.EstadoId = 1 THEN 1 ELSE 0 END), 0) AS PrestamosPendientes " +
                 "FROM Cuenta " +
                 "INNER JOIN CuentaTipo ON Cuenta.TipoId = CuentaTipo.Id " +
+                "LEFT JOIN Prestamo ON Prestamo.CuentaId = Cuenta.Id " +
                 "WHERE FechaDeCreacion BETWEEN ? AND ? " +
                 "GROUP BY CuentaTipo.Descripcion";
 
@@ -64,11 +69,17 @@ public class ReporteDaoImpl implements ReporteDao {
 	            int totalCuentas = resultSet.getInt("TotalCuentas");
 	            int cuentasActivas = resultSet.getInt("CuentasActivas");
 	            int cuentasInactivas = resultSet.getInt("CuentasInactivas");
+	            int prestamosAprobados = resultSet.getInt("PrestamosAprobados");
+	            int prestamosDesaprobados = resultSet.getInt("PrestamosDesaprobados");
+	            int prestamosPendientes = resultSet.getInt("PrestamosPendientes");
 	            
 	            Map<String, Integer> cuentaData = new HashMap<>();
 	            cuentaData.put("TotalCuentas", totalCuentas);
 	            cuentaData.put("CuentasActivas", cuentasActivas);
 	            cuentaData.put("CuentasInactivas", cuentasInactivas);
+	            cuentaData.put("PrestamosAprobados", prestamosAprobados);
+	            cuentaData.put("PrestamosDesaprobados", prestamosDesaprobados);
+	            cuentaData.put("PrestamosPendientes", prestamosPendientes);
 	  
 	            resultado.put(descripcion, cuentaData);
 	        }

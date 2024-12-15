@@ -36,10 +36,13 @@
     }
 
     // Encontrar la cuenta actual
-    Cuenta cuentaActual = cuentasList.stream()
-        .filter(c -> c.isActiva() && c.getId() == nroCuenta)
-        .findFirst()
-        .orElse(null);
+    Cuenta cuentaActual = null;
+		for (Cuenta c : cuentasList) {
+    		if (c.isActiva() && c.getId() == nroCuenta) {
+        		cuentaActual = c;
+        		break;
+    	}
+}
 
     if (cuentaActual == null) {
         response.sendRedirect("error.jsp");

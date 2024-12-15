@@ -326,3 +326,21 @@ body {
 .mt-4 { margin-top: 1rem; }
 .mb-4 { margin-bottom: 1rem; }
 .p-4 { padding: 1rem; }
+
+canvas {
+    max-width: 400px;
+    max-height: 300px;
+    margin: 0 auto;
+    display: block;
+}
+.grafico-container {
+    display: flex;
+    justify-content: space-between; /* Espacio entre los gráficos */
+    gap: 5px; /* Espacio entre los elementos */
+    margin: 0 auto;
+}
+
+.grafico {
+    width: 45%; /* Controla el tamaño de cada gráfico */
+    height: 200px; /* Ajusta la altura si es necesario */
+}
