@@ -66,7 +66,7 @@ public class ServletPrestamosxAutorizar extends HttpServlet {
 		
 	}
 
-	private void updatePrestamo(HttpServletRequest request, HttpServletResponse response, int i) throws ServletException, IOException {
+	private void updatePrestamo(HttpServletRequest request, HttpServletResponse response, int nuevoEstado) throws ServletException, IOException {
 		RequestDispatcher rd;
 		PrestamosNegocio pdxaNeg = new PrestamosNegocioImpl();
 		
@@ -77,7 +77,7 @@ public class ServletPrestamosxAutorizar extends HttpServlet {
 		try
 		{
 	    pxa = pdxaNeg.BuscarUno(Integer.parseInt(request.getParameter("codPrestamo")));
-		solicitado = pdxaNeg.Update(pxa);
+		solicitado = pdxaNeg.Update(pxa, nuevoEstado); 
 
 		if(solicitado)
 			resString="Solicitud Procesada Satisfactoriamente";

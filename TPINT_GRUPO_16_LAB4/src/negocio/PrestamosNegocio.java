@@ -17,5 +17,6 @@ public interface PrestamosNegocio {
 	public int ContarPrestamos();
 	public List<Prestamo> BuscarByIdCliente(int id);
 	public List<CuotaPrestamo> ObtenerCuota(int codPrestamo);
+	public boolean Update(Prestamo prestamo, int nuevoEstado);
 	
 }

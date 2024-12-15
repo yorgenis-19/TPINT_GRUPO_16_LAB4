@@ -84,6 +84,22 @@ public class PrestamosNegocioImpl implements PrestamosNegocio {
 	public List<CuotaPrestamo> ObtenerCuota(int codPrestamo){
 		return pxaDao.ObtenerCuota(codPrestamo);
 	}
+
+
+	@Override
+	public boolean Update(Prestamo prestamo, int nuevoEstado) {
+		boolean estado = false;
+
+	    // Verificar que el estado del préstamo sea válido (por ejemplo, que no esté en un estado no permitido)
+	    if (prestamo.getIdEstadoPrestamo() > 0 && nuevoEstado > 0) {
+	        // Llamar al método de actualización del DAO y pasar el estado actualizado
+	        estado = pxaDao.Update(prestamo, nuevoEstado);
+	    } else {
+	        System.out.println("El estado del préstamo no es válido o el nuevo estado es incorrecto.");
+	    }
+
+	    return estado;
+	}
 	
 	
 }

@@ -140,6 +140,9 @@ if(request.getAttribute("Prestamos") == null) {
                         case 2: %>
                             Aprobado
                         <% break;
+                        case 4: %> 
+                        Desaprobado
+                    <% break;
                         default: %>
                             Error
                         <% break;

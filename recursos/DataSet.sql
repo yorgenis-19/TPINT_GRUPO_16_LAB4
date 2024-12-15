@@ -297,3 +297,8 @@ INSERT INTO Cuenta (ClienteId, Monto, Activa, CBU, TipoId, FechaDeCreacion) VALU
 ((SELECT Id FROM Cliente WHERE DNI = '33222003'), 10000, 0, 897546123131, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Caja de Ahorro'), '20241128'),
 ((SELECT Id FROM Cliente WHERE DNI = '33222003'), 10000, 0, 897546123132, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Cuenta Corriente'), '20241129'),
 ((SELECT Id FROM Cliente WHERE DNI = '33222003'), 10000, 0, 897546123133, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Caja de Ahorro'), '20241130');
+
+INSERT INTO EstadoPrestamo(id, descripcion) VALUES 
+(1, 'Pendiente de aprobacion'),
+(2, 'Aprobado'),
+(4, 'Desaprobado')

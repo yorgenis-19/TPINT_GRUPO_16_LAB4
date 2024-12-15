@@ -110,11 +110,13 @@ CREATE TABLE Prestamo
 
 CREATE TABLE Cuota
 (
-    Id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+   Id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     PrestamoId INT,
     Numero INT,
     Monto FLOAT(10,2),
-    Fecha DATE,
+    FechaPago DATE,
+    FechaVencimiento DATE,
+    Estado BOOL,
     FOREIGN KEY (PrestamoId) REFERENCES Prestamo(Id)
 );
 
@@ -130,3 +132,66 @@ END$$
 
 DELIMITER ;
 
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_PAGO_CUOTA`(	
+	IN IdCuota INT, 
+	IN NroCuenta INT,
+	IN tipoMovimiento INT,
+	IN saldo DECIMAL(20,6),
+	IN detalle VARCHAR(200),
+	IN idCliente INT
+)
+BEGIN
+	-- Actualizar la cuota con estado falso y fecha de pago actual
+	UPDATE CUOTA c
+	SET c.estado = FALSE,
+		c.fechaPago = CURDATE()
+	WHERE c.id = IdCuota;
+
+	-- Actualizar el monto de la cuenta
+	UPDATE CUENTA cu
+	SET cu.monto = saldo
+	WHERE cu.Id = NroCuenta;
+
+	-- Insertar un registro en la tabla MOVIMIENTO
+	INSERT INTO MOVIMIENTO (cuentaOrigenId, cuentaDestinoId, importe, fecha, detalle, tipoId)
+	VALUES (
+		NroCuenta, 
+		9,
+		(SELECT c.monto * -1 FROM CUOTA c WHERE c.id = IdCuota),
+		CURDATE(), 
+		detalle,
+		2
+	);
+END$$
+
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER PrestamoCreado
+AFTER INSERT ON prestamo
+FOR EACH ROW
+BEGIN
+	DECLARE x INT DEFAULT 1; 
+	DECLARE fecha_venc DATE; -- Fecha de vencimiento de la cuota
+
+	WHILE x <= NEW.CantidadDeCuotas DO
+	    -- Calcular la fecha de vencimiento como el 23 de cada mes
+	    SET fecha_venc = DATE_ADD(CURRENT_DATE(), INTERVAL (x - 1) MONTH);
+	    SET fecha_venc = DATE_FORMAT(fecha_venc, '%Y-%m-23'); -- Ajustar al día 23
+
+	    -- Insertar la cuota en la tabla cuota
+	    INSERT INTO cuota (PrestamoId, Numero, Monto, Estado, FechaPago, FechaVencimiento)
+	    VALUES (
+	        NEW.Id, -- ID del préstamo
+	        x, -- Número de la cuota
+	        CAST((NEW.MontoSolicitado * 1.15) / NEW.CantidadDeCuotas AS DECIMAL(10,2)), -- Monto de la cuota con interés
+	        TRUE, -- Estado: TRUE (indica "pendiente")
+	        NULL, -- Fecha de pago: NULL
+	        fecha_venc -- Fecha de vencimiento: 23 de ese mes
+	    );
+
+	    SET x = x + 1; -- Incrementar el contador
+	END WHILE;
+END//
+DELIMITER ;

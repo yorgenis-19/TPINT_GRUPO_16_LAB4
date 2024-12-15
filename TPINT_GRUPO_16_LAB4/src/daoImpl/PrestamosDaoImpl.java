@@ -423,8 +423,93 @@ public class PrestamosDaoImpl implements PrestamosDao {
 		boolean estado = resultSet.getBoolean("Estado");
 		return new CuotaPrestamo(id, prestamoId, numeroCuota, monto, fechaPago, fechaVencimiento, estado);
 	}
-	
-	
-	
 
+	@Override
+	public boolean Update(Prestamo prestamo, int nuevoEstado) {
+		PreparedStatement statement = null;
+	    Connection conexion = null;
+	    boolean isUpdateExitoso = false;
+
+	    try {
+	        // Validar que el objeto prestamo no sea nulo y tenga los campos obligatorios
+	        if (prestamo == null || prestamo.getId() == 0) {
+	            throw new IllegalArgumentException("El objeto prestamo o su ID es nulo");
+	        }
+
+	        // Cargar el driver de MySQL
+	        Class.forName("com.mysql.jdbc.Driver");
+
+	        // Establecer conexión a la base de datos
+	        conexion = DriverManager.getConnection(host + dbName + "?useSSL=false", user, pass);
+	        conexion.setAutoCommit(false); // Desactivar auto-commit para manejar transacciones
+
+	        // Preparar la sentencia para actualizar el préstamo con el nuevo estado
+	        String updateQuery = "UPDATE Prestamo SET EstadoId = ? WHERE id = ?";
+	        statement = conexion.prepareStatement(updateQuery);
+	        
+	        // Establecer los parámetros para la actualización del préstamo
+	        statement.setInt(1, nuevoEstado); // Nuevo estado (2 para aprobado, 4 para rechazado, etc.)
+	        statement.setInt(2, prestamo.getId()); // ID del préstamo
+	        int rowsUpdated = statement.executeUpdate();
+	        
+
+	        // Ejecutar la actualización del préstamo
+	        if (rowsUpdated > 0) {
+	            // Si la actualización fue exitosa, también puedes manejar otras actualizaciones (saldo de cuenta, etc.)
+	            if (nuevoEstado == 2) { // Si es aprobado, actualizamos el saldo
+	                BigDecimal montoSolicitado = prestamo.getMontoSolicitado(); // Monto solicitado
+	                int cuentaId = prestamo.getCuentaId(); // ID de la cuenta asociada al préstamo
+
+	                // Actualizar saldo en la tabla Cuenta
+	                String updateSaldoQuery = "UPDATE Cuenta SET Monto = Monto + ? WHERE Id = ?";
+	                try (PreparedStatement ps = conexion.prepareStatement(updateSaldoQuery)) {
+	                    ps.setBigDecimal(1, montoSolicitado); // Monto a agregar a la cuenta
+	                    ps.setInt(2, cuentaId); // ID de la cuenta
+	                    ps.executeUpdate(); // Ejecutar actualización del saldo
+	                }
+	                String insertMovimientoQuery = "INSERT INTO Movimiento (CuentaOrigenId, CuentaDestinoId, Importe, Fecha, Detalle, TipoId) VALUES (?, ?, ?, ?, ?, ?)";
+	                try (PreparedStatement ps = conexion.prepareStatement(insertMovimientoQuery)) {
+	                    // Asumiendo que el movimiento es del tipo "Alta" (estado 2)
+	                	ps.setNull(1, java.sql.Types.INTEGER); // Cuenta origen (generalmente la cuenta que recibe el dinero)
+	                    ps.setInt(2, cuentaId); // Cuenta destino (generalmente la cuenta que recibe el dinero)
+	                    ps.setBigDecimal(3, montoSolicitado); // Importe (monto solicitado)
+	                    ps.setDate(4, new java.sql.Date(System.currentTimeMillis())); // Fecha actual
+	                    ps.setString(5, "Aprobación de préstamo"); // Detalle del movimiento
+	                    ps.setInt(6, 3); // Tipo de movimiento, por ejemplo 'Alta' (debe corresponder con el ID de la tabla MovimientoTipo)
+	                    ps.executeUpdate(); // Insertar el movimiento
+	                }
+	            }
+	            
+	           
+
+	            conexion.commit(); // Confirmar transacción si todo fue exitoso
+	            isUpdateExitoso = true; // Marcar como exitoso
+	        } else {
+	            conexion.rollback(); // Revertir si no se afectaron filas
+	        }
+
+	    } catch (ClassNotFoundException e) {
+	        System.err.println("Error: No se encontró el driver de MySQL: " + e.getMessage());
+	    } catch (SQLException e) {
+	        System.err.println("Error SQL al actualizar el préstamo: " + e.getMessage());
+	        if (conexion != null) {
+	            try {
+	                conexion.rollback(); // Revertir en caso de error
+	            } catch (SQLException ex) {
+	                System.err.println("Error al hacer rollback: " + ex.getMessage());
+	            }
+	        }
+	    } finally {
+	        try {
+	            if (statement != null) statement.close();
+	            if (conexion != null) conexion.close();
+	        } catch (SQLException e) {
+	            System.err.println("Error al cerrar la conexión: " + e.getMessage());
+	        }
+	    }
+
+	    return isUpdateExitoso; // Retornar resultado de la operación
+	}
+
+	
 }
