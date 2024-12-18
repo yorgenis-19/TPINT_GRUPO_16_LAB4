@@ -13,6 +13,7 @@ public class Prestamo {
 	private int idEstadoPrestamo;
 	private int cantidadCuotas;
 	private BigDecimal importeMensualAPagar;
+	private String cbu;
 	
 	public Prestamo() {
 		// TODO Auto-generated constructor stub
@@ -65,6 +66,13 @@ public class Prestamo {
 	public void setImporteMensualAPagar(BigDecimal importeMensualAPagar) {
 		this.importeMensualAPagar = importeMensualAPagar;
 	}
+
+	public String getCbu() {
+		return this.cbu;
+	}
+	public void setCbu(String c) {
+		this.cbu = c;
+	}
 	@Override
 	public String toString() {
 		return "Prestamo [id=" + id + ", clienteId=" + clienteId + ", cuentaId=" + cuentaId + ", fechaAlta=" + fechaAlta
@@ -84,6 +92,17 @@ public class Prestamo {
 	    this.idEstadoPrestamo = estadoId;
 	    this.cantidadCuotas = cantidadDeCuotas;
 	    this.importeMensualAPagar = importeMensualAPagar;
+	}
+	public Prestamo(int id, int clienteId, int cuentaId, Date fechaAlta, BigDecimal montoSolicitado, int estadoId, int cantidadDeCuotas, BigDecimal importeMensualAPagar, String cbu) {
+	    this.id = id;
+	    this.clienteId = clienteId;
+	    this.cuentaId = cuentaId;
+	    this.fechaAlta = fechaAlta;
+	    this.montoSolicitado = montoSolicitado;
+	    this.idEstadoPrestamo = estadoId;
+	    this.cantidadCuotas = cantidadDeCuotas;
+	    this.importeMensualAPagar = importeMensualAPagar;
+	    this.cbu = cbu;
 	}
 	
 }

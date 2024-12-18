@@ -32,7 +32,7 @@ public class PrestamosDaoImpl implements PrestamosDao {
 	private static final String insert = "INSERT INTO Prestamo (ClienteId, CuentaId, FechaAlta, MontoSolicitado, " +
             "EstadoId, CantidadDeCuotas, ImporteMensualAPagar) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?)";
-	private static final String readallActive = "SELECT * FROM prestamo";
+	private static final String readallActive = "SELECT prestamo.*, c.CBU FROM prestamo INNER JOIN Cuenta c ON c.Id = prestamo.CuentaId";
 	private static final String countallActive = "SELECT COUNT(Id) as total  FROM prestamo where EstadoId = 2";
 	private static final String update = "UPDATE prestamo SET estadoId = ? WHERE Id = ?";
 	private static final String countAll = "SELECT COUNT(Id) as total FROM prestamo where estadoId = 1 ORDER by CuentaId, ClienteId, Id";
@@ -358,8 +358,9 @@ public class PrestamosDaoImpl implements PrestamosDao {
 	    int estadoId = resultSet.getInt("EstadoId");
 	    int cantidadDeCuotas = resultSet.getInt("CantidadDeCuotas");
 	    BigDecimal importeMensualAPagar = resultSet.getBigDecimal("ImporteMensualAPagar");
+	    String cbu = resultSet.getString("CBU");
 
-	    return new Prestamo(id, clienteId, cuentaId, fechaAlta, montoSolicitado, estadoId, cantidadDeCuotas, importeMensualAPagar);
+	    return new Prestamo(id, clienteId, cuentaId, fechaAlta, montoSolicitado, estadoId, cantidadDeCuotas, importeMensualAPagar, cbu);
 	}
 
 	

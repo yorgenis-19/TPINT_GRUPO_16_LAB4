@@ -7,14 +7,22 @@ if(request.getAttribute("Prestamos") == null) {
     return;
 }
 %>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" 
+	pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<head>
-<meta charset="ISO-8859-1">
+<head>	
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Prestamos</title>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css">
 <style>
+	<jsp:include page="style.css"></jsp:include>
 .dataTables_filter input {
     padding: 5px;
     border-radius: 5px;
@@ -75,28 +83,34 @@ if(request.getAttribute("Prestamos") == null) {
     String resString = (String) request.getAttribute("resString");
     Boolean solicitado = (Boolean) request.getAttribute("resBoolean");
 
-    Usuario usuario = (Usuario) session.getAttribute("Usuario");
+    Usuario usuario = (Usuario) session.getAttribute("UsuarioActual");
 	%>
-
-<header style="padding: 25px;">
-    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
-        <div class="container-fluid">
-            <div class="collapse navbar-collapse" id="navbarExample01">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item active" style="background-color: highlight;">
-                        <a class="nav-link" href="/TPINT_GRUPO_16_LAB4/Administrador.jsp">
-                            <i class="fas fa-arrow-left"></i> Menu Principal
-                        </a>
-                    </li>
-                </ul>
-                <div class="alert alert-info ml-auto">
-                    <i class="fas fa-user"></i>
-                    <span>User</span>
-                </div>
-            </div>
-        </div>
-    </nav>
+<header>
+<nav class="navbar bg-primary navbar-expand-lg " data-bs-theme="dark">
+  <div class="container-fluid">
+  
+    <a class="navbar-brand" href="Administrador.jsp">
+    	<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 20 20"><path fill="currentColor" fill-rule="evenodd" d="M10 2.682L3.938 6.5h12.124zm.267-1.014a.5.5 0 0 0-.533 0L1.939 6.577c-.424.267-.235.923.267.923h15.588c.502 0 .691-.656.267-.923zM2 17a.5.5 0 0 1 .5-.5h15a.5.5 0 0 1 0 1h-15A.5.5 0 0 1 2 17m1.5-8.5A.5.5 0 0 1 4 9v6a.5.5 0 0 1-1 0V9a.5.5 0 0 1 .5-.5m3 0A.5.5 0 0 1 7 9v6a.5.5 0 0 1-1 0V9a.5.5 0 0 1 .5-.5m3 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V9a.5.5 0 0 1 .5-.5m3 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V9a.5.5 0 0 1 .5-.5m3 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V9a.5.5 0 0 1 .5-.5" clip-rule="evenodd"/></svg>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="Administrador.jsp">Inicio</a>
+        </li>
+      </ul>
+      <form class="d-flex" role="search" method="post" action="ServletLogout">
+      	<span class="username"><%=usuario.getNombre()%></span>
+        <button class="btn btn-secondary" type="submit" name="btnLogout">Cerrar sesion</button>
+      </form>
+    </div>
+   </div>
+</nav>
+    
 </header>
+
 
 
 <div class="container col-8 mt-5 pt-5">
@@ -124,7 +138,7 @@ if(request.getAttribute("Prestamos") == null) {
             <tr>
                 <form action="ServletPrestamosxAutorizar" method="GET">
                     <td><%=p.getId()%></td>  <!-- Código de préstamo pendiente -->
-        			<td><%=p.getCuentaId()%></td>  <!-- Número de cuenta -->
+        			<td><%=p.getCbu()%></td>  <!-- Número de cuenta -->
         			<td><%=p.getMontoSolicitado()%></td>  <!-- Importe solicitado -->
         			<td><%=p.getCantidadCuotas()%></td>  <!-- Cuotas -->
         			<td><%=p.getFechaAlta()%></td>  <!-- Fecha alta -->
