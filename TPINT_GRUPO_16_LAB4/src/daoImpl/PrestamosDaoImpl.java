@@ -232,7 +232,7 @@ public class PrestamosDaoImpl implements PrestamosDao {
 	        
 	        int contadorRegistros = 0;
 	        while (resultSet.next()) {
-	            Prestamo prestamo = getPrestamoxAutorizar(resultSet);
+	            Prestamo prestamo = getPrestamoxAutorizarParaListado(resultSet);
 	            prestamoxAutorizar.add(prestamo);
 	            contadorRegistros++;
 	            
@@ -358,11 +358,24 @@ public class PrestamosDaoImpl implements PrestamosDao {
 	    int estadoId = resultSet.getInt("EstadoId");
 	    int cantidadDeCuotas = resultSet.getInt("CantidadDeCuotas");
 	    BigDecimal importeMensualAPagar = resultSet.getBigDecimal("ImporteMensualAPagar");
+
+	    return new Prestamo(id, clienteId, cuentaId, fechaAlta, montoSolicitado, estadoId, cantidadDeCuotas, importeMensualAPagar);
+	}
+
+	private Prestamo getPrestamoxAutorizarParaListado(ResultSet resultSet) throws SQLException {
+	    int id = resultSet.getInt("Id");
+	    int clienteId = resultSet.getInt("ClienteId");
+	    int cuentaId = resultSet.getInt("CuentaId");
+	    Date fechaAlta = resultSet.getDate("FechaAlta");
+	    BigDecimal montoSolicitado = resultSet.getBigDecimal("MontoSolicitado");
+	    int estadoId = resultSet.getInt("EstadoId");
+	    int cantidadDeCuotas = resultSet.getInt("CantidadDeCuotas");
+	    BigDecimal importeMensualAPagar = resultSet.getBigDecimal("ImporteMensualAPagar");
 	    String cbu = resultSet.getString("CBU");
+	    
 
 	    return new Prestamo(id, clienteId, cuentaId, fechaAlta, montoSolicitado, estadoId, cantidadDeCuotas, importeMensualAPagar, cbu);
 	}
-
 	
 	public int ContarPrestamos() {
 		PreparedStatement statement;

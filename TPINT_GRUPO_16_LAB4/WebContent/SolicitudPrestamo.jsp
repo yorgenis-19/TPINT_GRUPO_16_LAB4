@@ -157,7 +157,7 @@
             currency: 'ARS' 
         }).format(monto);
         
-        return confirm(`¿Está seguro de solicitar el préstamo por ${montoFormateado}?`);
+        return confirm(`¿Está seguro de solicitar el préstamo?`);
     }
 
     function mostrarError(mensaje) {
