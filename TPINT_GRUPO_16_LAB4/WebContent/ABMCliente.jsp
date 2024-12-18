@@ -75,6 +75,7 @@ function eventoSeleccionarProvincia() {
 	boolean errorCuil = request.getAttribute("CUIL_EXISTENTE") != null ? (boolean)request.getAttribute("CUIL_EXISTENTE") : false;
 	boolean errorUsuario = request.getAttribute("USUARIO_EXISTENTE") != null ? (boolean)request.getAttribute("USUARIO_EXISTENTE") : false;
 	boolean errorClave = request.getAttribute("CLAVE_DISTINTA") != null ? (boolean)request.getAttribute("CLAVE_DISTINTA") : false;
+	boolean errorMenorEdad = request.getAttribute("MENOR_EDAD") != null ? (boolean)request.getAttribute("MENOR_EDAD") : false;
 	
 	int filas = request.getAttribute("Filas") != null ? (int)request.getAttribute("Filas") : 0;
 	
@@ -211,6 +212,11 @@ function eventoSeleccionarProvincia() {
 				<div class="col-sm">
 				<label for="txtFechaNacimiento" class="col-sm col-form-label">Fecha de Nacimiento:</label>
 			    <input type="date" class="form-control" value="<%=new SimpleDateFormat("yyyy-MM-dd").format(cliente.getFechaNacimiento()) %>" placeholder="Fecha de Nacimiento" aria-label="Fecha de Nacimiento"  name="txtFechaNacimiento" id="txtFechaNacimiento" required>
+			    <%if(errorMenorEdad){ %>
+			    <div class="invalid-feedback" style="display:block;">
+			      El cliente debe ser mayor de edad.
+			    </div>
+			    <%} %>
 				</div>
 			  <div class="col-sm">
 			  
@@ -232,6 +238,15 @@ function eventoSeleccionarProvincia() {
 		  			<input type="text" class="form-control" value="<%=cliente.getUsuario().getNombre() %>" disabled placeholder="Nombre" aria-label="Nombre" id="txtNombre" name="txtNombre">
 		  		<%} %>
 			  </div>
+			  
+			  
+			  <div class="col-sm">		
+		  		<%if(cliente.getId() == 0){%>
+	    			<label for="txtClave" class="col-sm-2 col-form-label">Clave:</label>
+        			<input type="password" class="form-control" placeholder="Clave" aria-label="Clave" id="txtClave" name="txtClave" required>
+        			
+		  		<%}%>		  	
+			  </div>
 				
 			  <div class="col-sm">
 		  		<%if(cliente.getId() == 0){%>
@@ -247,13 +262,6 @@ function eventoSeleccionarProvincia() {
 			  
 			  
 			  
-			  <div class="col-sm">		
-		  		<%if(cliente.getId() == 0){%>
-	    			<label for="txtClave" class="col-sm-2 col-form-label">Clave:</label>
-        			<input type="password" class="form-control" placeholder="Clave" aria-label="Clave" id="txtClave" name="txtClave" required>
-        			
-		  		<%}%>		  	
-			  </div>
 			</div>
 			
 			<div class="row button-row">

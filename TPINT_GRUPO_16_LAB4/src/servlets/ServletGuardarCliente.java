@@ -3,6 +3,9 @@ package servlets;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
@@ -76,6 +79,13 @@ public class ServletGuardarCliente extends HttpServlet {
 				e.printStackTrace();
 			}
 
+			LocalDate birthLocalDate = fechaNacimiento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+	        LocalDate currentDate = LocalDate.now();
+	        int age = Period.between(birthLocalDate, currentDate).getYears();
+			if(age < 18) {
+				error = true;
+				request.setAttribute("MENOR_EDAD", true);
+			}
 			if(neg.ExisteMail(id, email)) {
 				error = true;
 				request.setAttribute("MAIL_EXISTENTE", true);
@@ -134,7 +144,14 @@ public class ServletGuardarCliente extends HttpServlet {
 				}
 			}
 			request.setAttribute("ClienteActual", obj);
-			
+
+	        ArrayList<Provincia> provincias = new ProvinciaNegocioImpl().ObtenerTodos();
+	        ArrayList<Localidad> localidades = new LocalidadNegocioImpl().ObtenerTodos();
+	        
+	        
+	        request.setAttribute("Provincias", provincias);
+	        request.setAttribute("Localidades", localidades);
+	        
 			if(error)
 			{
 				
@@ -149,10 +166,6 @@ public class ServletGuardarCliente extends HttpServlet {
 		        request.setAttribute("Filas", filas);
 		        request.setAttribute("ClienteActual", obj);
 		        
-		        ArrayList<Provincia> provincias = new ProvinciaNegocioImpl().ObtenerTodos();
-		        request.setAttribute("Provincias", provincias);
-		        ArrayList<Localidad> localidades = new LocalidadNegocioImpl().ObtenerTodos();
-		        request.setAttribute("Localidades", localidades);
 		        RequestDispatcher rd = request.getRequestDispatcher("/ABMCliente.jsp");
 		        rd.forward(request, response);
 			}
