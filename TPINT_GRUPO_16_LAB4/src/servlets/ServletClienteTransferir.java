@@ -60,6 +60,11 @@ public class ServletClienteTransferir extends HttpServlet {
 				error = true;
 				request.setAttribute("ERROR_CuentaDestino", true);
 			}
+			else if(cuentaDestino != null && cuentaDestino.isActiva() == false)
+			{
+				error = true;
+				request.setAttribute("ERROR_CuentaDestino", true);
+			}
 			if(importe > cuentaOrigen.getMonto())
 			{
 				error = true;

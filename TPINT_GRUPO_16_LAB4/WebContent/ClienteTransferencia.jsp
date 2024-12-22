@@ -90,18 +90,18 @@ boolean errorImporte = request.getAttribute("ERROR_Importe") != null ? (boolean)
 	  		  <textarea class="form-control" id="txtDetalle" rows="3" name="txtDetalle" required></textarea>		
 	  		</div>
 			<div class="mb-3">
-			<div class="row">
-				<div class="col">
-					<button type="submit" class="btn btn-success" name="btnTransferir">
-		                TRANSFERIR
-		            </button>
-	            </div>
-				<div class="col">
-		            <a class="btn btn-secondary" href="Cliente.jsp">
-		                VOLVER
-		            </a>
-	            </div>
-			</div>	
+				<div class="row">
+					<div class="col">
+						<button type="submit" class="btn btn-success" name="btnTransferir">
+			                TRANSFERIR
+			            </button>
+		            </div>
+					<div class="col">
+			            <a class="btn btn-secondary" href="Cliente.jsp">
+			                VOLVER
+			            </a>
+		            </div>
+				</div>
 	  		</div>
   		</form>
 	</div>
