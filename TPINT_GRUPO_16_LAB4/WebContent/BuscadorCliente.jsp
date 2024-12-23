@@ -1,3 +1,4 @@
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="entidad.Cliente"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="entidad.Usuario"%>
@@ -10,7 +11,11 @@
 <title>Buscador Clientes</title>
 <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">    
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>    
 <!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <style>
@@ -22,10 +27,13 @@
   }
 </style>
 <script>
-function setDeleteInfo(clientId, clientName) {
-  document.getElementById("clientId").value = clientId;
-  document.getElementById("clienteName").innerText = clientName;
-}
+	function setDeleteInfo(clientId, clientName) {
+	  document.getElementById("clientId").value = clientId;
+	  document.getElementById("clienteName").innerText = clientName;
+	}
+	$(document).ready(function() {
+		$('#table_id').DataTable();
+	});
 </script>
 </head>
 <body>
@@ -99,24 +107,36 @@ if(request.getAttribute("ClientesResultado") != null) {
 	         
         </div>
         <div class="grid-container">
-        	<table class="table table-striped table-hover">
-        		<tr>
+        
+        <table border="1" id="table_id">
+			<thead>	
+				<tr>
         			<th>APELLIDO</th>
         			<th>NOMBRE</th>
         			<th>DNI</th>
+        			<th>C.U.I.L.</th>
         			<th>EMAIL</th>
+        			<th>SEXO</th>
+        			<th>USUARIO</th>
+        			<th>FECHA DE NACIMIENTO</th>
         			<th></th>
         			<th></th>
-        		</tr>
-        		<%
+				</tr>
+			</thead>
+			<tbody>
+				<%
     				if(clientes != null) {
         			for(Cliente obj : clientes) {
-    			%>
-        		<tr>
+				%>	
+				<tr>
         			<td><%=obj.getApellido()%></td>
         			<td><%=obj.getNombre()%></td>
         			<td><%=obj.getDni()%></td>
+        			<td><%=obj.getCuil()%></td>
         			<td><%=obj.getEmail()%></td>
+        			<td><%=obj.getSexo()%></td>
+        			<td><%=obj.getUsuario().getNombre()%></td>
+        			<td><%=new SimpleDateFormat("dd/MM/yyyy").format(obj.getFechaNacimiento())%></td>
         			<td>
 	        			<form method="get" action="ServletVerCliente">
 	        				<input name="Id" value="<%=obj.getId()%>" style="display:none;">
@@ -131,10 +151,13 @@ if(request.getAttribute("ClientesResultado") != null) {
 						      Eliminar
 				    	</button>
                    	</td>
-        		</tr>
-        		<%} 
-        		}%>
-        	</table>
+				</tr>
+        		<% 
+        		}}%>
+			</tbody>
+		</table>
+        
+        
         </div>
         
 	<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
