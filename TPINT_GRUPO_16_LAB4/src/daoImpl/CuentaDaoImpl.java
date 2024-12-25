@@ -147,7 +147,7 @@ public class CuentaDaoImpl implements CuentaDao {
 	                   "FROM Cuenta c " +
 	                   "INNER JOIN CuentaTipo ct ON c.TipoId = ct.Id " +
 	                   "INNER JOIN Cliente cl ON c.ClienteId = cl.Id " +
-	                   "WHERE c.ClienteId = ?";
+	                   "WHERE c.ClienteId = ? AND c.Activa = 1";
 		    Conexion cn = null;
 		    PreparedStatement preparedStatement = null;
 		    ResultSet rs = null;

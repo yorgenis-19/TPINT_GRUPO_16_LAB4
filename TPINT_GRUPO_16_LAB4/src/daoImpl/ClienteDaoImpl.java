@@ -383,7 +383,7 @@ public class ClienteDaoImpl implements ClienteDao {
 	        String query = "SELECT c.*, u.Activo " +
                     "FROM Cliente c " +
                     "JOIN Usuario u ON c.UsuarioId = u.Id " +
-                    "WHERE c.Id = ? AND u.Activo = 1";
+                    "WHERE c.DNI = ? AND u.Activo = 1";
 	        PreparedStatement ps = (PreparedStatement) conexion.prepareStatement(query);
 	        ps.setInt(1, id);
 	        System.out.println("Consulta preparada: " + ps.toString());

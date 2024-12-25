@@ -67,7 +67,7 @@ if (mensajeExito != null) {
 <% } %>
     <form action="ServletNuevaCuenta" method="post">
     <div id="BusquedaCliente">
-        <input type="number" id="IDCliente" name="IDCliente" placeholder="Ingrese el ID del cliente" required>
+        <input type="number" id="IDCliente" name="IDCliente" placeholder="Ingrese el DNI del cliente" required>
         <input type="hidden" name="action" value="buscarCliente">
         <input type="submit" value="Buscar Cliente" class="btn btn-primary">
     </div>
