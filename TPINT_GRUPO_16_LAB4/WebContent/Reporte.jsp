@@ -59,29 +59,29 @@
 
 <h1 class="text-center">Generar Reporte</h1>
 
-<form action="ServletGenerarReporte" method="post" class="abm_form">
-    <div class="abm_form-column">
-        <label for="tipoReporte" class="form-label">Seleccione el tipo de informe:</label>
-        <select id="tipoReporte" name="tipoReporte" class="form-select" required>
-            <option value="saldoTotal">Saldo total por rango de fechas</option>
-            <option value="cuentasPorTipo">Cuentas agrupadas por tipo</option>
-        </select>
-    </div>
-    <div class="abm_form-column">
-        <label for="fechaInicio" class="form-label">Fecha de Inicio:</label>
-        <input type="date" id="fechaInicio" name="fechaInicio" class="form-input" required>
-    </div>
-    <div class="abm_form-column">
-        <label for="fechaFin" class="form-label">Fecha de Fin:</label>
-        <input type="date" id="fechaFin" name="fechaFin" class="form-input" required>
-    </div>
-    <div class="abm_form-column">
-        <button type="submit" name="btnReporte1" class="button button-primary">Generar Informe</button>
-    </div>
+    <form id="formReporte" action="ServletGenerarReporte" method="post" class="abm_form">
         <div class="abm_form-column">
-        <button type="submit" class="button button-primary" name="btnReporte2">Informe Detallado</button>
-    </div>
-</form>
+            <label for="tipoReporte" class="form-label">Seleccione el tipo de informe:</label>
+            <select id="tipoReporte" name="tipoReporte" class="form-select" required>
+                <option value="saldoTotal">Saldo total por rango de fechas</option>
+                <option value="cuentasPorTipo">Cuentas agrupadas por tipo</option>
+            </select>
+        </div>
+        <div class="abm_form-column">
+            <label for="fechaInicio" class="form-label">Fecha de Inicio:</label>
+            <input type="date" id="fechaInicio" name="fechaInicio" class="form-input" required>
+        </div>
+        <div class="abm_form-column">
+            <label for="fechaFin" class="form-label">Fecha de Fin:</label>
+            <input type="date" id="fechaFin" name="fechaFin" class="form-input" required>
+        </div>
+        <div class="abm_form-column">
+            <button type="submit" name="btnReporte1" class="button button-primary">Generar Informe</button>
+        </div>
+        <div class="abm_form-column">
+            <button type="submit" class="button button-primary" name="btnReporte2">Informe Detallado</button>
+        </div>
+    </form>
 
 <%
     String tipoReporte = (String) request.getAttribute("tipoReporte");
@@ -272,6 +272,17 @@
         dom: 'lfrtip'
     });
    });
+</script>
+<script>
+    document.getElementById('formReporte').addEventListener('submit', function(event) {
+        const fechaInicio = new Date(document.getElementById('fechaInicio').value);
+        const fechaFin = new Date(document.getElementById('fechaFin').value);
+
+        if (fechaFin < fechaInicio) {
+            event.preventDefault(); // Prevenir el envío del formulario
+            alert('La fecha de fin debe ser mayor o igual a la fecha de inicio.');
+        }
+    });
 </script>
 </body>
 </html>
