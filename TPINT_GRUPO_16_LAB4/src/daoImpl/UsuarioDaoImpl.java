@@ -1,11 +1,10 @@
 package daoImpl;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import dao.UsuarioDao;
@@ -14,186 +13,170 @@ import entidad.UsuarioTipo;
 
 public class UsuarioDaoImpl implements UsuarioDao {
 
-	private String host = "jdbc:mysql://localhost:3306/";
-	private String user ="root";
-    private String pass = "root";
-	private String dbName = "bancotp";
-	
-	@Override
-	public Usuario Obtener(String nombre, String clave) throws SQLException {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-		} catch(ClassNotFoundException e)
-		{
-			e.printStackTrace();
-		}
-		
-		Usuario usuario = new Usuario();
-		Connection cn = null;
-		try
-		{
-			cn = DriverManager.getConnection(host+dbName,user,pass);
-			Statement st = cn.createStatement();
-			 System.out.println("Ejecutando consulta con:");
-		        System.out.println("Nombre: " + nombre);
-		        System.out.println("Clave: " + clave);
-			String query = "SELECT * FROM Usuario WHERE Nombre = '" + nombre + "' AND Clave = '" + clave + "'";
-			ResultSet rs = st.executeQuery(query);
-			while(rs.next())
-			{	
-				usuario.setId(rs.getInt("Id"));
-				usuario.setNombre(rs.getString("Nombre"));
-				usuario.setClave(rs.getString("Clave"));
-				UsuarioTipo tipo = new UsuarioTipo();
-				tipo = new UsuarioTipoDaoImpl().Obtener(rs.getInt("TipoId"));
-				usuario.setTipo(tipo);
-				usuario.setActivo(rs.getBoolean("Activo"));
-			}
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-			
-		}
-		finally{
-		 if(cn!=null) {
-			 cn.close();			 
-		 }
-		}
-		return usuario;
-	}
+    private Conexion conexion;
 
+    public UsuarioDaoImpl() {
+        this.conexion = new Conexion();
+    }
 
-	@Override
-	public Usuario Obtener(int id) {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-		} catch(ClassNotFoundException e)
-		{
-			e.printStackTrace();
-		}
-		
-		Usuario usuario = new Usuario();
-		Connection cn = null;
-		try
-		{
-			cn = DriverManager.getConnection(host+dbName,user,pass);
-			Statement st = cn.createStatement();
-			String query = "SELECT * FROM Usuario WHERE Id = " + id;
-			ResultSet rs = st.executeQuery(query);
-			while(rs.next())
-			{	
-				usuario.setId(rs.getInt("Id"));
-				usuario.setNombre(rs.getString("Nombre"));
-				usuario.setClave(rs.getString("Clave"));
-				UsuarioTipo tipo = new UsuarioTipo();
-				tipo = new UsuarioTipoDaoImpl().Obtener(rs.getInt("TipoId"));
-				usuario.setTipo(tipo);
-				usuario.setActivo(rs.getBoolean("Activo"));
-			}
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		finally {
-			if(cn != null) {
-				try {
-					cn.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		return usuario;
-	}
+    @Override
+    public Usuario Obtener(String nombre, String clave) throws SQLException {
+        Usuario usuario = new Usuario();
+        Connection cn = null;
+        PreparedStatement statement = null;
+        ResultSet rs = null;
 
+        try {
+            cn = conexion.Open();
+            String query = "SELECT * FROM Usuario WHERE Nombre = ? AND Clave = ?";
+            statement = cn.prepareStatement(query);
+            statement.setString(1, nombre);
+            statement.setString(2, clave);
+            rs = statement.executeQuery();
 
-	@Override
-	public int Guardar(Usuario obj) {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-		} catch(ClassNotFoundException e)
-		{
-			e.printStackTrace();
-		}
-		
-		String query = "INSERT INTO `Usuario`(`Nombre`,`Clave`,`TipoId`,`Activo`)VALUES('"+obj.getNombre()+"','"+obj.getClave()+"',"+obj.getTipo().getId()+","+obj.getActivo()+")";
-		if(obj.getId() > 0)
-		{
-			query = "UPDATE Usuario SET Nombre = '"+obj.getNombre()+"', Clave = '"+obj.getClave()+"', TipoId = "+obj.getTipo().getId()+", Activo = "+obj.getActivo()+" WHERE Id = " + obj.getId();
-		}
-		
-		Connection cn = null;
-		int filas = 0;
-			
-		try {
-			cn = DriverManager.getConnection(host+dbName, user, pass);
-			Statement st = cn.createStatement();
-			filas = st.executeUpdate(query);
-		} 
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
-		finally {
-			if(cn != null) {
-				try {
-					cn.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		return filas;
-	}
+            while (rs.next()) {
+                usuario.setId(rs.getInt("Id"));
+                usuario.setNombre(rs.getString("Nombre"));
+                usuario.setClave(rs.getString("Clave"));
+                UsuarioTipo tipo = new UsuarioTipoDaoImpl().Obtener(rs.getInt("TipoId"));
+                usuario.setTipo(tipo);
+                usuario.setActivo(rs.getBoolean("Activo"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (statement != null) statement.close();
+                if (cn != null) conexion.close();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        return usuario;
+    }
 
+    @Override
+    public Usuario Obtener(int id) {
+        Usuario usuario = new Usuario();
+        Connection cn = null;
+        PreparedStatement statement = null;
+        ResultSet rs = null;
 
-	@Override
-	public ArrayList<Usuario> Obtener(String nombre, int tipoId, String activo) {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-		} catch(ClassNotFoundException e)
-		{
-			e.printStackTrace();
-		}
-		
-		ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
-		Connection cn = null;
-		try
-		{
-			cn = DriverManager.getConnection(host+dbName,user,pass);
-			Statement st = cn.createStatement();
-			String query = "select * from usuario WHERE Nombre LIKE '%"+nombre+"%'";
-			if(tipoId != 0)
-			{
-				query += " AND TipoId = " +tipoId;
-			}
-			if(activo.equals("ACTIVO"))
-			{
-				query += " AND Activo = true";
-			}
-			else if (activo.equals("BAJA"))
-			{
-				query += " AND Activo = false";
-			}
-			ResultSet rs = st.executeQuery(query);
-			while(rs.next())
-			{	
-				Usuario usuario = new Usuario();
-				usuario.setId(rs.getInt("Id"));
-				usuario.setNombre(rs.getString("Nombre"));
-				usuario.setClave(rs.getString("Clave"));
-				UsuarioTipo tipo = new UsuarioTipo();
-				tipo = new UsuarioTipoDaoImpl().Obtener(rs.getInt("TipoId"));
-				usuario.setTipo(tipo);
-				usuario.setActivo(rs.getBoolean("Activo"));
-				usuarios.add(usuario);
-			}
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		return usuarios;
-	}
+        try {
+            cn = conexion.Open();
+            String query = "SELECT * FROM Usuario WHERE Id = ?";
+            statement = cn.prepareStatement(query);
+            statement.setInt(1, id);
+            rs = statement.executeQuery();
+
+            while (rs.next()) {
+                usuario.setId(rs.getInt("Id"));
+                usuario.setNombre(rs.getString("Nombre"));
+                usuario.setClave(rs.getString("Clave"));
+                UsuarioTipo tipo = new UsuarioTipoDaoImpl().Obtener(rs.getInt("TipoId"));
+                usuario.setTipo(tipo);
+                usuario.setActivo(rs.getBoolean("Activo"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (statement != null) statement.close();
+                if (cn != null) conexion.close();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        return usuario;
+    }
+
+    @Override
+    public int Guardar(Usuario obj) {
+        Connection cn = null;
+        PreparedStatement statement = null;
+        int filas = 0;
+
+        String query = "INSERT INTO Usuario (Nombre, Clave, TipoId, Activo) VALUES (?, ?, ?, ?)";
+        if (obj.getId() > 0) {
+            query = "UPDATE Usuario SET Nombre = ?, Clave = ?, TipoId = ?, Activo = ? WHERE Id = ?";
+        }
+
+        try {
+            cn = conexion.Open();
+            statement = cn.prepareStatement(query);
+            statement.setString(1, obj.getNombre());
+            statement.setString(2, obj.getClave());
+            statement.setInt(3, obj.getTipo().getId());
+            statement.setBoolean(4, obj.getActivo());
+
+            if (obj.getId() > 0) {
+                statement.setInt(5, obj.getId());
+            }
+
+            filas = statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (statement != null) statement.close();
+                if (cn != null) conexion.close();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        return filas;
+    }
+
+    @Override
+    public ArrayList<Usuario> Obtener(String nombre, int tipoId, String activo) {
+        ArrayList<Usuario> usuarios = new ArrayList<>();
+        Connection cn = null;
+        PreparedStatement statement = null;
+        ResultSet rs = null;
+
+        try {
+            cn = conexion.Open();
+            StringBuilder query = new StringBuilder("SELECT * FROM Usuario WHERE Nombre LIKE ?");
+            if (tipoId != 0) {
+                query.append(" AND TipoId = ?");
+            }
+            if (activo.equals("ACTIVO")) {
+                query.append(" AND Activo = true");
+            } else if (activo.equals("BAJA")) {
+                query.append(" AND Activo = false");
+            }
+
+            statement = cn.prepareStatement(query.toString());
+            statement.setString(1, "%" + nombre + "%");
+            if (tipoId != 0) {
+                statement.setInt(2, tipoId);
+            }
+
+            rs = statement.executeQuery();
+
+            while (rs.next()) {
+                Usuario usuario = new Usuario();
+                usuario.setId(rs.getInt("Id"));
+                usuario.setNombre(rs.getString("Nombre"));
+                usuario.setClave(rs.getString("Clave"));
+                UsuarioTipo tipo = new UsuarioTipoDaoImpl().Obtener(rs.getInt("TipoId"));
+                usuario.setTipo(tipo);
+                usuario.setActivo(rs.getBoolean("Activo"));
+                usuarios.add(usuario);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (statement != null) statement.close();
+                if (cn != null) conexion.close();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        return usuarios;
+    }
 }
