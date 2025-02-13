@@ -67,7 +67,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card shadow">
-                    <div class="card-header bg-primary text-white">
+                    <div class="card-header bg-success text-white">
                         <h4 class="mb-0 text-center">Solicitud de Préstamo</h4>
                     </div>
                     <div class="card-body">
@@ -116,7 +116,7 @@
                             <input type="hidden" name="getCliente" value="<%= cuentasList.get(0).getCliente().getId() %>">
 
                             <div class="form-group text-center">
-                                <button type="submit" class="btn btn-primary btn-lg" name="btnRealizarSolicitudPrestamo">
+                                <button type="submit" class="btn btn-success btn-lg" name="btnRealizarSolicitudPrestamo">
                                     Solicitar Préstamo
                                 </button>
                             </div>
