@@ -31,6 +31,7 @@
 	  document.getElementById("clientId").value = clientId;
 	  document.getElementById("clienteName").innerText = clientName;
 	}
+	
 	$(document).ready(function() {
 		$('#table_id').DataTable();
 	});

@@ -11,6 +11,10 @@
 	<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
@@ -24,20 +28,6 @@
             text-align: center;
             margin-bottom: 20px;
         }
-        .button-wrapper {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .abm-table {
-            margin-top: 20px;
-            width: 100%;
-        }
-        .table-actions {
-            display: flex;
-            gap: 10px;
-        }
     </style>
 
 <script>
@@ -45,6 +35,9 @@ function setDeleteInfo(usuarioId, usuarioName) {
   document.getElementById("usuarioId").value = usuarioId;
   document.getElementById("usuarioName").innerText = usuarioName;
 }
+$(document).ready(function() {
+	$('#table_id').DataTable();
+});
 </script>
 </head>
 <%
@@ -127,6 +120,39 @@ function setDeleteInfo(usuarioId, usuarioName) {
         </div>
 
         <div class="grid-container">
+        
+        <table border="1" id="table_id">
+			<thead>	
+				<tr>
+        			<th>NOMBRE</th>
+        			<th>TIPO</th>
+        			<th>ACTIVO</th>
+        			<th></th>
+				</tr>
+			</thead>
+			<tbody>
+        		<%
+    				if(usuarios != null) {
+        			for(Usuario obj : usuarios) {
+    			%>
+				<tr>
+        			<td><%=obj.getNombre()%></td>
+        			<td><%=obj.getTipo().getDescripcion()%></td>
+        			<td><%=obj.getActivoStr()%></td>
+                    <td>
+					    <input name="Id" value="<%=obj.getId()%>" id="hiddenUsuarioId" style="display:none;">
+					    <%if(obj.getActivo()) {%>
+					    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" onclick="setDeleteInfo(<%=obj.getId()%>, '<%=obj.getNombre()%>')">
+						      Baja
+				    	</button>
+				    	<%}%>
+                   	</td>
+				</tr>
+        		<% 
+        		}}%>
+			</tbody>
+		</table>
+        <%-- 
         	<table class="table table-striped table-hover">
         		<tr>
         			<th>NOMBRE</th>
@@ -164,7 +190,7 @@ function setDeleteInfo(usuarioId, usuarioName) {
         		</tr>
         		<%} 
         		}%>
-        	</table>
+        	</table>--%>
         </div>
         
  
