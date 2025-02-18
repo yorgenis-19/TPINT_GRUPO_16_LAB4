@@ -34,29 +34,48 @@
     ArrayList<Prestamo> prestamoList = (ArrayList<Prestamo>) request.getAttribute("Prestamos");
     ArrayList<CuotaPrestamo> cuotasList = (ArrayList<CuotaPrestamo>) request.getAttribute("Cuotas");
     ArrayList<Cuenta> cuentasList = (ArrayList<Cuenta>) request.getSession().getAttribute("cuentasDDL");
-    Integer nroCuenta = (Integer) request.getAttribute("NroCuenta");
+    
     BigDecimal currentSaldo = (BigDecimal) request.getAttribute("Saldo");
+    Cuenta cuentaSeleccionada = (Cuenta) request.getAttribute("cuentaSeleccionada");
+    
+    Integer nroCuenta = null;
+    if (cuentaSeleccionada == null && cuentasList != null && !cuentasList.isEmpty()) {
+        cuentaSeleccionada = cuentasList.get(0);
+        nroCuenta = cuentaSeleccionada.getId();
+    } else if (cuentaSeleccionada != null) {
+        nroCuenta = cuentaSeleccionada.getId();
+    }
 
-    // Validación de parámetros necesarios
-    if (prestamoList == null || cuotasList == null || cuentasList == null || nroCuenta == null || currentSaldo == null) {
-        request.setAttribute("error", "Error en la carga de datos. Por favor, intente nuevamente.");
+
+
+ // Validación de parámetros necesarios
+    if (prestamoList == null || cuotasList == null || cuentasList == null || nroCuenta == null || currentSaldo == null || cuentaSeleccionada == null) {
+        System.out.println("=== INICIO DE LOGS DE VALIDACIÓN ===");
+        System.out.println("prestamoList: " + (prestamoList == null ? "ES NULL" : "Contiene " + prestamoList.size() + " elementos"));
+        System.out.println("cuotasList: " + (cuotasList == null ? "ES NULL" : "Contiene " + cuotasList.size() + " elementos"));
+        System.out.println("cuentasList: " + (cuentasList == null ? "ES NULL" : "Contiene " + cuentasList.size() + " elementos"));
+        System.out.println("nroCuenta: " + (nroCuenta == null ? "ES NULL" : nroCuenta));
+        System.out.println("currentSaldo: " + (currentSaldo == null ? "ES NULL" : currentSaldo));
+        System.out.println("cuentaSeleccionada: " + (cuentaSeleccionada == null ? "ES NULL" : cuentaSeleccionada));
+        System.out.println("=== FIN DE LOGS DE VALIDACIÓN ===");
+
+        StringBuilder mensajeError = new StringBuilder("Error en la carga de datos: ");
+        if (prestamoList == null) mensajeError.append("Lista de préstamos vacía. ");
+        if (cuotasList == null) mensajeError.append("Lista de cuotas vacía. ");
+        if (cuentasList == null) mensajeError.append("Lista de cuentas vacía. ");
+        if (nroCuenta == null) mensajeError.append("Número de cuenta no especificado. ");
+        if (currentSaldo == null) mensajeError.append("Saldo no disponible. ");
+        if (cuentaSeleccionada == null) mensajeError.append("No ha seleccionado una cuenta. ");
+        
+
+        request.setAttribute("error", mensajeError.toString());
         response.sendRedirect("error.jsp");
         return;
     }
+    System.out.println("=== ULTIMO PARAMETRO ===" + cuentaSeleccionada.getCliente().getId());
+    
 
-    // Encontrar la cuenta actual
-    Cuenta cuentaActual = null;
-		for (Cuenta c : cuentasList) {
-    		if (c.isActiva() && c.getId() == nroCuenta) {
-        		cuentaActual = c;
-        		break;
-    	}
-}
-
-    if (cuentaActual == null) {
-        response.sendRedirect("error.jsp");
-        return;
-    }
+   
     %>
 
 <header>
@@ -86,121 +105,156 @@
  <div class="container page-container">
     <h1 class="mt-5 text-center mb-4">Pagar prestamos</h1>
 
-    <!-- Selector de préstamos -->
-    <section class="container mb-4">
-        <div class="form-group">
-            <label>SELECCIONAR PRESTAMO</label>
-            <select class="form-control" id="select-prestamo">
-                <option value="-1">Seleccione un prestamo</option>
-                <% if (!prestamoList.isEmpty()) {
-                    for(Prestamo p : prestamoList) { %>
-                        <option value="<%=p.getId()%>">
-                            Codigo: <%=p.getId()%> - Monto: $<%=p.getImporteMensualAPagar()%>
-                        </option>
-                    <% }
-                } %>
-            </select>
-            <button id="btnElegirPrestamo" class="btn btn-primary mt-2" onclick="getCuotasPrestamo()">
-                Elegir prestamo
-            </button>
-        </div>
-    </section>
+   <!-- Sección de selectores -->
+<section class="container mb-4">
+    <div class="form-group">
+        <label>SELECCIONAR CUENTA</label>
+        <select class="form-control" id="select-cuenta" name="NroCuenta">
+            <option value="-1">Seleccione una cuenta</option>
+            <% if (!cuentasList.isEmpty()) {
+                for(Cuenta p : cuentasList) { %>
+                    <option value="<%=p.getId()%>" <%= Integer.valueOf(p.getId()).equals(nroCuenta) ? "selected" : "" %>>
+                        CBU: <%=p.getCBU()%> (ID: <%=p.getId()%>)
+                    </option>
+                <% }
+            } %>
+        </select>
+    </div>
+
+    <div class="form-group mt-3">
+        <label>SELECCIONAR PRESTAMO</label>
+        <select class="form-control" id="select-prestamo" name="idPrestamo">
+            <option value="-1">Seleccione un prestamo</option>
+            <% if (!prestamoList.isEmpty()) {
+                for(Prestamo p : prestamoList) { %>
+                    <option value="<%=p.getId()%>">
+                        Codigo: <%=p.getId()%> - Monto: $<%=p.getImporteMensualAPagar()%>
+                    </option>
+                <% }
+            } %>
+        </select>
+    </div>
+
+    <form action="ServletCuota" method="GET">
+        <input type="hidden" name="OP" value="VER_PRESTAMOS">
+        <input type="hidden" id="hiddenNroCuenta" name="NroCuenta" value="">
+        <input type="hidden" id="hiddenIdPrestamo" name="idPrestamo" value="">
+        <button type="submit" class="btn btn-primary mt-3" onclick="return validarYEnviar()">
+            Seleccionar Cuenta y Préstamo
+        </button>
+    </form>
+</section>
+	    
 
     <!-- Información de la cuenta -->
-    <% if(cuentaActual.getTipo().getId() == 1) { %>
+   
     <section class="container mb-4">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title"><%=cuentaActual.getTipo().getDescripcion()%> - Cuenta Nro: <%=cuentaActual.getId()%></h5>
-                <p class="card-text">Saldo disponible: $<%= String.format("%.2f", currentSaldo) %></p>
-            </div>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Cuenta Nro: <%=cuentaSeleccionada.getCBU()%></h5>
+            <p class="card-text">Saldo disponible: $<%= String.format("%.2f", currentSaldo) %></p>
         </div>
-    </section>
-    <% } %>
+    </div>
+</section>
+    
 
-    <!-- Tabla de cuotas -->
-    <section class="container mb-5">
-        <div class="table-responsive">
-            <table class="table table-hover" id="tabla-cuotas" style="display: none;">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>Cuota</th>
-                        <th>Importe</th>
-                        <th>Fecha de pago</th>
-                        <th>Fecha vencimiento</th>
-                        <th>Estado</th>
-                        <th>Acción</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% for(CuotaPrestamo c : cuotasList) { %>
-                    <tr class="cuotasTr cuoPrestamo-<%=c.getPrestamoId()%>" style="display: none">
-                        <td><%=c.getNumeroCuota()%></td>
-                        <td>$<%= String.format("%.2f", c.getMonto())%></td>
-                        <td><%= c.getFechaPago() == null ? "-" : c.getFechaPago() %></td>
-                        <td><%=c.getFechaVencimiento()%></td>
-                        <td><%= c.getEstado() ? "Pendiente de pago" : "Pagado" %></td>
-                        <td>
-                            <% if(c.getEstado()) { %>
-                            <button class="btn btn-success btn-sm"
-                                    onclick="cuotaSeleccionada(<%=c.getId()%>, <%=c.getMonto()%>, <%= cuentasList.get(0).getCliente().getId() %>);"
-                                    <%= currentSaldo.compareTo(BigDecimal.valueOf(c.getMonto())) < 0 ? "disabled" : "" %>>
-                                Pagar
-                            </button>
-                            <% } else { %>
-                            <span class="badge badge-success">Completado</span>
-                            <% } %>
-                        </td>
-                    </tr>
-                    <% } %>
-                </tbody>
-            </table>
-        </div>
-    </section>
-
+   <!-- Tabla de cuotas con visibilidad inicial basada en parámetros -->
+<section class="container mb-5">
+    <div class="table-responsive">
+        <table class="table table-hover" id="tabla-cuotas" 
+               style="display: <%= request.getParameter("idPrestamo") != null && !request.getParameter("idPrestamo").equals("-1") ? "table" : "none" %>;">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Cuota</th>
+                    <th>Importe</th>
+                    <th>Fecha de pago</th>
+                    <th>Fecha vencimiento</th>
+                    <th>Estado</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for(CuotaPrestamo c : cuotasList) { %>
+                <tr class="cuotasTr cuoPrestamo-<%=c.getPrestamoId()%>" 
+                    style="display: <%= String.valueOf(c.getPrestamoId()).equals(request.getParameter("idPrestamo")) ? "table-row" : "none" %>">
+                    <td><%=c.getNumeroCuota()%></td>
+                    <td>$<%= String.format("%.2f", c.getMonto())%></td>
+                    <td><%= c.getFechaPago() == null ? "-" : c.getFechaPago() %></td>
+                    <td><%=c.getFechaVencimiento()%></td>
+                    <td><%= c.getEstado() ? "Pendiente de pago" : "Pagado" %></td>
+                    <td>
+                        <% if(c.getEstado()) { %>
+                        <button class="btn btn-success btn-sm"
+                                onclick="cuotaSeleccionada(<%=c.getId()%>, <%=c.getMonto()%>, <%= cuentaSeleccionada.getCliente().getId() %>);"
+                                <%= currentSaldo.compareTo(BigDecimal.valueOf(c.getMonto())) < 0 ? "disabled" : "" %>>
+                            Pagar
+                        </button>
+                        <% } else { %>
+                        <span class="badge badge-success">Completado</span>
+                        <% } %>
+                    </td>
+                </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</section>
     <!-- Formulario oculto para el pago -->
     <form id="formPago" method="post" action="ServletCuota" style="display: none;">
         <input type="hidden" id="IdCuotaAPagar" name="IdCuotaAPagar">
-        <input type="hidden" id="NroCuenta" name="NroCuenta" value="<%= cuentaActual.getId() %>">
+        <input type="hidden" id="NroCuenta" name="NroCuenta">
         <input type="hidden" id="impCuota" name="impCuota">
         <input type="hidden" id="clienteId" name="clienteId">
         <input type="hidden" name="OPPAGARCUOTA" value="PAGAR">
     </form>
 </div>
-    <script>
-    function cuotaSeleccionada(idCuota, importe, clienteId) {
-        const saldoDisponible = <%= currentSaldo %>;
-        
-        if (importe > saldoDisponible) {
-            alert("No tiene saldo suficiente para realizar el pago.");
-            return;
-        }
+   <script>
+function validarYEnviar() {
+    const selectCuenta = document.getElementById("select-cuenta");
+    const selectPrestamo = document.getElementById("select-prestamo");
+    const hiddenNroCuenta = document.getElementById("hiddenNroCuenta");
+    const hiddenIdPrestamo = document.getElementById("hiddenIdPrestamo");
+    
+    if (selectCuenta.value === "-1") {
+        alert("Por favor, seleccione una cuenta válida");
+        return false;
+    }
+    
+    if (selectPrestamo.value === "-1") {
+        alert("Por favor, seleccione un préstamo válido");
+        return false;
+    }
+    
+    // Actualizar los valores hidden antes de enviar
+    hiddenNroCuenta.value = selectCuenta.value;
+    hiddenIdPrestamo.value = selectPrestamo.value;
+    
+    return true;
+}
 
-        if(confirm("¿Está seguro que desea pagar la cuota por $" + importe + "?")) {
-            document.getElementById("IdCuotaAPagar").value = idCuota;
-            document.getElementById("impCuota").value = importe;
-            document.getElementById("clienteId").value = clienteId;
-            document.getElementById("formPago").submit();
-        }
+function cuotaSeleccionada(idCuota, importe, clienteId) {
+    const saldoDisponible = <%= currentSaldo %>;
+    const cuentaSeleccionada = <%= nroCuenta %>; // Agregamos esta línea
+    
+    if (importe > saldoDisponible) {
+        alert("No tiene saldo suficiente para realizar el pago.");
+        return;
     }
 
-    function getCuotasPrestamo() {
-        const prestamoId = document.getElementById("select-prestamo").value;
-        const tabla = document.getElementById("tabla-cuotas");
-        const todasLasCuotas = document.querySelectorAll('.cuotasTr');
-        
-        // Ocultar todas las cuotas
-        todasLasCuotas.forEach(cuota => cuota.style.display = 'none');
-        
-        if (prestamoId !== "-1") {
-            // Mostrar cuotas del préstamo seleccionado
-            document.querySelectorAll(".cuoPrestamo-" + prestamoId)
-                .forEach(cuota => cuota.style.display = 'table-row');
-            tabla.style.display = 'table';
-        } else {
-            tabla.style.display = 'none';
-        }
+    if(confirm("¿Está seguro que desea pagar la cuota por $" + importe + "?")) {
+        document.getElementById("IdCuotaAPagar").value = idCuota;
+        document.getElementById("NroCuenta").value = cuentaSeleccionada; // Usamos la cuenta seleccionada
+        document.getElementById("impCuota").value = importe;
+        document.getElementById("clienteId").value = clienteId;
+        document.getElementById("formPago").submit();
     }
-    </script>
+}
+
+// Al cargar la página, seleccionar la cuenta actual
+window.onload = function() {
+    const selectCuenta = document.getElementById("select-cuenta");
+    selectCuenta.value = <%= nroCuenta %>;
+}
+</script>
 </body>
 </html>

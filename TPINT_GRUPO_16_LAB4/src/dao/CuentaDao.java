@@ -18,4 +18,5 @@ public interface CuentaDao {
 	boolean insertarCuenta(Cuenta cuenta);
 	public int ValidarCantidad(int clienteId);
 	public boolean actualizarEstadoCuenta(int cuentaId, boolean estado);
+	public Cuenta ObtenerCuentaxNroCuenta(int nroCuenta);
 }

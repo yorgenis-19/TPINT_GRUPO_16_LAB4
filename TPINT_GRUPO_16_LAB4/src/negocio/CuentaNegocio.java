@@ -15,4 +15,5 @@ public interface CuentaNegocio {
 	boolean insertarCuenta(Cuenta cuenta);
 	public boolean ValidarCantidad(int clienteId);
 	public boolean actualizarEstadoCuenta(int cuentaId, boolean estado);
+	public Cuenta ObtenerCuentaxNroCuenta(int nroCuenta);
 }

@@ -476,4 +476,29 @@ public class CuentaDaoImpl implements CuentaDao {
         }
         return resultado;
     }
+    
+    public Cuenta ObtenerCuentaxNroCuenta(int nroCuenta) {
+    	String query = "SELECT * FROM Cuenta WHERE Id = ?";
+        try (Connection cn = conexion.Open();
+             PreparedStatement ps = cn.prepareStatement(query)) {
+            
+            ps.setInt(1, nroCuenta);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Cuenta cuenta = new Cuenta();
+                    cuenta.setId(rs.getInt("Id"));
+                    cuenta.setCBU(rs.getLong("CBU"));
+                    cuenta.setMonto(rs.getFloat("Monto"));
+                    // Asegúrate de cargar el cliente
+                    Cliente cliente = new Cliente();
+                    cliente.setId(rs.getInt("ClienteId")); // Ajusta el nombre de la columna
+                    cuenta.setCliente(cliente);
+                    return cuenta;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

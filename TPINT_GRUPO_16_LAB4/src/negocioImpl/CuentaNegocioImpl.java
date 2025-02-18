@@ -126,6 +126,16 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 		
 		return dao.actualizarEstadoCuenta(cuentaId, estado);
 	}
+	
+	@Override
+	public Cuenta ObtenerCuentaxNroCuenta(int nroCuenta) {
+		CuentaDao dao = new CuentaDaoImpl();
+		Cuenta cuenta = dao.ObtenerCuentaxNroCuenta(nroCuenta);
+		if (cuenta == null ) {
+		    System.out.println("No se encontro cuenta para el cliente: " + nroCuenta);
+		}
+		return cuenta;
+	}
 
 
 

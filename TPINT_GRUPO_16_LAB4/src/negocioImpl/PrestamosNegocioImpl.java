@@ -78,7 +78,11 @@ public class PrestamosNegocioImpl implements PrestamosNegocio {
 	
 	@Override
 	public List<Prestamo> BuscarByIdCliente(int id){
-		return pxaDao.BuscarByIdCliente(id);
+		List<Prestamo> prestamos = pxaDao.BuscarByIdCliente(id);
+		if (prestamos == null || prestamos.isEmpty()) {
+		    System.out.println("No se encontraron préstamos para el cliente: " + id);
+		}
+		return prestamos;
 	}
 	
 	public List<CuotaPrestamo> ObtenerCuota(int codPrestamo){
