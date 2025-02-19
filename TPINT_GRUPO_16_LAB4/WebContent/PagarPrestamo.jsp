@@ -18,6 +18,9 @@
 	<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
     
     <style>
 		<jsp:include page="style.css"></jsp:include>   
@@ -255,6 +258,10 @@ window.onload = function() {
     const selectCuenta = document.getElementById("select-cuenta");
     selectCuenta.value = <%= nroCuenta %>;
 }
+
+$(document).ready(function() {
+	$('#tabla-cuotas').DataTable();
+});
 </script>
 </body>
 </html>
