@@ -2,7 +2,9 @@
 package servlets;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -103,14 +105,26 @@ public class ServletCuota extends HttpServlet {
             int clienteId = cuenta.getCliente().getId();
             
             // Obtener préstamos y cuotas
-            List<Prestamo> prestamos = prestamoNegocio.BuscarByIdCliente(clienteId);
+            List<Prestamo> prestamosList = prestamoNegocio.BuscarByIdCliente(clienteId);;
+    		ListIterator<Prestamo> it = prestamosList.listIterator();
+    		ArrayList<Prestamo> prestamosActivos  = new ArrayList<Prestamo>();
             List<CuotaPrestamo> cuotas = prestamoNegocio.ObtenerCuota(idPrestamo);
+            
+            /*Levanto solo los prestamos activos*/
+    		while (it.hasNext()) {
+    			Prestamo p = it.next();
+    			if(p.getIdEstadoPrestamo() == 2) {
+    				prestamosActivos.add(p);
+    				//cuotaList.addAll((ArrayList<CuotaPrestamo>)prestamos.ObtenerCuota(p.getId()));
+    			}
+    		} 
+            
             
             // Obtener cuentas para el dropdown
             List<Cuenta> cuentas = cuentaNegocio.ObtenerCuentasxClienteID(clienteId);
             
             // Setear atributos en el request
-            request.setAttribute("Prestamos", prestamos);
+            request.setAttribute("Prestamos", prestamosActivos);
             request.setAttribute("Cuotas", cuotas);
             request.setAttribute("NroCuenta", nroCuenta);
             request.setAttribute("Saldo", BigDecimal.valueOf(cuenta.getMonto()));

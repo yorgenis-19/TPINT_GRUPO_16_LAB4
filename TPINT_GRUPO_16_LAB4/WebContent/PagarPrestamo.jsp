@@ -114,7 +114,7 @@
             <% if (!cuentasList.isEmpty()) {
                 for(Cuenta p : cuentasList) { %>
                     <option value="<%=p.getId()%>" <%= Integer.valueOf(p.getId()).equals(nroCuenta) ? "selected" : "" %>>
-                        CBU: <%=p.getCBU()%> (ID: <%=p.getId()%>)
+                        CBU: <%=p.getCBU()%> (ID: <%=p.getId()%> - MONTO: $<%=p.getMonto() %>)
                     </option>
                 <% }
             } %>
