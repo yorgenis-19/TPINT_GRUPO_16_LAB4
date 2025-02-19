@@ -14,27 +14,31 @@ import dao.ReporteDao;
 import entidad.CuentaTipo;
 
 public class ReporteDaoImpl implements ReporteDao {
-	public double obtenerSaldoTotalCuentas(String fechaInicio, String fechaFin) {
+	
+	public Map<String, Object> obtenerValoresTotal(String fechaInicio, String fechaFin) {
 		
         double saldoTotal = 0;
         Conexion conexion = new Conexion();
         Connection conn = (Connection) conexion.Open();
+	    Map<String, Object> resultado = new HashMap<String, Object>();
         
-        String query = "SELECT SUM(Monto) FROM Cuenta WHERE FechaDeCreacion BETWEEN ? AND ?";
+        //String query = "SELECT SUM(Monto) FROM Cuenta WHERE Activa = 1 AND FechaDeCreacion BETWEEN ? AND ?";
+        String query = "CALL ObtenerValoresTotales(?, ?);";
         
         try (PreparedStatement stmt = (PreparedStatement) conn.prepareStatement(query)) {
             stmt.setString(1, fechaInicio);
             stmt.setString(2, fechaFin);
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                saldoTotal = rs.getDouble(1); // Obtiene el saldo total
+            while (rs.next()) {
+                //saldoTotal = rs.getDouble(1); // Obtiene el saldo total
+            	resultado.put(rs.getString("Tipo"), rs.getString("Valor"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             conexion.close(); // Cerramos la conexión
         }
-        return saldoTotal;
+        return resultado;
     }
 	public Map<String, Object> obtenerCuentaPorTipo(String fechaInicio, String fechaFin) {
 	    Conexion conexion = new Conexion();
@@ -93,6 +97,11 @@ public class ReporteDaoImpl implements ReporteDao {
 	    }
 
 	    return resultado;
+	}
+	@Override
+	public double obtenerSaldoTotalCuentas(String fechaInicio, String fechaFin) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 

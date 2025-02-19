@@ -44,20 +44,28 @@ public class ServletGenerarReporte extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	
-    	String fechaInicio = request.getParameter("fechaInicio");
-    	 String fechaFin = request.getParameter("fechaFin");
     	  // Obtenemos el saldo total de las cuentas utilizando la capa de negocio
-    	 if (request.getParameter("btnReporte1") != null) {
-        double saldoTotal = reportenegocio.obtenerSaldoTotalCuentas(fechaInicio, fechaFin);
-        // Agregamos el saldo total al request para que el JSP lo muestre
-        request.setAttribute("saldoTotal", saldoTotal);
-        request.setAttribute("tipoReporte", "saldoTotal");
-    	    } else if (request.getParameter("btnReporte2") != null) {
-    	        // Lógica para el botón "Generar Informe de Cuentas por Tipo"
+    	if (request.getParameter("btnGenerarReporte") != null && request.getParameter("tipoReporte") != null) 
+    	{
+    		String tipo = request.getParameter("tipoReporte");
+    		String fechaInicio = request.getParameter("fechaInicio");
+    		String fechaFin = request.getParameter("fechaFin");
+    		if(tipo.equals("valoresTotales"))
+    		{
+    			Map<String, Object> totales = reportenegocio.obtenerValoresTotal(fechaInicio, fechaFin);
+    			// Agregamos el saldo total al request para que el JSP lo muestre
+    			request.setAttribute("valoresTotales", totales); 			
+    		}
+    		else if(tipo.equals("cuentasPorTipo"))
+    		{
+        		// Lógica para el botón "Generar Informe de Cuentas por Tipo"
     	    	Map<String, Object> cuentasPorTipo = reportenegocio.obtenerCuentaPorTipo(fechaInicio, fechaFin);
-    	         request.setAttribute("cuentasPorTipo", cuentasPorTipo);
-    	         request.setAttribute("tipoReporte", "cuentasPorTipo");
-    	    }
+    	        request.setAttribute("cuentasPorTipo", cuentasPorTipo);
+    		}
+	        request.setAttribute("tipoReporte", tipo);
+	        request.setAttribute("fechaInicio", fechaInicio);
+	        request.setAttribute("fechaFin", fechaFin);
+	    } 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/Reporte.jsp");
         dispatcher.forward(request, response);
         

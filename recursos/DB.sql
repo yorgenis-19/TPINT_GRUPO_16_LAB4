@@ -195,3 +195,52 @@ BEGIN
 	END WHILE;
 END//
 DELIMITER ;
+
+
+DELIMITER $$
+
+CREATE PROCEDURE ObtenerValoresTotales(
+    IN fechaInicio DATE,
+    IN fechaFin DATE
+)
+BEGIN
+    SELECT DISTINCT 'CantidadClientes' AS Tipo, COUNT(Cliente.Id) AS Valor  
+    FROM Cliente
+    INNER JOIN Usuario ON Usuario.Id = Cliente.UsuarioId
+    WHERE Usuario.Activo = 1
+
+    UNION ALL
+
+    SELECT 'CantidadCuentas', COUNT(*) 
+    FROM Cuenta 
+    WHERE Cuenta.Activa = 1 AND Cuenta.FechaDeCreacion BETWEEN fechaInicio AND fechaFin
+
+    UNION ALL
+
+    SELECT 'SaldoTotalCuentas', ROUND(SUM(Monto), 2) 
+    FROM Cuenta 
+    WHERE Activa = 1 AND FechaDeCreacion BETWEEN fechaInicio AND fechaFin
+
+    UNION ALL
+
+    SELECT 'SaldoTotalPrestamos', ROUND(SUM(Prestamo.MontoSolicitado), 2)  
+    FROM Prestamo 
+    WHERE Prestamo.FechaAlta BETWEEN fechaInicio AND fechaFin
+
+    UNION ALL
+
+    SELECT 'SaldoTotalCuotasPagas', ROUND(SUM(Cuota.Monto), 2)  
+    FROM Cuota
+    WHERE Cuota.FechaPago IS NOT NULL AND Cuota.FechaPago BETWEEN fechaInicio AND fechaFin
+
+    UNION ALL
+
+    SELECT 'SaldoTotalCuotasPendientes', ROUND(SUM(Cuota.Monto), 2)  
+    FROM Cuota
+    INNER JOIN Prestamo ON Prestamo.Id = Cuota.PrestamoId
+    WHERE Cuota.FechaPago IS NULL AND Prestamo.FechaAlta BETWEEN fechaInicio AND fechaFin;
+
+END$$
+
+DELIMITER ;
+

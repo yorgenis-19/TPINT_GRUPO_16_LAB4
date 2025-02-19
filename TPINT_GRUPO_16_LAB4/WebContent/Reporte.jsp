@@ -1,3 +1,4 @@
+<%@page import="java.time.LocalDate"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@page import="entidad.CuentaTipo"%>
 <%@page import="negocioImpl.ClienteNegocioImpl"%>
@@ -33,6 +34,10 @@
     if(session.getAttribute("UsuarioActual") != null) {
         usuario = (Usuario)session.getAttribute("UsuarioActual");
     }
+    
+	String tipo = request.getParameter("tipoReporte") != null ? request.getParameter("tipoReporte") : "valoresTotales";
+	LocalDate desde = request.getParameter("fechaInicio") != null ? LocalDate.parse(request.getParameter("fechaInicio")) : LocalDate.now();
+	LocalDate hasta = request.getParameter("fechaFin") != null ? LocalDate.parse(request.getParameter("fechaFin")) : LocalDate.now();
 %>
 
 <nav class="navbar bg-primary navbar-expand-lg " data-bs-theme="dark">
@@ -63,34 +68,41 @@
         <div class="abm_form-column">
             <label for="tipoReporte" class="form-label">Seleccione el tipo de informe:</label>
             <select id="tipoReporte" name="tipoReporte" class="form-select" required>
-                <option value="saldoTotal">Saldo total por rango de fechas</option>
-                <option value="cuentasPorTipo">Cuentas agrupadas por tipo</option>
+                <option value="valoresTotales" <% if(tipo.equals("valoresTotales")){%>selected<%} %>>Valores totales</option>
+                <option value="cuentasPorTipo" <% if(tipo.equals("cuentasPorTipo")){%>selected<%} %>>Cuentas agrupadas por tipo</option>
             </select>
         </div>
         <div class="abm_form-column">
             <label for="fechaInicio" class="form-label">Fecha de Inicio:</label>
-            <input type="date" id="fechaInicio" name="fechaInicio" class="form-input" required>
+            <input type="date" id="fechaInicio" name="fechaInicio" class="form-input" value=<%=desde %> required>
         </div>
         <div class="abm_form-column">
             <label for="fechaFin" class="form-label">Fecha de Fin:</label>
-            <input type="date" id="fechaFin" name="fechaFin" class="form-input" required>
+            <input type="date" id="fechaFin" name="fechaFin" class="form-input" value=<%=hasta %> required>
         </div>
         <div class="abm_form-column">
-            <button type="submit" name="btnReporte1" class="button button-primary">Generar Informe</button>
+            <button type="submit" name="btnGenerarReporte" class="button button-primary">Generar Informe</button>
         </div>
+        <!-- 
         <div class="abm_form-column">
             <button type="submit" class="button button-primary" name="btnReporte2">Informe Detallado</button>
         </div>
+         -->
     </form>
 
 <%
     String tipoReporte = (String) request.getAttribute("tipoReporte");
     if (tipoReporte != null) {
-        if (tipoReporte.equals("saldoTotal")) {
+        if (tipoReporte.equals("valoresTotales")) {
 %>
             <div class="report-container">
-                <h2>Saldo Total de Cuentas</h2>
-                <p>El saldo total de las cuentas entre las fechas seleccionadas es: $<%= request.getAttribute("saldoTotal") %></p>
+                <h2>Totales</h2>
+                <p>Cantidad de clientes: <%= ((Map<String, Object>)request.getAttribute("valoresTotales")).get("CantidadClientes") %></p>
+                <p>Cantidad de cuentas: <%= ((Map<String, Object>)request.getAttribute("valoresTotales")).get("CantidadCuentas") %></p>
+                <p>Saldo total de las cuentas: $<%= ((Map<String, Object>)request.getAttribute("valoresTotales")).get("SaldoTotalCuentas") %></p>
+                <p>Saldo total de préstamos: $<%= ((Map<String, Object>)request.getAttribute("valoresTotales")).get("SaldoTotalPrestamos") %></p>
+                <p>Saldo total de cuotas pagadas: $<%= ((Map<String, Object>)request.getAttribute("valoresTotales")).get("SaldoTotalCuotasPagas") %></p>
+                <p>Saldo total de cuotas pendientes: $<%= ((Map<String, Object>)request.getAttribute("valoresTotales")).get("SaldoTotalCuotasPendientes") %></p>
             </div>
 <%
         } else if (tipoReporte.equals("cuentasPorTipo")) {

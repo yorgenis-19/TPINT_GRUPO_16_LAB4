@@ -14,6 +14,13 @@ public class ReporteNegocioImpl implements ReporteNegocio{
 	public ReporteNegocioImpl() {
         reportedao = new ReporteDaoImpl(); // Inicializo el DAO en el constructor
     }
+
+	@Override
+	public Map<String, Object> obtenerValoresTotal(String fechaInicio, String fechaFin) {
+		// TODO Auto-generated method stub		
+		return reportedao.obtenerValoresTotal(fechaInicio, fechaFin);
+	}
+	
 	@Override
 	public double obtenerSaldoTotalCuentas(String fechaInicio, String fechaFin) {
 		// TODO Auto-generated method stub		
