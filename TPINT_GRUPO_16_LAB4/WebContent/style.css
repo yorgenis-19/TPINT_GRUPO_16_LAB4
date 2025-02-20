@@ -344,3 +344,7 @@ canvas {
     width: 45%; /* Controla el tamaño de cada gráfico */
     height: 200px; /* Ajusta la altura si es necesario */
 }
+
+.report-container{
+	margin: 0 24px;
+}

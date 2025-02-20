@@ -288,15 +288,15 @@ INSERT INTO Cliente (UsuarioId, Nombre, Apellido, Sexo, DNI, CUIL, Telefono, Ema
 	(SELECT Id FROM Provincia WHERE Nombre = 'Ciudad Autónoma de Buenos Aires'));
 
 INSERT INTO Cuenta (ClienteId, Monto, Activa, CBU, TipoId, FechaDeCreacion) VALUES
-((SELECT Id FROM Cliente WHERE DNI = '33222001'), 10000, 1, 897546123111, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Caja de Ahorro'), '20241120'),
-((SELECT Id FROM Cliente WHERE DNI = '33222001'), 10000, 1, 897546123112, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Cuenta Corriente'), '20241121'),
-((SELECT Id FROM Cliente WHERE DNI = '33222001'), 10000, 0, 897546123113, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Caja de Ahorro'), '20241122'),
-((SELECT Id FROM Cliente WHERE DNI = '33222002'), 10000, 1, 897546123121, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Caja de Ahorro'), '20241120'),
-((SELECT Id FROM Cliente WHERE DNI = '33222002'), 10000, 1, 897546123122, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Cuenta Corriente'), '20241121'),
-((SELECT Id FROM Cliente WHERE DNI = '33222002'), 10000, 1, 897546123123, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Caja de Ahorro'), '20241122'),
-((SELECT Id FROM Cliente WHERE DNI = '33222003'), 10000, 0, 897546123131, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Caja de Ahorro'), '20241128'),
-((SELECT Id FROM Cliente WHERE DNI = '33222003'), 10000, 0, 897546123132, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Cuenta Corriente'), '20241129'),
-((SELECT Id FROM Cliente WHERE DNI = '33222003'), 10000, 0, 897546123133, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Caja de Ahorro'), '20241130');
+((SELECT Id FROM Cliente WHERE DNI = '33222001'), 10000, 1, 897546123111, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Caja de Ahorro'), '20250201'),
+((SELECT Id FROM Cliente WHERE DNI = '33222001'), 10000, 1, 897546123112, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Cuenta Corriente'), '20250202'),
+((SELECT Id FROM Cliente WHERE DNI = '33222001'), 10000, 0, 897546123113, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Caja de Ahorro'), '20250203'),
+((SELECT Id FROM Cliente WHERE DNI = '33222002'), 10000, 1, 897546123121, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Caja de Ahorro'), '20250204'),
+((SELECT Id FROM Cliente WHERE DNI = '33222002'), 10000, 1, 897546123122, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Cuenta Corriente'), '20250204'),
+((SELECT Id FROM Cliente WHERE DNI = '33222002'), 10000, 1, 897546123123, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Caja de Ahorro'), '20250208'),
+((SELECT Id FROM Cliente WHERE DNI = '33222003'), 10000, 0, 897546123131, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Caja de Ahorro'), '20250209'),
+((SELECT Id FROM Cliente WHERE DNI = '33222003'), 10000, 0, 897546123132, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Cuenta Corriente'), '20250215'),
+((SELECT Id FROM Cliente WHERE DNI = '33222003'), 10000, 0, 897546123133, (SELECT Id FROM CuentaTipo WHERE Descripcion = 'Caja de Ahorro'), '20250219');
 
 INSERT INTO EstadoPrestamo(id, descripcion) VALUES 
 (1, 'Pendiente de aprobacion'),

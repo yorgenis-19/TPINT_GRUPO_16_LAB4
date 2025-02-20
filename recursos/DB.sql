@@ -217,25 +217,25 @@ BEGIN
 
     UNION ALL
 
-    SELECT 'SaldoTotalCuentas', ROUND(SUM(Monto), 2) 
+    SELECT 'SaldoTotalCuentas', IFNULL(ROUND(SUM(Monto), 2), 0)
     FROM Cuenta 
     WHERE Activa = 1 AND FechaDeCreacion BETWEEN fechaInicio AND fechaFin
 
     UNION ALL
 
-    SELECT 'SaldoTotalPrestamos', ROUND(SUM(Prestamo.MontoSolicitado), 2)  
+    SELECT 'SaldoTotalPrestamos', IFNULL(ROUND(SUM(Prestamo.MontoSolicitado), 2), 0)
     FROM Prestamo 
     WHERE Prestamo.FechaAlta BETWEEN fechaInicio AND fechaFin
 
     UNION ALL
 
-    SELECT 'SaldoTotalCuotasPagas', ROUND(SUM(Cuota.Monto), 2)  
+    SELECT 'SaldoTotalCuotasPagas', IFNULL(ROUND(SUM(Cuota.Monto), 2), 0)
     FROM Cuota
     WHERE Cuota.FechaPago IS NOT NULL AND Cuota.FechaPago BETWEEN fechaInicio AND fechaFin
 
     UNION ALL
 
-    SELECT 'SaldoTotalCuotasPendientes', ROUND(SUM(Cuota.Monto), 2)  
+    SELECT 'SaldoTotalCuotasPendientes', IFNULL(ROUND(SUM(Cuota.Monto), 2), 0)
     FROM Cuota
     INNER JOIN Prestamo ON Prestamo.Id = Cuota.PrestamoId
     WHERE Cuota.FechaPago IS NULL AND Prestamo.FechaAlta BETWEEN fechaInicio AND fechaFin;

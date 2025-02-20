@@ -64,10 +64,10 @@
 
 <h1 class="text-center">Generar Reporte</h1>
 
-    <form id="formReporte" action="ServletGenerarReporte" method="post" class="abm_form">
+    <form id="formReporte" action="ServletGenerarReporte" method="post" class="abm_form" style="align-items: center;">
         <div class="abm_form-column">
             <label for="tipoReporte" class="form-label">Seleccione el tipo de informe:</label>
-            <select id="tipoReporte" name="tipoReporte" class="form-select" required>
+            <select id="tipoReporte" name="tipoReporte" class="form-select" required style="width: 350px;">
                 <option value="valoresTotales" <% if(tipo.equals("valoresTotales")){%>selected<%} %>>Valores totales</option>
                 <option value="cuentasPorTipo" <% if(tipo.equals("cuentasPorTipo")){%>selected<%} %>>Cuentas agrupadas por tipo</option>
             </select>
@@ -80,7 +80,7 @@
             <label for="fechaFin" class="form-label">Fecha de Fin:</label>
             <input type="date" id="fechaFin" name="fechaFin" class="form-input" value=<%=hasta %> required>
         </div>
-        <div class="abm_form-column">
+        <div class="abm_form-column" style="margin-top: 20px;">
             <button type="submit" name="btnGenerarReporte" class="button button-primary">Generar Informe</button>
         </div>
         <!-- 
