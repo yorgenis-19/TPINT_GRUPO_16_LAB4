@@ -1,3 +1,4 @@
+<%@page import="entidad.ReporteClientesCuentas"%>
 <%@page import="java.time.LocalDate"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@page import="entidad.CuentaTipo"%>
@@ -70,6 +71,7 @@
             <select id="tipoReporte" name="tipoReporte" class="form-select" required style="width: 350px;">
                 <option value="valoresTotales" <% if(tipo.equals("valoresTotales")){%>selected<%} %>>Valores totales</option>
                 <option value="cuentasPorTipo" <% if(tipo.equals("cuentasPorTipo")){%>selected<%} %>>Cuentas agrupadas por tipo</option>
+                <option value="reporteClientesCuentas" <% if(tipo.equals("reporteClientesCuentas")){%>selected<%} %>>Clientes Cuentas</option>
             </select>
         </div>
         <div class="abm_form-column">
@@ -249,6 +251,44 @@
                 <p>No se encontró información para el tipo de informe seleccionado.</p>
 <%
             }
+        } else if (tipoReporte.equals("reporteClientesCuentas")){
+        	ArrayList<ReporteClientesCuentas> reporte = (ArrayList<ReporteClientesCuentas>)request.getAttribute("reporteClientesCuentas");
+        	if (reporte != null && !reporte.isEmpty()) {%>
+        		<table id="table_reporteClientesCuentas" class="table table-striped" style="max-width: 98%" >
+					<thead>	
+						<tr>
+		        			<th>USUARIO</th>
+		        			<th>APELLIDO</th>
+		        			<th>NOMBRE</th>
+		        			<th>DNI</th>
+		        			<th>EMAIL</th>
+		        			<th>SEXO</th>
+		        			<th>DINERO TOTAL</th>
+		        			<th>PRESTAMOS SOLICITADOS</th>
+		        			<th>DINERO SOLICITADO</th>
+		        			<th>DINERO CUOTAS PAGADAS</th>
+						</tr>
+					</thead>
+					<tbody>
+						<%
+		        			for(ReporteClientesCuentas obj : reporte) {
+						%>	
+						<tr>
+		        			<td><%=obj.getUsuario()%></td>
+		        			<td><%=obj.getApellido()%></td>
+		        			<td><%=obj.getNombre()%></td>
+		        			<td><%=obj.getDni()%></td>
+		        			<td><%=obj.getEmail()%></td>
+		        			<td><%=obj.getSexo()%></td>
+		        			<td><%=obj.getDineroTotal()%></td>
+		        			<td><%=obj.getPrestamosSolicitados()%></td>
+		        			<td><%=obj.getDineroSolicitado()%></td>
+		        			<td><%=obj.getDineroCuotasPagadas()%></td>
+						</tr>
+		        		<%}%>
+					</tbody>
+				</table>
+        	<%}
         }
     }
 %>

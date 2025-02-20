@@ -2,6 +2,7 @@ package daoImpl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +12,10 @@ import com.mysql.jdbc.PreparedStatement;
 
 
 import dao.ReporteDao;
+import entidad.Cliente;
 import entidad.CuentaTipo;
+import entidad.ReporteClientesCuentas;
+import entidad.Usuario;
 
 public class ReporteDaoImpl implements ReporteDao {
 	
@@ -102,6 +106,42 @@ public class ReporteDaoImpl implements ReporteDao {
 	public double obtenerSaldoTotalCuentas(String fechaInicio, String fechaFin) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	@Override
+	public ArrayList<ReporteClientesCuentas> ObtenerReporteClientesCuentas(String fechaInicio, String fechaFin) {
+		ArrayList<ReporteClientesCuentas> objs = new ArrayList<ReporteClientesCuentas>();
+		Conexion conexion = new Conexion();
+        Connection cn = (Connection) conexion.Open();
+        try {
+            Statement st = cn.createStatement();
+            String query = "CALL ReporteClientesCuentas ('" + fechaInicio + "','" + fechaFin + "')";
+            ResultSet rs = st.executeQuery(query);
+            while (rs.next()) {
+            	ReporteClientesCuentas obj = new ReporteClientesCuentas();
+                obj.setUsuario(rs.getString("Usuario"));
+                obj.setNombre(rs.getString("Nombre"));
+                obj.setApellido(rs.getString("Apellido"));
+                obj.setSexo(rs.getString("Sexo"));
+                obj.setDni(rs.getString("Dni"));
+                obj.setEmail(rs.getString("Email"));
+                obj.setDineroTotal(rs.getDouble("DineroTotal"));
+                obj.setPrestamosSolicitados(rs.getInt("PrestamosSolicitados"));
+                obj.setDineroSolicitado(rs.getDouble("DineroSolicitado"));
+                obj.setDineroCuotasPagadas(rs.getDouble("DineroCuotasPagadas"));
+                objs.add(obj);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cn != null) {
+                try {
+                    conexion.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return objs;
 	}
 
 

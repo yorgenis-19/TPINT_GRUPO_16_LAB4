@@ -6,6 +6,7 @@ import java.util.Map;
 import dao.ReporteDao;
 import daoImpl.ReporteDaoImpl;
 import entidad.CuentaTipo;
+import entidad.ReporteClientesCuentas;
 import negocio.ReporteNegocio;
 
 public class ReporteNegocioImpl implements ReporteNegocio{
@@ -31,6 +32,12 @@ public class ReporteNegocioImpl implements ReporteNegocio{
 	public Map<String, Object> obtenerCuentaPorTipo(String fechaInicio, String fechaFin) {
 		// TODO Auto-generated method stub
 		return reportedao.obtenerCuentaPorTipo(fechaInicio, fechaFin);
+	}
+
+	@Override
+	public ArrayList<ReporteClientesCuentas> ObtenerReporteClientesCuentas(String fechaInicio, String fechaFin) {
+		// TODO Auto-generated method stub
+		return reportedao.ObtenerReporteClientesCuentas(fechaInicio, fechaFin);
 	}
 
 }

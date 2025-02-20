@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import entidad.CuentaTipo;
+import entidad.ReporteClientesCuentas;
 import negocio.ReporteNegocio;
 import negocioImpl.ReporteNegocioImpl;
 
@@ -61,6 +62,12 @@ public class ServletGenerarReporte extends HttpServlet {
         		// Lógica para el botón "Generar Informe de Cuentas por Tipo"
     	    	Map<String, Object> cuentasPorTipo = reportenegocio.obtenerCuentaPorTipo(fechaInicio, fechaFin);
     	        request.setAttribute("cuentasPorTipo", cuentasPorTipo);
+    		}
+    		else if(tipo.equals("reporteClientesCuentas"))
+    		{
+        		// Lógica para el botón "Generar Informe de Cuentas por Tipo"
+    	    	ArrayList<ReporteClientesCuentas> reporte = reportenegocio.ObtenerReporteClientesCuentas(fechaInicio, fechaFin);
+    	        request.setAttribute("reporteClientesCuentas", reporte);
     		}
 	        request.setAttribute("tipoReporte", tipo);
 	        request.setAttribute("fechaInicio", fechaInicio);
